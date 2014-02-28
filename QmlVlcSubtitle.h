@@ -1,6 +1,8 @@
 #ifndef SUBTITLE_H
 #define SUBTITLE_H
 
+#include <QObject>
+
 #include <libvlc_wrapper/vlc_player.h>
 
 class QmlVlcSubtitle : public QObject

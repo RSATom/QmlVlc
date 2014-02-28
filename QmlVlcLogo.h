@@ -1,6 +1,8 @@
 #ifndef QMLVLCLOGO_H
 #define QMLVLCLOGO_H
 
+#include <QObject>
+
 #include <libvlc_wrapper/vlc_player.h>
 
 class QmlVlcLogo : public QObject

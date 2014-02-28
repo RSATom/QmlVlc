@@ -1,8 +1,6 @@
 #include "QmlVlcPlayer.h"
 
-#include "global/config.h"
-
-QmlVlcPlayer::QmlVlcPlayer( vlc::player* player, QObject* parent /*= 0*/ )
+QmlVlcPlayerProxy::QmlVlcPlayerProxy( vlc::player* player, QObject* parent /*= 0*/ )
     : QmlVlcVideoOutput( player, parent ),
       m_audio( *player ), m_input( *player ),
       m_playlist( *player ),  m_subtitle( *player ),
@@ -25,7 +23,7 @@ QmlVlcPlayer::QmlVlcPlayer( vlc::player* player, QObject* parent /*= 0*/ )
 }
 
 //libvlc events arrives from separate thread
-void QmlVlcPlayer::OnLibVlcEvent( const libvlc_event_t* e )
+void QmlVlcPlayerProxy::OnLibVlcEvent( const libvlc_event_t* e )
 {
     switch ( e->type ) {
     case libvlc_MediaPlayerMediaChanged:
@@ -88,110 +86,143 @@ void QmlVlcPlayer::OnLibVlcEvent( const libvlc_event_t* e )
     };
 }
 
-QString QmlVlcPlayer::get_version()
-{
-    return QStringLiteral( FBSTRING_PLUGIN_VERSION );
-}
-
-QString QmlVlcPlayer::get_vlcVersion()
+QString QmlVlcPlayerProxy::get_vlcVersion()
 {
     return QString::fromLatin1( libvlc_get_version() );
 }
 
-void QmlVlcPlayer::play()
+void QmlVlcPlayerProxy::play( const QString& mrl )
+{
+    vlc_player& p = player();
+
+    p.clear_items();
+
+    int item = p.add_media( mrl.toUtf8().data(), 0, 0, 0, 0 );
+    if( item >= 0) {
+        p.play( item );
+    }
+}
+
+void QmlVlcPlayerProxy::play()
 {
     player().play();
 }
 
-void QmlVlcPlayer::pause()
+void QmlVlcPlayerProxy::pause()
 {
     player().pause();
 }
 
-void QmlVlcPlayer::togglePause()
+void QmlVlcPlayerProxy::togglePause()
 {
     player().togglePause();
 }
 
-void QmlVlcPlayer::stop()
+void QmlVlcPlayerProxy::stop()
 {
     //use async stop to avoid freeze (on network timeout for example).
     player().stop( true );
     player().clear_items();
 }
 
-void QmlVlcPlayer::mute()
+void QmlVlcPlayerProxy::mute()
 {
     player().audio().set_mute( true );
 }
 
-void QmlVlcPlayer::unMute()
+void QmlVlcPlayerProxy::unMute()
 {
     player().audio().set_mute( false );
 }
 
-void QmlVlcPlayer::toggleMute()
+void QmlVlcPlayerProxy::toggleMute()
 {
     player().audio().toggle_mute();
 }
 
-bool QmlVlcPlayer::get_playing()
+QString QmlVlcPlayerProxy::get_mrl()
+{
+    return QString::fromUtf8( player().current_media().get_mrl() );
+}
+
+void QmlVlcPlayerProxy::set_mrl( const QString& mrl )
+{
+    play( mrl );
+}
+
+bool QmlVlcPlayerProxy::get_playing()
 {
     return player().is_playing();
 }
 
-double QmlVlcPlayer::get_length()
+double QmlVlcPlayerProxy::get_length()
 {
     return static_cast<double>( player().current_media().get_length() );
 }
 
-double QmlVlcPlayer::get_position()
+double QmlVlcPlayerProxy::get_position()
 {
     return player().get_position();
 }
 
-void QmlVlcPlayer::set_position( double pos )
+void QmlVlcPlayerProxy::set_position( double pos )
 {
     player().set_position( static_cast<float>( pos ) );
 }
 
-double QmlVlcPlayer::get_time()
+double QmlVlcPlayerProxy::get_time()
 {
     return static_cast<double>( player().get_time() );
 }
 
-void QmlVlcPlayer::set_time( double t )
+void QmlVlcPlayerProxy::set_time( double t )
 {
     player().set_time( static_cast<libvlc_time_t>( t ) );
 }
 
-unsigned int QmlVlcPlayer::get_volume()
+unsigned int QmlVlcPlayerProxy::get_volume()
 {
     return player().audio().get_volume();
 }
 
-void QmlVlcPlayer::set_volume( unsigned int v )
+void QmlVlcPlayerProxy::set_volume( unsigned int v )
 {
     player().audio().set_volume( v );
 }
 
-int QmlVlcPlayer::get_state()
+int QmlVlcPlayerProxy::get_state()
 {
     return player().get_state();
-};
+}
 
-bool QmlVlcPlayer::get_fullscreen()
+bool QmlVlcPlayerProxy::get_fullscreen()
 {
     //FIXME!
     return false;
 }
 
-void QmlVlcPlayer::set_fullscreen( bool fs )
+void QmlVlcPlayerProxy::set_fullscreen( bool /*fs*/ )
 {
     //FIXME!
 }
 
-void QmlVlcPlayer::toggleFullscreen()
+void QmlVlcPlayerProxy::toggleFullscreen()
 {
     //FIXME!
+}
+
+QmlVlcPlayer::QmlVlcPlayer( QObject* parent )
+    : QmlVlcPlayerProxy( &m_player, parent )
+{
+    m_libvlc = libvlc_new( 0, 0 );
+    m_player.open( m_libvlc );
+}
+
+QmlVlcPlayer::~QmlVlcPlayer()
+{
+    m_player.close();
+    if( m_libvlc ) {
+        libvlc_free( m_libvlc );
+        m_libvlc = 0;
+    }
 }

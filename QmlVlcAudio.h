@@ -1,8 +1,9 @@
 #ifndef QMLVLCAUDIO_H
 #define QMLVLCAUDIO_H
 
-#include <libvlc_wrapper/vlc_player.h>
 #include <QObject>
+
+#include <libvlc_wrapper/vlc_player.h>
 
 class QmlVlcAudio : public QObject
 {

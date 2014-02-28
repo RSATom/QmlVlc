@@ -1,6 +1,8 @@
 #ifndef QMLVLCMEDIADESC_H
 #define QMLVLCMEDIADESC_H
 
+#include <QObject>
+
 #include <libvlc_wrapper/vlc_player.h>
 
 #include <QObject.h>

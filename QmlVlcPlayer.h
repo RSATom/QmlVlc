@@ -1,6 +1,8 @@
 #ifndef QMLVLCPLAYER_H
 #define QMLVLCPLAYER_H
 
+#include <QObject>
+
 #include "QmlVlcVideoOutput.h"
 #include "QmlVlcAudio.h"
 #include "QmlVlcInput.h"
@@ -9,14 +11,16 @@
 #include "QmlVlcVideo.h"
 #include "QmlVlcMediaDesc.h"
 
-class QmlVlcPlayer : public QmlVlcVideoOutput
+class QmlVlcPlayerProxy : public QmlVlcVideoOutput
 {
     Q_OBJECT
 public:
-    explicit QmlVlcPlayer( vlc::player* player, QObject* parent = 0 );
+    explicit QmlVlcPlayerProxy( vlc::player* player, QObject* parent = 0 );
 
-    Q_PROPERTY( QString version READ get_version )
     Q_PROPERTY( QString vlcVersion READ get_vlcVersion )
+
+    Q_PROPERTY( QString mrl READ get_mrl WRITE set_mrl )
+
     Q_PROPERTY( bool playing READ get_playing NOTIFY playingChanged )
     Q_PROPERTY( double length READ get_length NOTIFY MediaPlayerMediaChanged);
     Q_PROPERTY( double position READ get_position WRITE set_position NOTIFY MediaPlayerPositionChanged );
@@ -49,9 +53,9 @@ public:
     void OnLibVlcEvent( const libvlc_event_t* e );
 
     //QML Api
-    QString get_version();
     QString get_vlcVersion();
 
+    Q_INVOKABLE void play( const QString& mrl );
     Q_INVOKABLE void play();
     Q_INVOKABLE void pause();
     Q_INVOKABLE void togglePause();
@@ -59,6 +63,9 @@ public:
     Q_INVOKABLE void mute();
     Q_INVOKABLE void unMute();
     Q_INVOKABLE void toggleMute();
+
+    QString get_mrl();
+    void set_mrl( const QString& mrl );
 
     bool get_playing();
 
@@ -114,6 +121,18 @@ private:
     QmlVlcSubtitle  m_subtitle;
     QmlVlcVideo     m_video;
     QmlVlcMediaDesc m_mediaDesc;
+};
+
+class QmlVlcPlayer : public QmlVlcPlayerProxy
+{
+    Q_OBJECT
+public:
+    explicit QmlVlcPlayer( QObject* parent = 0 );
+    ~QmlVlcPlayer();
+
+private:
+    libvlc_instance_t* m_libvlc;
+    vlc::player m_player;
 };
 
 #endif // QMLVLCPLAYER_H

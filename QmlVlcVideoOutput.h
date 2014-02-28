@@ -1,32 +1,37 @@
 #ifndef QMLVLCVIDEOOUTPUT_H
 #define QMLVLCVIDEOOUTPUT_H
 
+#include <cassert>
+
 #include <QObject>
-class QAbstractVideoSurface; //#include <QAbstractVideoSurface>
-#include <QVideoSurfaceFormat>
+#include <QSharedPointer>
 
 #ifndef Q_MOC_RUN
 #include <libvlc_wrapper/vlc_player.h>
 #include <libvlc_wrapper/vlc_vmem.h>
 #endif // Q_MOC_RUN
 
+#include "QmlVlcVideoFrame.h"
+
+#include <QQmlParserStatus >
+
+class QmlVlcVideoSurface; //#include "QmlVlcVideoSurface.h"
+
 class QmlVlcVideoOutput
     : public QObject,
-      private vlc::basic_vmem_wrapper
+      private vlc::basic_vmem_wrapper,
+      public QQmlParserStatus
 {
     Q_OBJECT
 public:
     explicit QmlVlcVideoOutput( vlc::player* player, QObject *parent = 0 );
+    ~QmlVlcVideoOutput();
 
-    Q_PROPERTY( QAbstractVideoSurface* videoSurface READ videoSurface WRITE setVideoSurface )
-
-    QAbstractVideoSurface* videoSurface() const { return m_videoSurface; }
-    void setVideoSurface( QAbstractVideoSurface* s );
+    void registerVideoSurface( QmlVlcVideoSurface* s );
+    void unregisterVideoSurface( QmlVlcVideoSurface* s );
 
 private:
-    Q_INVOKABLE void initVideoSurface( );
-    Q_INVOKABLE void updateFrame();
-    Q_INVOKABLE void cleanupVideoSurface();
+    Q_INVOKABLE void frameUpdated();
 
 private:
     //for libvlc_video_set_format_callbacks
@@ -45,15 +50,16 @@ private:
 protected:
     vlc::player& player() { assert( m_player ); return *m_player; }
 
+protected:
+    virtual void classBegin();
+    virtual void componentComplete();
+
 private:
     vlc::player *const m_player;
-    QAbstractVideoSurface* m_videoSurface;
 
-    QMutex m_frameGuard;
-    unsigned m_UPlaneOffset;
-    unsigned m_VPlaneOffset;
-    QVideoSurfaceFormat m_surfaceFormat;
-    QVideoFrame m_videoFrame;
+    QList<QmlVlcVideoSurface*> m_attachedSurfaces;
+
+    QSharedPointer<QmlVlcI420Frame> m_frame;
 };
 
 #endif //QMLVLCVIDEOOUTPUT_H

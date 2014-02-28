@@ -1,9 +1,9 @@
 #ifndef QMLVLCDEINTERLACE_H
 #define QMLVLCDEINTERLACE_H
 
-#include <libvlc_wrapper/vlc_player.h>
+#include <QObject>
 
-#include <QObject.h>
+#include <libvlc_wrapper/vlc_player.h>
 
 class QmlVlcDeinterlace : public QObject
 {

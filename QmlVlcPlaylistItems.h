@@ -1,6 +1,8 @@
 #ifndef PLAYLISTITEMS_H
 #define PLAYLISTITEMS_H
 
+#include <QObject>
+
 #include <libvlc_wrapper/vlc_player.h>
 
 class QmlVlcPlaylistItems : public QObject

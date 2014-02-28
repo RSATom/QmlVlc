@@ -71,7 +71,7 @@ bool QmlVlcVideo::get_fullscreen()
     return false;
 }
 
-void QmlVlcVideo::set_fullscreen( bool fs )
+void QmlVlcVideo::set_fullscreen( bool /*fs*/ )
 {
     //FIXME!
 }

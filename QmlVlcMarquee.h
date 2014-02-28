@@ -1,6 +1,8 @@
 #ifndef QMLVLCMARQUEE_H
 #define QMLVLCMARQUEE_H
 
+#include <QObject>
+
 #include <libvlc_wrapper/vlc_player.h>
 
 class QmlVlcMarquee : public QObject

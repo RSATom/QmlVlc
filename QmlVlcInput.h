@@ -1,6 +1,8 @@
 #ifndef QMLVLCINPUT_H
 #define QMLVLCINPUT_H
 
+#include <QObject>
+
 #include <libvlc_wrapper/vlc_player.h>
 
 class QmlVlcInput : public QObject
