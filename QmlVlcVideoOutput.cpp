@@ -1,5 +1,7 @@
 #include "QmlVlcVideoOutput.h"
 
+#include <functional>
+
 #include "QmlVlcVideoSurface.h"
 
 QmlVlcVideoOutput::QmlVlcVideoOutput( vlc::player* player, QObject *parent /*= 0*/)
@@ -96,7 +98,7 @@ void QmlVlcVideoOutput::frameUpdated()
     QSharedPointer<const QmlVlcI420Frame> frame = m_frame;
 
     std::for_each( m_attachedSurfaces.begin(), m_attachedSurfaces.end(),
-                   std::bind2nd( std::mem_fun1( &QmlVlcVideoSurface::presentFrame ), frame ) );
+                   std::bind2nd( std::mem_fun( &QmlVlcVideoSurface::presentFrame ), frame ) );
 }
 
 void QmlVlcVideoOutput::registerVideoSurface( QmlVlcVideoSurface* s )

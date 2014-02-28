@@ -2,6 +2,7 @@
 #define QMLVLCVIDEOFRAME_H
 
 #include <QByteArray>
+#include <QMutex>
 
 struct QmlVlcVideoFrame
 {
