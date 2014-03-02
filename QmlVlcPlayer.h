@@ -16,6 +16,7 @@ class QmlVlcPlayerProxy : public QmlVlcVideoOutput
     Q_OBJECT
 public:
     explicit QmlVlcPlayerProxy( vlc::player* player, QObject* parent = 0 );
+    using QQmlParserStatus::classBegin;
 
     Q_PROPERTY( QString vlcVersion READ get_vlcVersion )
 
