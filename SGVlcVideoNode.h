@@ -41,6 +41,7 @@ public:
 
     virtual QSGMaterialType* type() const;
     virtual QSGMaterialShader* createShader() const;
+    virtual int compare( const QSGMaterial *other ) const;
 
     void setFrame( const QSharedPointer<const QmlVlcI420Frame>& frame );
 
