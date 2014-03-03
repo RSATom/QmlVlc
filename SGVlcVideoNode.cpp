@@ -120,13 +120,13 @@ void QSGVlcVideoFrameMaterial::bindPlanes()
         const quint16 tw = m_frame->width;
         const quint16 th = m_frame->height;
 
-        bindPlane( GL_TEXTURE0, m_planeTexIds[0], m_frame->yPlane, tw, th );
         bindPlane( GL_TEXTURE1, m_planeTexIds[1], m_frame->uPlane, tw / 2, th / 2 );
         bindPlane( GL_TEXTURE2, m_planeTexIds[2], m_frame->vPlane, tw / 2, th / 2 );
+        bindPlane( GL_TEXTURE0, m_planeTexIds[0], m_frame->yPlane, tw, th );
     } else {
-        bindPlane( GL_TEXTURE0, m_planeTexIds[0], 0, 0, 0 );
         bindPlane( GL_TEXTURE1, m_planeTexIds[1], 0, 0, 0 );
         bindPlane( GL_TEXTURE2, m_planeTexIds[2], 0, 0, 0 );
+        bindPlane( GL_TEXTURE0, m_planeTexIds[0], 0, 0, 0 );
     }
 }
 
