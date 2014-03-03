@@ -38,7 +38,7 @@ QSGNode* QmlVlcVideoSurface::updatePaintNode( QSGNode* oldNode,
     if( !node )
         node = new SGVlcVideoNode;
 
-    QRectF outRect( x(), y(), width(), height() );
+    QRectF outRect( 0, 0, width(), height() );
 
     const uint16_t fw = m_frame->width;
     const uint16_t fh = m_frame->height;
@@ -53,9 +53,8 @@ QSGNode* QmlVlcVideoSurface::updatePaintNode( QSGNode* oldNode,
     else if( frameAspect < itemAspect )
         outWidth = outHeight * frameAspect;
 
-    outRect = QRectF( x() + ( width() - outWidth ) / 2,
-                        y() + ( height() - outHeight ) / 2,
-                        outWidth, outHeight );
+    outRect = QRectF( ( width() - outWidth ) / 2, ( height() - outHeight ) / 2,
+                       outWidth, outHeight );
 
     node->setFrame( m_frame );
     node->setRect( outRect );
