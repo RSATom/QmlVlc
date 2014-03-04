@@ -31,10 +31,12 @@ void QmlVlcVideoSurface::setSource( QmlVlcVideoOutput* source )
 QSGNode* QmlVlcVideoSurface::updatePaintNode( QSGNode* oldNode,
                                               UpdatePaintNodeData* /*data*/ )
 {
-    if( !m_frame )
-        return 0;
-
     SGVlcVideoNode* node = static_cast<SGVlcVideoNode*>( oldNode );
+    if( !m_frame ) {
+        delete node;
+        return 0;
+    }
+
     if( !node )
         node = new SGVlcVideoNode;
 
