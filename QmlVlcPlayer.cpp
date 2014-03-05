@@ -220,9 +220,65 @@ QmlVlcPlayer::QmlVlcPlayer( QObject* parent )
 
 QmlVlcPlayer::~QmlVlcPlayer()
 {
+    vlcEvents( false );
+
     m_player.close();
     if( m_libvlc ) {
         libvlc_free( m_libvlc );
         m_libvlc = 0;
     }
+}
+
+void QmlVlcPlayer::classBegin()
+{
+    QmlVlcPlayerProxy::classBegin();
+
+    vlcEvents( true );
+}
+
+void QmlVlcPlayer::vlcEvents( bool Attach )
+{
+    if( !player().is_open() )
+        return;
+
+    libvlc_event_manager_t* em =
+        libvlc_media_player_event_manager( player().get_mp() );
+    if( !em )
+        return;
+
+    for( int e = libvlc_MediaPlayerMediaChanged; e <= libvlc_MediaPlayerVout; ++e ) {
+        switch( e ){
+        case libvlc_MediaPlayerMediaChanged:
+        case libvlc_MediaPlayerNothingSpecial:
+        case libvlc_MediaPlayerOpening:
+        case libvlc_MediaPlayerBuffering:
+        case libvlc_MediaPlayerPlaying:
+        case libvlc_MediaPlayerPaused:
+        case libvlc_MediaPlayerStopped:
+        case libvlc_MediaPlayerForward:
+        case libvlc_MediaPlayerBackward:
+        case libvlc_MediaPlayerEndReached:
+        case libvlc_MediaPlayerEncounteredError:
+        case libvlc_MediaPlayerTimeChanged:
+        case libvlc_MediaPlayerPositionChanged:
+        case libvlc_MediaPlayerSeekableChanged:
+        case libvlc_MediaPlayerPausableChanged:
+        //case libvlc_MediaPlayerTitleChanged:
+        //case libvlc_MediaPlayerSnapshotTaken:
+        //case libvlc_MediaPlayerLengthChanged:
+        //case libvlc_MediaPlayerVout:
+            if( Attach )
+                libvlc_event_attach( em, e, OnLibVlcEvent_proxy, this );
+            else
+                libvlc_event_detach( em, e, OnLibVlcEvent_proxy, this );
+            break;
+        }
+    }
+}
+
+//libvlc events arrives from separate thread
+void QmlVlcPlayer::OnLibVlcEvent_proxy( const libvlc_event_t* e, void *param )
+{
+    QmlVlcPlayerProxy* this_ = static_cast<QmlVlcPlayerProxy*>( param );
+    this_->OnLibVlcEvent( e );
 }
