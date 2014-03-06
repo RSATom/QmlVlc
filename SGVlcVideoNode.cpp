@@ -78,6 +78,7 @@ void QSGVlcVideoFrameMaterialShader::updateState( const RenderState& state,
 
     fm->bindPlanes();
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 // QSGVlcVideoFrameMaterial
 QSGVlcVideoFrameMaterial::QSGVlcVideoFrameMaterial()

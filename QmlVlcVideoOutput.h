@@ -13,7 +13,7 @@
 
 #include "QmlVlcVideoFrame.h"
 
-#include <QQmlParserStatus >
+#include <QQmlParserStatus>
 
 class QmlVlcVideoSurface; //#include "QmlVlcVideoSurface.h"
 
