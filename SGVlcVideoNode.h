@@ -26,6 +26,7 @@ public:
 private:
     int m_matrixId;
     int m_rgbMatrixId;
+    int m_opacityId;
     int m_yPlaneTexId;
     int m_uPlaneTexId;
     int m_vPlaneTexId;

@@ -33,6 +33,7 @@ const char* QSGVlcVideoFrameMaterialShader::fragmentShader() const
 {
     return
         "uniform mediump mat4 rgbMatrix;"
+        "uniform lowp float opacity;"
         "uniform sampler2D yPlaneTex;"
         "uniform sampler2D uPlaneTex;"
         "uniform sampler2D vPlaneTex;"
@@ -41,7 +42,7 @@ const char* QSGVlcVideoFrameMaterialShader::fragmentShader() const
         "    mediump float y = texture2D( yPlaneTex, v_texCoord ).r;"
         "    mediump float u = texture2D( uPlaneTex, v_texCoord ).r;"
         "    mediump float v = texture2D( vPlaneTex, v_texCoord ).r;"
-        "    gl_FragColor = vec4( y - .0625, u - .5, v - .5, 1. ) * rgbMatrix;"
+        "    gl_FragColor = vec4( y - .0625, u - .5, v - .5, 1. ) * rgbMatrix * opacity;"
         "}";
 }
 
@@ -49,6 +50,7 @@ void QSGVlcVideoFrameMaterialShader::initialize()
 {
     m_matrixId = program()->uniformLocation("matrix");
     m_rgbMatrixId = program()->uniformLocation("rgbMatrix");
+    m_opacityId = program()->uniformLocation("opacity");
     m_yPlaneTexId = program()->uniformLocation("yPlaneTex");
     m_uPlaneTexId = program()->uniformLocation("uPlaneTex");
     m_vPlaneTexId = program()->uniformLocation("vPlaneTex");
@@ -58,6 +60,10 @@ void QSGVlcVideoFrameMaterialShader::updateState( const RenderState& state,
                                                   QSGMaterial* newMaterial,
                                                   QSGMaterial* /*oldMaterial*/ )
 {
+    if( state.isOpacityDirty() ) {
+        program()->setUniformValue( m_opacityId, GLfloat( state.opacity() ) );
+    }
+
     if( state.isMatrixDirty() )
         program()->setUniformValue( m_matrixId, state.combinedMatrix() );
 
