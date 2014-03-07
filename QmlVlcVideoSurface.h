@@ -4,7 +4,7 @@
 #include <QQuickItem>
 #include <QPointer>
 
-#include "QmlVlcVideoOutput.h"
+#include "QmlVlcPlayer.h"
 
 struct QmlVlcI420Frame;//#include "QmlVlcVideoFrame.h"
 
@@ -13,15 +13,15 @@ class QmlVlcVideoSurface
 {
     Q_OBJECT
 
-    Q_PROPERTY( QmlVlcVideoOutput* source READ source WRITE setSource NOTIFY sourceChanged )
+    Q_PROPERTY( QmlVlcPlayer* source READ source WRITE setSource NOTIFY sourceChanged )
 
 public:
     QmlVlcVideoSurface();
     ~QmlVlcVideoSurface();
 
-    QmlVlcVideoOutput* source() const
-        { return m_source.data(); }
-    void setSource( QmlVlcVideoOutput* source );
+    QmlVlcPlayer* source() const
+        { return m_source; }
+    void setSource( QmlVlcPlayer* source );
 
     virtual QSGNode* updatePaintNode( QSGNode*, UpdatePaintNodeData* );
 
@@ -32,7 +32,7 @@ Q_SIGNALS:
     void sourceChanged();
 
 private:
-    QPointer<QmlVlcVideoOutput> m_source;
+    QPointer<QmlVlcPlayer> m_source;
 
     QSharedPointer<const QmlVlcI420Frame> m_frame;
 };

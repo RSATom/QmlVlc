@@ -1,6 +1,6 @@
-#include "QmlVlcPlayer.h"
+#include "QmlVlcMmPlayer.h"
 
-QmlVlcPlayer::QmlVlcPlayer( QObject* parent )
+QmlVlcMmPlayer::QmlVlcMmPlayer( QObject* parent )
     : QmlVlcPlayerProxy( &m_player, parent ),
       m_videoOutput( &m_player )
 {
@@ -9,7 +9,7 @@ QmlVlcPlayer::QmlVlcPlayer( QObject* parent )
     m_videoOutput.init();
 }
 
-QmlVlcPlayer::~QmlVlcPlayer()
+QmlVlcMmPlayer::~QmlVlcMmPlayer()
 {
     m_player.close();
     if( m_libvlc ) {

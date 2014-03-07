@@ -4,24 +4,15 @@
 
 #include "QmlVlcVideoSurface.h"
 
-QmlVlcVideoOutput::QmlVlcVideoOutput( vlc::player* player, QObject *parent /*= 0*/)
+QmlVlcVideoOutput::QmlVlcVideoOutput( vlc::player* player, QObject* parent /*= 0*/ )
     : QObject( parent ), m_player( player )
 {
 }
 
-QmlVlcVideoOutput::~QmlVlcVideoOutput()
-{
-}
-
-void QmlVlcVideoOutput::classBegin()
+void QmlVlcVideoOutput::init()
 {
     assert( m_player && m_player->is_open() );
     vlc::basic_vmem_wrapper::open( &( m_player->basic_player() ) );
-}
-
-void QmlVlcVideoOutput::componentComplete()
-{
-
 }
 
 unsigned QmlVlcVideoOutput::video_format_cb( char *chroma,

@@ -3,6 +3,7 @@
 #include "SGVlcVideoNode.h"
 
 QmlVlcVideoSurface::QmlVlcVideoSurface()
+    : m_source( 0 )
 {
     setFlag( QQuickItem::ItemHasContents, true );
 }
@@ -12,7 +13,7 @@ QmlVlcVideoSurface::~QmlVlcVideoSurface()
     setSource( 0 );
 }
 
-void QmlVlcVideoSurface::setSource( QmlVlcVideoOutput* source )
+void QmlVlcVideoSurface::setSource( QmlVlcPlayer* source )
 {
     if( source == m_source.data() )
         return;
