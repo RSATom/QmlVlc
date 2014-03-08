@@ -2,7 +2,7 @@
 
 #include <QAbstractVideoSurface>
 
-QmlVlcMmVideoOutput::QmlVlcMmVideoOutput( vlc::player* player, QObject *parent /*= 0*/)
+QmlVlcMmVideoOutput::QmlVlcMmVideoOutput( vlc::player* player, QObject* parent /*= 0*/ )
     : QObject( parent ), m_player( player ), m_videoSurface( 0 ),
       m_UPlaneOffset( 0 ), m_VPlaneOffset( 0 )
 {
@@ -14,9 +14,9 @@ void QmlVlcMmVideoOutput::init()
     vlc::basic_vmem_wrapper::open( &( m_player->basic_player() ) );
 }
 
-unsigned QmlVlcMmVideoOutput::video_format_cb( char *chroma,
-                                                 unsigned *width, unsigned *height,
-                                                 unsigned *pitches, unsigned *lines )
+unsigned QmlVlcMmVideoOutput::video_format_cb( char* chroma,
+                                               unsigned* width, unsigned* height,
+                                               unsigned* pitches, unsigned* lines )
 {
     QMutexLocker locker( &m_frameGuard );
 
@@ -54,7 +54,7 @@ void QmlVlcMmVideoOutput::video_cleanup_cb()
     QMetaObject::invokeMethod( this, "cleanupVideoSurface" );
 }
 
-void* QmlVlcMmVideoOutput::video_lock_cb( void **planes )
+void* QmlVlcMmVideoOutput::video_lock_cb( void** planes )
 {
     m_frameGuard.lock();
 
