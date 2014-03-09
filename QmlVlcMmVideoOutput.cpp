@@ -4,6 +4,9 @@
 
 QmlVlcMmVideoOutput::QmlVlcMmVideoOutput( vlc::player* player, QObject* parent /*= 0*/ )
     : QObject( parent ), m_player( player ), m_videoSurface( 0 ),
+      m_pixelFormat( QVideoFrame::Format_Invalid ),
+      m_frameWidth( 0 ), m_frameHeight( 0 ),
+      m_frameSize( 0 ), m_pitchSize( 0 ),
       m_UPlaneOffset( 0 ), m_VPlaneOffset( 0 )
 {
 }
@@ -18,8 +21,6 @@ unsigned QmlVlcMmVideoOutput::video_format_cb( char* chroma,
                                                unsigned* width, unsigned* height,
                                                unsigned* pitches, unsigned* lines )
 {
-    QMutexLocker locker( &m_frameGuard );
-
     memcpy( chroma, "I420", 4 );
     pitches[0] = *width; if( pitches[0] % 4 ) pitches[0] += 4 - pitches[0] % 4;
     pitches[1] = ( *width + 1 ) / 2; if( pitches[1] % 4 ) pitches[1] += 4 - pitches[1] % 4;
@@ -32,42 +33,47 @@ unsigned QmlVlcMmVideoOutput::video_format_cb( char* chroma,
     m_UPlaneOffset = pitches[0] * lines[0];
     m_VPlaneOffset = m_UPlaneOffset + pitches[1] * lines[1];
 
-    m_videoFrame =
-        QVideoFrame( pitches[0] * lines[0] + pitches[1] * lines[1] + pitches[2] * lines[2],
-                     QSize( *width, *height ), (*pitches),
-                     QVideoFrame::Format_YUV420P );
+    m_pixelFormat = QVideoFrame::Format_YUV420P;
+    m_frameWidth = *width;
+    m_frameHeight = *height;
+    m_frameSize = pitches[0] * lines[0] + pitches[1] * lines[1] + pitches[2] * lines[2];
+    m_pitchSize = pitches[0];
 
-    m_surfaceFormat = QVideoSurfaceFormat( QSize( *width, *height ), m_videoFrame.pixelFormat() );
-    QMetaObject::invokeMethod( this, "initVideoSurface" );
+    QVideoSurfaceFormat format( QSize( m_frameWidth, m_frameHeight ), m_pixelFormat );
+
+    QMetaObject::invokeMethod( this, "updateSurfaceFormat",
+                               Q_ARG( QVideoSurfaceFormat, format ) );
 
     return 3;
 }
 
 void QmlVlcMmVideoOutput::video_cleanup_cb()
 {
-    QMutexLocker locker( &m_frameGuard );
-
-    Q_ASSERT( !m_videoFrame.isMapped() );
-
+    m_pixelFormat = QVideoFrame::Format_Invalid;
+    m_frameWidth = m_frameHeight = 0;
+    m_frameSize = 0;
+    m_pitchSize = 0;
     m_UPlaneOffset = m_VPlaneOffset = 0;
+    m_videoFrame = QVideoFrame();
 
     QMetaObject::invokeMethod( this, "cleanupVideoSurface" );
 }
 
 void* QmlVlcMmVideoOutput::video_lock_cb( void** planes )
 {
-    m_frameGuard.lock();
+    QVideoFrame frame( m_frameSize,
+                       QSize( m_frameWidth, m_frameHeight ), m_pitchSize,
+                       m_pixelFormat );
 
-    if( m_videoFrame.map( QAbstractVideoBuffer::WriteOnly ) ) {
-        uint8_t* b = m_videoFrame.bits();
+    if( frame.map( QAbstractVideoBuffer::WriteOnly ) ) {
+        uint8_t* b = frame.bits();
         planes[0] = b;
         planes[1] = b + m_UPlaneOffset;
         planes[2] = b + m_VPlaneOffset;
-    } else {
-        planes[0] = 0;
-        planes[1] = 0;
-        planes[2] = 0;
-    }
+    } else
+        assert( false );
+
+    m_videoFrame = frame;
 
     return 0;
 }
@@ -76,13 +82,29 @@ void QmlVlcMmVideoOutput::video_unlock_cb( void* /*picture*/, void *const * /*pl
 {
     if( m_videoFrame.isMapped() )
         m_videoFrame.unmap();
-
-    m_frameGuard.unlock();
+    else
+        assert(false);
 }
 
 void QmlVlcMmVideoOutput::video_display_cb( void* /*picture*/ )
 {
-    QMetaObject::invokeMethod( this, "updateFrame" );
+    QMetaObject::invokeMethod( this, "presentFrame",
+                               Q_ARG( QVideoFrame, m_videoFrame ) );
+}
+
+void QmlVlcMmVideoOutput::updateSurfaceFormat( const QVideoSurfaceFormat& newFormat )
+{
+    cleanupVideoSurface();
+
+    m_surfaceFormat = newFormat;
+
+    initVideoSurface( newFormat );
+}
+
+void QmlVlcMmVideoOutput::presentFrame( const QVideoFrame& newFrame )
+{
+    if( m_videoSurface )
+        m_videoSurface->present( newFrame );
 }
 
 void QmlVlcMmVideoOutput::setVideoSurface( QAbstractVideoSurface* s )
@@ -94,28 +116,15 @@ void QmlVlcMmVideoOutput::setVideoSurface( QAbstractVideoSurface* s )
 
     m_videoSurface = s;
 
-    initVideoSurface();
+    initVideoSurface( m_surfaceFormat );
 }
 
-void QmlVlcMmVideoOutput::initVideoSurface()
+void QmlVlcMmVideoOutput::initVideoSurface( const QVideoSurfaceFormat& format )
 {
-    if( !m_videoSurface )
-        return;
+    assert( !m_videoSurface || !m_videoSurface->isActive() );
 
-    cleanupVideoSurface();
-
-    QMutexLocker locker( &m_frameGuard );
-    if( m_surfaceFormat.isValid() )
-        m_videoSurface->start( m_surfaceFormat );
-}
-
-void QmlVlcMmVideoOutput::updateFrame()
-{
-    QMutexLocker locker( &m_frameGuard );
-
-    if( m_videoSurface ) {
-        m_videoSurface->present( m_videoFrame );
-    }
+    if( m_videoSurface && format.isValid() )
+        m_videoSurface->start( format );
 }
 
 void QmlVlcMmVideoOutput::cleanupVideoSurface()

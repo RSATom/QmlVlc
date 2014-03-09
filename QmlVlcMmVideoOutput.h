@@ -27,9 +27,11 @@ public:
     void setVideoSurface( QAbstractVideoSurface* s );
 
 private:
-    Q_INVOKABLE void initVideoSurface( );
-    Q_INVOKABLE void updateFrame();
+    Q_INVOKABLE void updateSurfaceFormat( const QVideoSurfaceFormat& newFormat );
+    Q_INVOKABLE void presentFrame( const QVideoFrame& newFrame );
     Q_INVOKABLE void cleanupVideoSurface();
+
+    void initVideoSurface( const QVideoSurfaceFormat& format );
 
 private:
     //for libvlc_video_set_format_callbacks
@@ -52,10 +54,16 @@ private:
     vlc::player *const m_player;
     QAbstractVideoSurface* m_videoSurface;
 
-    QMutex m_frameGuard;
+    QVideoSurfaceFormat m_surfaceFormat;
+
+    //for use in decode thread only
+    QVideoFrame::PixelFormat m_pixelFormat;
+    unsigned short m_frameWidth;
+    unsigned short m_frameHeight;
+    unsigned m_frameSize;
+    unsigned m_pitchSize;
     unsigned m_UPlaneOffset;
     unsigned m_VPlaneOffset;
-    QVideoSurfaceFormat m_surfaceFormat;
     QVideoFrame m_videoFrame;
 };
 
