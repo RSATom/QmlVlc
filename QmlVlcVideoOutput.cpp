@@ -63,7 +63,6 @@ void QmlVlcVideoOutput::video_cleanup_cb()
 void* QmlVlcVideoOutput::video_lock_cb( void **planes )
 {
     Q_ASSERT( m_frame );
-    m_frame->guard()->lock();
 
     planes[0] = m_frame->yPlane;
     planes[1] = m_frame->uPlane;
@@ -75,7 +74,6 @@ void* QmlVlcVideoOutput::video_lock_cb( void **planes )
 void QmlVlcVideoOutput::video_unlock_cb( void* /*picture*/, void *const * /*planes*/ )
 {
     Q_ASSERT( m_frame );
-    m_frame->guard()->unlock();
 }
 
 void QmlVlcVideoOutput::video_display_cb( void* /*picture*/ )

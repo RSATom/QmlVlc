@@ -135,8 +135,6 @@ void QSGVlcVideoFrameMaterial::bindPlanes()
         glGenTextures( sizeof( m_planeTexIds ) / sizeof( m_planeTexIds[0] ), m_planeTexIds );
 
     if( m_frame ) {
-        QMutexLocker lock( m_frame->guard() );
-
         Q_ASSERT( 0 == ( m_frame->width & 1 ) && 0 == ( m_frame->height & 1 ) );//width and height should be even
         const quint16 tw = m_frame->width;
         const quint16 th = m_frame->height;

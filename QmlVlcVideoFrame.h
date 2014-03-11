@@ -7,12 +7,6 @@
 struct QmlVlcVideoFrame
 {
     QByteArray frameBuf;
-
-    QMutex* guard() const
-        { return &m_guard; }
-
-private:
-    mutable QMutex m_guard;
 };
 
 struct QmlVlcI420Frame : public QmlVlcVideoFrame
