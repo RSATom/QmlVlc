@@ -49,7 +49,8 @@ private:
 
     QList<QmlVlcVideoSurface*> m_attachedSurfaces;
 
-    QSharedPointer<QmlVlcI420Frame> m_frame;
+    QSharedPointer<QmlVlcI420Frame> m_decodeFrame;
+    QSharedPointer<QmlVlcI420Frame> m_renderFrame;
 };
 
 #endif //QMLVLCVIDEOOUTPUT_H

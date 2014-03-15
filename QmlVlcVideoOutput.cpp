@@ -15,6 +15,29 @@ void QmlVlcVideoOutput::init()
     vlc::basic_vmem_wrapper::open( &( m_player->basic_player() ) );
 }
 
+QSharedPointer<QmlVlcI420Frame> cloneFrame( const QSharedPointer<QmlVlcI420Frame>& from )
+{
+    QSharedPointer<QmlVlcI420Frame> newFrame( new QmlVlcI420Frame );
+
+    newFrame->frameBuf.resize( from->frameBuf.size() );
+
+    newFrame->width = from->width;
+    newFrame->height = from->height;
+
+    char* fb = newFrame->frameBuf.data();
+
+    newFrame->yPlane = fb;
+    newFrame->yPlaneSize = from->yPlaneSize;
+
+    newFrame->uPlane = fb + newFrame->yPlaneSize;
+    newFrame->uPlaneSize = from->uPlaneSize;
+
+    newFrame->vPlane = fb + newFrame->yPlaneSize + newFrame->uPlaneSize;
+    newFrame->vPlaneSize = from->vPlaneSize;
+
+    return newFrame;
+}
+
 unsigned QmlVlcVideoOutput::video_format_cb( char *chroma,
                                              unsigned *width, unsigned *height,
                                              unsigned *pitches, unsigned *lines )
@@ -32,62 +55,62 @@ unsigned QmlVlcVideoOutput::video_format_cb( char *chroma,
     lines[1] = evenHeight / 2;
     lines[2] = lines[1];
 
-    m_frame.reset( new QmlVlcI420Frame );
+    m_decodeFrame.reset( new QmlVlcI420Frame );
 
-    m_frame->frameBuf.resize( pitches[0] * lines[0] + pitches[1] * lines[1] + pitches[2] * lines[2] );
+    m_decodeFrame->frameBuf.resize( pitches[0] * lines[0] + pitches[1] * lines[1] + pitches[2] * lines[2] );
 
-    m_frame->width = evenWidth;
-    m_frame->height = evenHeight;
+    m_decodeFrame->width = evenWidth;
+    m_decodeFrame->height = evenHeight;
 
-    char* fb = m_frame->frameBuf.data();
+    char* fb = m_decodeFrame->frameBuf.data();
 
-    m_frame->yPlane = fb;
-    m_frame->yPlaneSize = pitches[0] * lines[0];
+    m_decodeFrame->yPlane = fb;
+    m_decodeFrame->yPlaneSize = pitches[0] * lines[0];
 
-    m_frame->uPlane = fb + m_frame->yPlaneSize;
-    m_frame->uPlaneSize = pitches[1] * lines[1];
+    m_decodeFrame->uPlane = fb + m_decodeFrame->yPlaneSize;
+    m_decodeFrame->uPlaneSize = pitches[1] * lines[1];
 
-    m_frame->vPlane = fb + m_frame->yPlaneSize + m_frame->uPlaneSize;
-    m_frame->vPlaneSize = pitches[2] * lines[2];
+    m_decodeFrame->vPlane = fb + m_decodeFrame->yPlaneSize + m_decodeFrame->uPlaneSize;
+    m_decodeFrame->vPlaneSize = pitches[2] * lines[2];
+
+    m_renderFrame = cloneFrame( m_decodeFrame );
 
     return 3;
 }
 
 void QmlVlcVideoOutput::video_cleanup_cb()
 {
-    m_frame.clear();
+    m_decodeFrame.clear();
+    m_renderFrame.clear();
 
     QMetaObject::invokeMethod( this, "frameUpdated" );
 }
 
 void* QmlVlcVideoOutput::video_lock_cb( void **planes )
 {
-    Q_ASSERT( m_frame );
+    Q_ASSERT( m_decodeFrame );
 
-    planes[0] = m_frame->yPlane;
-    planes[1] = m_frame->uPlane;
-    planes[2] = m_frame->vPlane;
+    planes[0] = m_decodeFrame->yPlane;
+    planes[1] = m_decodeFrame->uPlane;
+    planes[2] = m_decodeFrame->vPlane;
 
     return 0;
 }
 
 void QmlVlcVideoOutput::video_unlock_cb( void* /*picture*/, void *const * /*planes*/ )
 {
-    Q_ASSERT( m_frame );
 }
 
 void QmlVlcVideoOutput::video_display_cb( void* /*picture*/ )
 {
+    m_renderFrame.swap( m_decodeFrame );
     QMetaObject::invokeMethod( this, "frameUpdated" );
 }
 
 void QmlVlcVideoOutput::frameUpdated()
 {
-    //protect frame from destruction while we will process it...
-    QSharedPointer<const QmlVlcI420Frame> frame = m_frame;
-
     std::for_each( m_attachedSurfaces.begin(), m_attachedSurfaces.end(),
-                   std::bind2nd( std::mem_fun( &QmlVlcVideoSurface::presentFrame ), frame ) );
+                   std::bind2nd( std::mem_fun( &QmlVlcVideoSurface::presentFrame ), m_renderFrame ) );
 }
 
 void QmlVlcVideoOutput::registerVideoSurface( QmlVlcVideoSurface* s )
