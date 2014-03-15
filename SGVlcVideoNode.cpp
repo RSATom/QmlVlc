@@ -60,9 +60,8 @@ void QSGVlcVideoFrameMaterialShader::updateState( const RenderState& state,
                                                   QSGMaterial* newMaterial,
                                                   QSGMaterial* /*oldMaterial*/ )
 {
-    if( state.isOpacityDirty() ) {
+    if( state.isOpacityDirty() )
         program()->setUniformValue( m_opacityId, GLfloat( state.opacity() ) );
-    }
 
     if( state.isMatrixDirty() )
         program()->setUniformValue( m_matrixId, state.combinedMatrix() );
@@ -187,6 +186,6 @@ void SGVlcVideoNode::setFrame( const QSharedPointer<const QmlVlcI420Frame>& fram
 
 void SGVlcVideoNode::setRect( const QRectF& rect )
 {
-    m_geometry.updateTexturedRectGeometry( &m_geometry, rect, QRectF( 0, 0, 1., 1. ) );
+    QSGGeometry::updateTexturedRectGeometry( &m_geometry, rect, QRectF( 0, 0, 1., 1. ) );
     markDirty( QSGNode::DirtyGeometry );
 }
