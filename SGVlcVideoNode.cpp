@@ -91,6 +91,7 @@ QSGVlcVideoFrameMaterial::QSGVlcVideoFrameMaterial()
     : m_frame( 0 )
 {
     memset( m_planeTexIds, 0, sizeof( m_planeTexIds ) );
+    setFlag( Blending, false );
 }
 
 QSGVlcVideoFrameMaterial::~QSGVlcVideoFrameMaterial()
@@ -134,14 +135,17 @@ void QSGVlcVideoFrameMaterial::bindPlanes()
     if( 0 == m_planeTexIds[0] && 0 == m_planeTexIds[1] && 0 == m_planeTexIds[2] )
         glGenTextures( sizeof( m_planeTexIds ) / sizeof( m_planeTexIds[0] ), m_planeTexIds );
 
-    if( m_frame ) {
-        Q_ASSERT( 0 == ( m_frame->width & 1 ) && 0 == ( m_frame->height & 1 ) );//width and height should be even
-        const quint16 tw = m_frame->width;
-        const quint16 th = m_frame->height;
+    QSharedPointer<const QmlVlcI420Frame> tmpFrame;
+    m_frame.swap( tmpFrame );
 
-        bindPlane( GL_TEXTURE1, m_planeTexIds[1], m_frame->uPlane, tw / 2, th / 2 );
-        bindPlane( GL_TEXTURE2, m_planeTexIds[2], m_frame->vPlane, tw / 2, th / 2 );
-        bindPlane( GL_TEXTURE0, m_planeTexIds[0], m_frame->yPlane, tw, th );
+    if( tmpFrame ) {
+        Q_ASSERT( 0 == ( tmpFrame->width & 1 ) && 0 == ( tmpFrame->height & 1 ) );//width and height should be even
+        const quint16 tw = tmpFrame->width;
+        const quint16 th = tmpFrame->height;
+
+        bindPlane( GL_TEXTURE1, m_planeTexIds[1], tmpFrame->uPlane, tw / 2, th / 2 );
+        bindPlane( GL_TEXTURE2, m_planeTexIds[2], tmpFrame->vPlane, tw / 2, th / 2 );
+        bindPlane( GL_TEXTURE0, m_planeTexIds[0], tmpFrame->yPlane, tw, th );
     } else {
         bindPlane( GL_TEXTURE1, m_planeTexIds[1], 0, 0, 0 );
         bindPlane( GL_TEXTURE2, m_planeTexIds[2], 0, 0, 0 );

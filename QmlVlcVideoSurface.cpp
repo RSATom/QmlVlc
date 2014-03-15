@@ -3,7 +3,7 @@
 #include "SGVlcVideoNode.h"
 
 QmlVlcVideoSurface::QmlVlcVideoSurface()
-    : m_source( 0 )
+    : m_source( 0 ), m_frameUpdated( false )
 {
     setFlag( QQuickItem::ItemHasContents, true );
 }
@@ -59,7 +59,10 @@ QSGNode* QmlVlcVideoSurface::updatePaintNode( QSGNode* oldNode,
     outRect = QRectF( ( width() - outWidth ) / 2, ( height() - outHeight ) / 2,
                        outWidth, outHeight );
 
-    node->setFrame( m_frame );
+    if( m_frameUpdated ) {
+        node->setFrame( m_frame );
+        m_frameUpdated = false;
+    }
     node->setRect( outRect );
 
     return node;
@@ -68,5 +71,6 @@ QSGNode* QmlVlcVideoSurface::updatePaintNode( QSGNode* oldNode,
 void QmlVlcVideoSurface::presentFrame( const QSharedPointer<const QmlVlcI420Frame>& frame )
 {
     m_frame = frame;
+    m_frameUpdated = true;
     update();
 }

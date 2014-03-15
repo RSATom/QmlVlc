@@ -34,6 +34,7 @@ Q_SIGNALS:
 private:
     QPointer<QmlVlcPlayer> m_source;
 
+    bool m_frameUpdated;
     QSharedPointer<const QmlVlcI420Frame> m_frame;
 };
 
