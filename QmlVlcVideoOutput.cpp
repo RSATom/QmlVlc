@@ -109,8 +109,11 @@ void QmlVlcVideoOutput::video_display_cb( void* /*picture*/ )
 
 void QmlVlcVideoOutput::frameUpdated()
 {
+    //convert to shared pointer to const frame to avoid crash
+    QSharedPointer<const QmlVlcI420Frame> frame = m_renderFrame;
+
     std::for_each( m_attachedSurfaces.begin(), m_attachedSurfaces.end(),
-                   std::bind2nd( std::mem_fun( &QmlVlcVideoSurface::presentFrame ), m_renderFrame ) );
+                   std::bind2nd( std::mem_fun( &QmlVlcVideoSurface::presentFrame ), frame ) );
 }
 
 void QmlVlcVideoOutput::registerVideoSurface( QmlVlcVideoSurface* s )
