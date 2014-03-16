@@ -3,7 +3,4 @@
 
 void RegisterQmlVlc();
 
-void RegisterQmlVlcVideoSurface();
-void RegisterQmlVlcPlayer( bool creatable /*= true*/ );
-
 #endif //QMLVLC_H

@@ -20,18 +20,15 @@ void RegisterQmlVlcVideoSurface()
         "VlcVideoSurface" );
 }
 
-void RegisterQmlVlcPlayer( bool creatable = true )
+void RegisterQmlVlcPlayer()
 {
-    if( creatable ) {
-        qmlRegisterType<QmlVlcPlayer>(
-            qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
-            "VlcPlayer" );
-    } else {
-        qmlRegisterUncreatableType<QmlVlcPlayer>(
-            qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
-            "QmlVlcPlayer",
-            QStringLiteral("QmlVlcPlayer cannot be instantiated directly") );
-    }
+    qmlRegisterUncreatableType<QmlVlcSurfacePlayerProxy>(
+        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
+        "QmlVlcSurfacePlayerProxy",
+        QStringLiteral("QmlVlcSurfacePlayerProxy cannot be instantiated directly") );
+    qmlRegisterType<QmlVlcPlayer>(
+        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
+        "VlcPlayer" );
 }
 
 #ifdef QMLVLC_QTMULTIMEDIA_ENABLE

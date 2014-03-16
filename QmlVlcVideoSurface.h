@@ -13,15 +13,15 @@ class QmlVlcVideoSurface
 {
     Q_OBJECT
 
-    Q_PROPERTY( QmlVlcPlayer* source READ source WRITE setSource NOTIFY sourceChanged )
+    Q_PROPERTY( QmlVlcSurfacePlayerProxy* source READ source WRITE setSource NOTIFY sourceChanged )
 
 public:
     QmlVlcVideoSurface();
     ~QmlVlcVideoSurface();
 
-    QmlVlcPlayer* source() const
+    QmlVlcSurfacePlayerProxy* source() const
         { return m_source; }
-    void setSource( QmlVlcPlayer* source );
+    void setSource( QmlVlcSurfacePlayerProxy* source );
 
     virtual QSGNode* updatePaintNode( QSGNode*, UpdatePaintNodeData* );
 
@@ -32,7 +32,7 @@ Q_SIGNALS:
     void sourceChanged();
 
 private:
-    QPointer<QmlVlcPlayer> m_source;
+    QPointer<QmlVlcSurfacePlayerProxy> m_source;
 
     bool m_frameUpdated;
     QSharedPointer<const QmlVlcI420Frame> m_frame;
