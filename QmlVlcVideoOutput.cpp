@@ -15,6 +15,13 @@ void QmlVlcVideoOutput::init()
     vlc::basic_vmem_wrapper::open( &( m_player->basic_player() ) );
 }
 
+QmlVlcVideoOutput::~QmlVlcVideoOutput()
+{
+    //we should force closing vmem here,
+    //to avoid pure virtual member call in vlc::basic_vmem_wrapper
+    vlc::basic_vmem_wrapper::close();
+}
+
 QSharedPointer<QmlVlcI420Frame> cloneFrame( const QSharedPointer<QmlVlcI420Frame>& from )
 {
     QSharedPointer<QmlVlcI420Frame> newFrame( new QmlVlcI420Frame );

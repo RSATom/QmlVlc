@@ -23,6 +23,7 @@ class QmlVlcVideoOutput
 public:
     explicit QmlVlcVideoOutput( vlc::player* player, QObject* parent = 0 );
     void init();
+    ~QmlVlcVideoOutput();
 
     void registerVideoSurface( QmlVlcVideoSurface* s );
     void unregisterVideoSurface( QmlVlcVideoSurface* s );
