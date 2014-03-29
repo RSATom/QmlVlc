@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include <libvlc_wrapper/vlc_player.h>
+#include "libvlc_wrapper/vlc_player.h"
 
 class QmlVlcSubtitle : public QObject
 {

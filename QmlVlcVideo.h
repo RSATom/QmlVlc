@@ -1,7 +1,7 @@
 #ifndef QMLVLCVIDEO_H
 #define QMLVLCVIDEO_H
 
-#include <libvlc_wrapper/vlc_player.h>
+#include "libvlc_wrapper/vlc_player.h"
 
 #include "QmlVlcMarquee.h"
 #include "QmlVlcLogo.h"

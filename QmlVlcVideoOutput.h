@@ -7,8 +7,8 @@
 #include <QQmlParserStatus>
 
 #ifndef Q_MOC_RUN
-#include <libvlc_wrapper/vlc_player.h>
-#include <libvlc_wrapper/vlc_vmem.h>
+#include "libvlc_wrapper/vlc_player.h"
+#include "libvlc_wrapper/vlc_vmem.h"
 #endif // Q_MOC_RUN
 
 #include "QmlVlcVideoFrame.h"
