@@ -2,9 +2,8 @@
 
 QString QmlVlcMediaDesc::get_meta( libvlc_meta_t e_meta )
 {
-    libvlc_media_t* p_media = libvlc_media_player_get_media( m_player.get_mp() );
-    const char* info = p_media ? libvlc_media_get_meta( p_media, e_meta ) : 0;
-    return info ? QString::fromUtf8( info ) : QString();
+    std::string meta = m_player.current_media().media().meta( e_meta );
+    return QString::fromUtf8( meta.data(), meta.size() );
 }
 
 QString QmlVlcMediaDesc::get_title()

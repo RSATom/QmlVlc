@@ -201,7 +201,8 @@ void QmlVlcPlayerProxy::toggleMute()
 
 QString QmlVlcPlayerProxy::get_mrl()
 {
-    return QString::fromUtf8( player().current_media().get_mrl() );
+    std::string mrl = player().current_media().media().mrl();
+    return QString::fromUtf8( mrl.data(), mrl.size() );
 }
 
 void QmlVlcPlayerProxy::set_mrl( const QString& mrl )
