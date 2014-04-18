@@ -2,12 +2,12 @@
 
 double QmlVlcInput::get_length()
 {
-    return static_cast<double>( m_player.current_media().get_length() );
+    return static_cast<double>( m_player.get_length() );
 }
 
 double QmlVlcInput::get_fps()
 {
-    return m_player.current_media().get_fps();
+    return m_player.get_fps();
 }
 
 bool QmlVlcInput::get_hasVout()

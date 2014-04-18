@@ -2,7 +2,7 @@
 
 QString QmlVlcMediaDesc::get_meta( libvlc_meta_t e_meta )
 {
-    std::string meta = m_player.current_media().media().meta( e_meta );
+    std::string meta = m_player.current_media().meta( e_meta );
     return QString::fromUtf8( meta.data(), meta.size() );
 }
 
