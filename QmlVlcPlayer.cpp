@@ -1,10 +1,14 @@
 #include "QmlVlcPlayer.h"
 
+#include "QmlVlcConfig.h"
+
 QmlVlcPlayer::QmlVlcPlayer( QObject* parent )
-    : QmlVlcSurfacePlayerProxy( &m_player, parent )
+    : QmlVlcSurfacePlayerProxy( &m_player, parent ),
+      m_libvlc( 0 )
 {
-    m_libvlc = libvlc_new( 0, 0 );
-    m_player.open( m_libvlc );
+    m_libvlc = QmlVlcConfig::createLibvlcInstance();
+    if( m_libvlc )
+        m_player.open( m_libvlc );
 }
 
 QmlVlcPlayer::~QmlVlcPlayer()

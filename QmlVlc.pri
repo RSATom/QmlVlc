@@ -1,5 +1,6 @@
 HEADERS += \
     $$PWD/QmlVlc.h \
+    $$PWD/QmlVlcConfig.h \
     $$PWD/QmlVlcAudio.h \
     $$PWD/QmlVlcDeinterlace.h \
     $$PWD/QmlVlcInput.h \
@@ -21,6 +22,7 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/QmlVlc.cpp \
+    $$PWD/QmlVlcConfig.cpp \
     $$PWD/QmlVlcAudio.cpp \
     $$PWD/QmlVlcDeinterlace.cpp \
     $$PWD/QmlVlcInput.cpp \
