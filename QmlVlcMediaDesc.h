@@ -14,23 +14,23 @@ public:
     QmlVlcMediaDesc( vlc::player& player )
         : m_player( player ) {}
 
-    Q_PROPERTY( QString title READ get_title );
-    Q_PROPERTY( QString artist READ get_artist );
-    Q_PROPERTY( QString genre READ get_genre );
-    Q_PROPERTY( QString copyright READ get_copyright );
-    Q_PROPERTY( QString album READ get_album );
-    Q_PROPERTY( QString trackNumber READ get_trackNumber );
-    Q_PROPERTY( QString description READ get_description );
-    Q_PROPERTY( QString rating READ get_rating );
-    Q_PROPERTY( QString date READ get_date );
-    Q_PROPERTY( QString setting READ get_setting );
-    Q_PROPERTY( QString URL READ get_URL );
-    Q_PROPERTY( QString language READ get_language );
-    Q_PROPERTY( QString nowPlaying READ get_nowPlaying );
-    Q_PROPERTY( QString publisher READ get_publisher );
-    Q_PROPERTY( QString encodedBy READ get_encodedBy );
-    Q_PROPERTY( QString artworkURL READ get_artworkURL );
-    Q_PROPERTY( QString trackID READ get_trackID );
+    Q_PROPERTY( QString title READ get_title )
+    Q_PROPERTY( QString artist READ get_artist )
+    Q_PROPERTY( QString genre READ get_genre )
+    Q_PROPERTY( QString copyright READ get_copyright )
+    Q_PROPERTY( QString album READ get_album )
+    Q_PROPERTY( QString trackNumber READ get_trackNumber )
+    Q_PROPERTY( QString description READ get_description )
+    Q_PROPERTY( QString rating READ get_rating )
+    Q_PROPERTY( QString date READ get_date )
+    Q_PROPERTY( QString setting READ get_setting )
+    Q_PROPERTY( QString URL READ get_URL )
+    Q_PROPERTY( QString language READ get_language )
+    Q_PROPERTY( QString nowPlaying READ get_nowPlaying )
+    Q_PROPERTY( QString publisher READ get_publisher )
+    Q_PROPERTY( QString encodedBy READ get_encodedBy )
+    Q_PROPERTY( QString artworkURL READ get_artworkURL )
+    Q_PROPERTY( QString trackID READ get_trackID )
 
     QString get_title();
     QString get_artist();

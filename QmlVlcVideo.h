@@ -14,26 +14,26 @@ public:
     QmlVlcVideo( vlc::player& player )
         : m_player( player ), m_marquee( player ), m_logo( player ), m_deinterlace( player ) { }
 
-    Q_PROPERTY( unsigned width READ get_width );
-    Q_PROPERTY( unsigned height READ get_height );
-    Q_PROPERTY( unsigned trackCount READ get_trackCount );
-    Q_PROPERTY( int track READ get_track WRITE set_track );
+    Q_PROPERTY( unsigned width READ get_width )
+    Q_PROPERTY( unsigned height READ get_height )
+    Q_PROPERTY( unsigned trackCount READ get_trackCount )
+    Q_PROPERTY( int track READ get_track WRITE set_track )
 
-    Q_PROPERTY( QString aspectRatio READ get_aspectRatio WRITE set_aspectRatio );
-    Q_PROPERTY( unsigned subtitle READ get_subtitle WRITE set_subtitle );
-    Q_PROPERTY( QString crop READ get_crop WRITE set_crop );
-    Q_PROPERTY( int teletext READ get_teletext WRITE set_teletext );
-    Q_PROPERTY( bool fullscreen READ get_fullscreen WRITE set_fullscreen );
+    Q_PROPERTY( QString aspectRatio READ get_aspectRatio WRITE set_aspectRatio )
+    Q_PROPERTY( unsigned subtitle READ get_subtitle WRITE set_subtitle )
+    Q_PROPERTY( QString crop READ get_crop WRITE set_crop )
+    Q_PROPERTY( int teletext READ get_teletext WRITE set_teletext )
+    Q_PROPERTY( bool fullscreen READ get_fullscreen WRITE set_fullscreen )
 
-    Q_PROPERTY( float contrast READ get_contrast WRITE set_contrast );
-    Q_PROPERTY( float brightness READ get_brightness WRITE set_brightness );
-    Q_PROPERTY( float hue READ get_hue WRITE set_hue );
-    Q_PROPERTY( float saturation READ get_saturation WRITE set_saturation );
-    Q_PROPERTY( float gamma READ get_gamma WRITE set_gamma );
+    Q_PROPERTY( float contrast READ get_contrast WRITE set_contrast )
+    Q_PROPERTY( float brightness READ get_brightness WRITE set_brightness )
+    Q_PROPERTY( float hue READ get_hue WRITE set_hue )
+    Q_PROPERTY( float saturation READ get_saturation WRITE set_saturation )
+    Q_PROPERTY( float gamma READ get_gamma WRITE set_gamma )
 
-    Q_PROPERTY( QmlVlcMarquee* marquee READ get_marquee CONSTANT );
-    Q_PROPERTY( QmlVlcLogo* logo READ get_logo CONSTANT );
-    Q_PROPERTY( QmlVlcDeinterlace* deinterlace READ get_deinterlace CONSTANT );
+    Q_PROPERTY( QmlVlcMarquee* marquee READ get_marquee CONSTANT )
+    Q_PROPERTY( QmlVlcLogo* logo READ get_logo CONSTANT )
+    Q_PROPERTY( QmlVlcDeinterlace* deinterlace READ get_deinterlace CONSTANT )
 
     unsigned get_width();
     unsigned get_height();
@@ -77,7 +77,7 @@ public:
     float get_gamma();
     void set_gamma( float v );
 
-    QmlVlcMarquee*     get_marquee()     { return &m_marquee; };
+    QmlVlcMarquee*     get_marquee()     { return &m_marquee; }
     QmlVlcLogo*        get_logo()        { return &m_logo; }
     QmlVlcDeinterlace* get_deinterlace() { return &m_deinterlace; }
 

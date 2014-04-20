@@ -15,6 +15,7 @@ const int QmlVlcVersionMinor = 1;
 
 void RegisterQmlVlcPlayer()
 {
+    // @uri QmlVlc
     qmlRegisterUncreatableType<QmlVlcAudio>(
         qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcAudio",
@@ -72,6 +73,7 @@ void RegisterQmlVlcPlayer()
 #ifdef QMLVLC_QTMULTIMEDIA_ENABLE
 void RegisterQmlVlcMmPlayer()
 {
+    // @uri QmlVlc
     qmlRegisterType<QmlVlcMmPlayer>(
         qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcMmPlayer" );

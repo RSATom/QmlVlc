@@ -14,11 +14,11 @@ public:
     QmlVlcPlaylist( vlc::player& player )
         : m_player( player ), m_items( player ) { }
 
-    Q_PROPERTY( unsigned itemCount READ get_itemCount );
-    Q_PROPERTY( bool isPlaying READ get_isPlaying );
-    Q_PROPERTY( int currentItem READ get_current );
+    Q_PROPERTY( unsigned itemCount READ get_itemCount )
+    Q_PROPERTY( bool isPlaying READ get_isPlaying )
+    Q_PROPERTY( int currentItem READ get_current )
 
-    Q_PROPERTY( QmlVlcPlaylistItems* items READ get_items CONSTANT );
+    Q_PROPERTY( QmlVlcPlaylistItems* items READ get_items CONSTANT )
 
     unsigned get_itemCount();
     bool get_isPlaying();

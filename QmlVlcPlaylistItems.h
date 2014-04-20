@@ -12,7 +12,7 @@ public:
     QmlVlcPlaylistItems( vlc::player& player )
         : m_player( player ) { }
 
-    Q_PROPERTY( unsigned count READ get_count );
+    Q_PROPERTY( unsigned count READ get_count )
 
     unsigned get_count();
 

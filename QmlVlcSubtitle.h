@@ -12,9 +12,9 @@ public:
     QmlVlcSubtitle( vlc::player& player )
         : m_player( player ) { }
 
-    Q_PROPERTY( unsigned trackCount READ get_trackCount );
+    Q_PROPERTY( unsigned trackCount READ get_trackCount )
 
-    Q_PROPERTY( int track READ get_track WRITE set_track );
+    Q_PROPERTY( int track READ get_track WRITE set_track )
     unsigned get_trackCount();
 
     int get_track();

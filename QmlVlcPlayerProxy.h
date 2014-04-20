@@ -36,28 +36,28 @@ public:
     Q_PROPERTY( QString mrl READ get_mrl WRITE set_mrl )
 
     Q_PROPERTY( bool playing READ get_playing NOTIFY playingChanged )
-    Q_PROPERTY( double length READ get_length NOTIFY MediaPlayerMediaChanged);
-    Q_PROPERTY( double position READ get_position WRITE set_position NOTIFY MediaPlayerPositionChanged );
-    Q_PROPERTY( double time READ get_time WRITE set_time NOTIFY MediaPlayerTimeChanged );
-    Q_PROPERTY( unsigned volume READ get_volume WRITE set_volume );
-    Q_PROPERTY( bool fullscreen READ get_fullscreen WRITE set_fullscreen );
-    Q_PROPERTY( int state READ get_state NOTIFY stateChanged );
+    Q_PROPERTY( double length READ get_length NOTIFY MediaPlayerMediaChanged)
+    Q_PROPERTY( double position READ get_position WRITE set_position NOTIFY MediaPlayerPositionChanged )
+    Q_PROPERTY( double time READ get_time WRITE set_time NOTIFY MediaPlayerTimeChanged )
+    Q_PROPERTY( unsigned volume READ get_volume WRITE set_volume )
+    Q_PROPERTY( bool fullscreen READ get_fullscreen WRITE set_fullscreen )
+    Q_PROPERTY( int state READ get_state NOTIFY stateChanged )
 
-    Q_PROPERTY( int libvlc_NothingSpecial MEMBER libvlc_NothingSpecial CONSTANT );
-    Q_PROPERTY( int libvlc_Opening MEMBER libvlc_Opening CONSTANT );
-    Q_PROPERTY( int libvlc_Buffering MEMBER libvlc_Buffering CONSTANT );
-    Q_PROPERTY( int libvlc_Playing MEMBER libvlc_Playing CONSTANT );
-    Q_PROPERTY( int libvlc_Paused MEMBER libvlc_Paused CONSTANT );
-    Q_PROPERTY( int libvlc_Stopped MEMBER libvlc_Stopped CONSTANT );
-    Q_PROPERTY( int libvlc_Ended MEMBER libvlc_Ended CONSTANT );
-    Q_PROPERTY( int libvlc_Error MEMBER libvlc_Error CONSTANT );
+    Q_PROPERTY( int libvlc_NothingSpecial MEMBER libvlc_NothingSpecial CONSTANT )
+    Q_PROPERTY( int libvlc_Opening MEMBER libvlc_Opening CONSTANT )
+    Q_PROPERTY( int libvlc_Buffering MEMBER libvlc_Buffering CONSTANT )
+    Q_PROPERTY( int libvlc_Playing MEMBER libvlc_Playing CONSTANT )
+    Q_PROPERTY( int libvlc_Paused MEMBER libvlc_Paused CONSTANT )
+    Q_PROPERTY( int libvlc_Stopped MEMBER libvlc_Stopped CONSTANT )
+    Q_PROPERTY( int libvlc_Ended MEMBER libvlc_Ended CONSTANT )
+    Q_PROPERTY( int libvlc_Error MEMBER libvlc_Error CONSTANT )
 
-    Q_PROPERTY( QmlVlcAudio* audio READ get_audio CONSTANT );
+    Q_PROPERTY( QmlVlcAudio* audio READ get_audio CONSTANT )
     Q_PROPERTY( QmlVlcInput* input READ get_input CONSTANT )
-    Q_PROPERTY( QmlVlcPlaylist* playlist READ get_playlist CONSTANT );
-    Q_PROPERTY( QmlVlcSubtitle* subtitle READ get_subtitle CONSTANT );
-    Q_PROPERTY( QmlVlcVideo* video READ get_video CONSTANT );
-    Q_PROPERTY( QmlVlcMediaDesc* mediaDesc READ get_mediaDesc CONSTANT );
+    Q_PROPERTY( QmlVlcPlaylist* playlist READ get_playlist CONSTANT )
+    Q_PROPERTY( QmlVlcSubtitle* subtitle READ get_subtitle CONSTANT )
+    Q_PROPERTY( QmlVlcVideo* video READ get_video CONSTANT )
+    Q_PROPERTY( QmlVlcMediaDesc* mediaDesc READ get_mediaDesc CONSTANT )
 
 Q_SIGNALS:
     void playingChanged();

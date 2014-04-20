@@ -12,40 +12,40 @@ public:
     QmlVlcLogo( vlc::player& player )
         : m_player( player ) { }
 
-    Q_PROPERTY( QString position READ get_position WRITE set_position );
-    Q_PROPERTY( unsigned opacity READ get_opacity WRITE set_opacity );
-    Q_PROPERTY( unsigned delay READ get_delay WRITE set_delay );
-    Q_PROPERTY( int repeat READ get_repeat WRITE set_repeat );
-    Q_PROPERTY( unsigned x READ get_x WRITE set_x );
-    Q_PROPERTY( unsigned y READ get_y WRITE set_y );
+    Q_PROPERTY( QString position READ get_position WRITE set_position )
+    Q_PROPERTY( unsigned opacity READ get_opacity WRITE set_opacity )
+    Q_PROPERTY( unsigned delay READ get_delay WRITE set_delay )
+    Q_PROPERTY( int repeat READ get_repeat WRITE set_repeat )
+    Q_PROPERTY( unsigned x READ get_x WRITE set_x )
+    Q_PROPERTY( unsigned y READ get_y WRITE set_y )
 
     QString get_position();
     void set_position( const QString& );
 
     unsigned get_opacity()
-        { return get_logo_int( libvlc_logo_opacity ); };
+        { return get_logo_int( libvlc_logo_opacity ); }
     void set_opacity( unsigned o )
-        { set_logo_int( libvlc_logo_opacity, o ); };
+        { set_logo_int( libvlc_logo_opacity, o ); }
 
     unsigned get_delay()
-        { return get_logo_int( libvlc_logo_delay ); };
+        { return get_logo_int( libvlc_logo_delay ); }
     void set_delay( unsigned d )
-        { set_logo_int( libvlc_logo_delay, d ); };
+        { set_logo_int( libvlc_logo_delay, d ); }
 
     int get_repeat()
-        { return get_logo_int( libvlc_logo_repeat ); };
+        { return get_logo_int( libvlc_logo_repeat ); }
     void set_repeat( int r )
-        { set_logo_int( libvlc_logo_repeat, r ); };
+        { set_logo_int( libvlc_logo_repeat, r ); }
 
     unsigned get_x()
-        { return get_logo_int( libvlc_logo_x ); };
+        { return get_logo_int( libvlc_logo_x ); }
     void set_x( unsigned x )
-        { set_logo_int( libvlc_logo_x, x ); };
+        { set_logo_int( libvlc_logo_x, x ); }
 
     unsigned int get_y()
-        { return get_logo_int( libvlc_logo_y ); };
+        { return get_logo_int( libvlc_logo_y ); }
     void set_y( unsigned y )
-        { set_logo_int( libvlc_logo_y, y ); };
+        { set_logo_int( libvlc_logo_y, y ); }
 
     void enable()
         { return set_logo_int( libvlc_logo_enable, 1 ); }
