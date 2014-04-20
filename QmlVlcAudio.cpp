@@ -38,14 +38,14 @@ void QmlVlcAudio::set_track( int idx )
     m_player.audio().set_track( idx );
 }
 
-unsigned int QmlVlcAudio::get_channel()
+QmlVlcAudio::Output QmlVlcAudio::get_channel()
 {
-    return m_player.audio().get_channel();
+    return static_cast<Output>( m_player.audio().get_channel() );
 }
 
-void QmlVlcAudio::set_channel( unsigned int ch )
+void QmlVlcAudio::set_channel( QmlVlcAudio::Output ch )
 {
-    m_player.audio().set_channel( (libvlc_audio_output_channel_t) ch );
+    m_player.audio().set_channel( static_cast<libvlc_audio_output_channel_t>( ch ) );
 }
 
 void QmlVlcAudio::toggleMute()

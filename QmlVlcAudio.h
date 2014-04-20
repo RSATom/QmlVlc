@@ -12,24 +12,20 @@ public:
     QmlVlcAudio( vlc::player& player )
         : m_player( player ) { }
 
+    enum Output {
+        Stereo = ::libvlc_AudioChannel_Stereo,
+        ReverseStereo = ::libvlc_AudioChannel_RStereo,
+        Left = ::libvlc_AudioChannel_Left,
+        Right = ::libvlc_AudioChannel_Right,
+        Dolby = ::libvlc_AudioChannel_Dolbys,
+    };
+    Q_ENUMS( Output )
+
     Q_PROPERTY( unsigned trackCount READ get_trackCount )
     Q_PROPERTY( int track READ get_track WRITE set_track )
     Q_PROPERTY( bool mute READ get_mute WRITE set_mute )
     Q_PROPERTY( unsigned volume READ get_volume WRITE set_volume )
-    Q_PROPERTY( unsigned channel READ get_channel WRITE set_channel )
-
-    Q_PROPERTY( int libvlc_AudioChannel_Error MEMBER libvlc_AudioChannel_Error CONSTANT )
-    Q_PROPERTY( int libvlc_AudioChannel_Stereo MEMBER libvlc_AudioChannel_Stereo CONSTANT )
-    Q_PROPERTY( int libvlc_AudioChannel_RStereo MEMBER libvlc_AudioChannel_RStereo CONSTANT )
-    Q_PROPERTY( int libvlc_AudioChannel_Left MEMBER libvlc_AudioChannel_Left CONSTANT )
-    Q_PROPERTY( int libvlc_AudioChannel_Right MEMBER libvlc_AudioChannel_Right CONSTANT )
-    Q_PROPERTY( int libvlc_AudioChannel_Dolbys MEMBER libvlc_AudioChannel_Dolbys CONSTANT )
-
-    Q_PROPERTY( int stereo MEMBER libvlc_AudioChannel_Stereo CONSTANT )
-    Q_PROPERTY( int reverseStereoeo MEMBER libvlc_AudioChannel_RStereo CONSTANT )
-    Q_PROPERTY( int left MEMBER libvlc_AudioChannel_Left CONSTANT )
-    Q_PROPERTY( int right MEMBER libvlc_AudioChannel_Right CONSTANT )
-    Q_PROPERTY( int dolby MEMBER libvlc_AudioChannel_Dolbys CONSTANT )
+    Q_PROPERTY( Output channel READ get_channel WRITE set_channel )
 
     unsigned get_trackCount();
 
@@ -42,8 +38,8 @@ public:
     int get_track();
     void set_track( int idx );
 
-    unsigned get_channel();
-    void set_channel( unsigned );
+    Output get_channel();
+    void set_channel( Output );
 
     void toggleMute();
 
