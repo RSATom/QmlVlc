@@ -24,6 +24,8 @@ public:
     bool get_isPlaying();
     int get_current();
 
+    Q_INVOKABLE int add( const QString& mrl );
+
     Q_INVOKABLE void play();
     Q_INVOKABLE bool playItem( unsigned idx );
     Q_INVOKABLE void setCurrentItem( unsigned idx );

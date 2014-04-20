@@ -15,6 +15,11 @@ int QmlVlcPlaylist::get_current()
     return m_player.current_item();
 }
 
+int QmlVlcPlaylist::add( const QString& mrl )
+{
+    return m_player.add_media( mrl.toUtf8().data() );
+}
+
 void QmlVlcPlaylist::play()
 {
     m_player.play();
