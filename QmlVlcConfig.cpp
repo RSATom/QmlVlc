@@ -7,6 +7,7 @@ bool QmlVlcConfig::_adjustFilter = false;
 bool QmlVlcConfig::_marqueeFilter = false;
 bool QmlVlcConfig::_logoFilter = false;
 bool QmlVlcConfig::_debug = false;
+bool QmlVlcConfig::_noVideoTitleShow = true;
 
 libvlc_instance_t* QmlVlcConfig::createLibvlcInstance()
 {
@@ -41,6 +42,9 @@ libvlc_instance_t* QmlVlcConfig::createLibvlcInstance()
 
     if( _debug )
         opts.push_back( "-vvv" );
+
+    if( _noVideoTitleShow )
+        opts.push_back( "--no-video-title-show" );
 
     return libvlc_new( opts.size(), opts.data() );
 }

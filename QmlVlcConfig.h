@@ -20,6 +20,8 @@ public:
         { _logoFilter = enable; }
     static void enableDebug( bool enable )
         { _debug = enable; }
+    static void enableNoVideoTitleShow( bool enable )
+        { _noVideoTitleShow = enable; }
 
     static libvlc_instance_t* createLibvlcInstance();
 
@@ -29,6 +31,7 @@ private:
     static bool _marqueeFilter;
     static bool _logoFilter;
     static bool _debug;
+    static bool _noVideoTitleShow;
 };
 
 #endif // QMLVLCCONFIG_H
