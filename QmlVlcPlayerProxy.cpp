@@ -250,9 +250,9 @@ void QmlVlcPlayerProxy::set_volume( unsigned int v )
     player().audio().set_volume( v );
 }
 
-int QmlVlcPlayerProxy::get_state()
+QmlVlcPlayerProxy::State QmlVlcPlayerProxy::get_state()
 {
-    return player().get_state();
+    return static_cast<State>( player().get_state() );
 }
 
 bool QmlVlcPlayerProxy::get_fullscreen()

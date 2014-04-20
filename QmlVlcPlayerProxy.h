@@ -41,16 +41,19 @@ public:
     Q_PROPERTY( double time READ get_time WRITE set_time NOTIFY MediaPlayerTimeChanged )
     Q_PROPERTY( unsigned volume READ get_volume WRITE set_volume )
     Q_PROPERTY( bool fullscreen READ get_fullscreen WRITE set_fullscreen )
-    Q_PROPERTY( int state READ get_state NOTIFY stateChanged )
 
-    Q_PROPERTY( int libvlc_NothingSpecial MEMBER libvlc_NothingSpecial CONSTANT )
-    Q_PROPERTY( int libvlc_Opening MEMBER libvlc_Opening CONSTANT )
-    Q_PROPERTY( int libvlc_Buffering MEMBER libvlc_Buffering CONSTANT )
-    Q_PROPERTY( int libvlc_Playing MEMBER libvlc_Playing CONSTANT )
-    Q_PROPERTY( int libvlc_Paused MEMBER libvlc_Paused CONSTANT )
-    Q_PROPERTY( int libvlc_Stopped MEMBER libvlc_Stopped CONSTANT )
-    Q_PROPERTY( int libvlc_Ended MEMBER libvlc_Ended CONSTANT )
-    Q_PROPERTY( int libvlc_Error MEMBER libvlc_Error CONSTANT )
+    enum State {
+        NothingSpecial = ::libvlc_NothingSpecial,
+        Opening = ::libvlc_Opening,
+        Buffering = ::libvlc_Buffering,
+        Playing = ::libvlc_Playing,
+        Paused = ::libvlc_Paused,
+        Stopped = ::libvlc_Stopped,
+        Ended = ::libvlc_Ended,
+        Error = ::libvlc_Error,
+    };
+    Q_ENUMS( State )
+    Q_PROPERTY( State state READ get_state NOTIFY stateChanged )
 
     Q_PROPERTY( QmlVlcAudio* audio READ get_audio CONSTANT )
     Q_PROPERTY( QmlVlcInput* input READ get_input CONSTANT )
@@ -97,7 +100,7 @@ public:
     bool get_fullscreen();
     void set_fullscreen( bool fs );
 
-    int get_state();
+    State get_state();
 
     Q_INVOKABLE void toggleFullscreen();
 
