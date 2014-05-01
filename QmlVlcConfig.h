@@ -22,6 +22,8 @@ public:
         { _debug = enable; }
     static void enableNoVideoTitleShow( bool enable )
         { _noVideoTitleShow = enable; }
+    static void enableHardwareAcceleration( bool enable )
+        { _hardwareAcceleration = enable; }
 
     static libvlc_instance_t* createLibvlcInstance();
 
@@ -32,6 +34,7 @@ private:
     static bool _logoFilter;
     static bool _debug;
     static bool _noVideoTitleShow;
+    static bool _hardwareAcceleration;
 };
 
 #endif // QMLVLCCONFIG_H

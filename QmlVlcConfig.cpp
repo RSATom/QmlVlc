@@ -8,6 +8,7 @@ bool QmlVlcConfig::_marqueeFilter = false;
 bool QmlVlcConfig::_logoFilter = false;
 bool QmlVlcConfig::_debug = false;
 bool QmlVlcConfig::_noVideoTitleShow = true;
+bool QmlVlcConfig::_hardwareAcceleration = false;
 
 libvlc_instance_t* QmlVlcConfig::createLibvlcInstance()
 {
