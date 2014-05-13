@@ -36,9 +36,9 @@ public:
     Q_PROPERTY( QString mrl READ get_mrl WRITE set_mrl )
 
     Q_PROPERTY( bool playing READ get_playing NOTIFY playingChanged )
-    Q_PROPERTY( double length READ get_length NOTIFY MediaPlayerMediaChanged)
-    Q_PROPERTY( double position READ get_position WRITE set_position NOTIFY MediaPlayerPositionChanged )
-    Q_PROPERTY( double time READ get_time WRITE set_time NOTIFY MediaPlayerTimeChanged )
+    Q_PROPERTY( double length READ get_length NOTIFY mediaPlayerMediaChanged)
+    Q_PROPERTY( double position READ get_position WRITE set_position NOTIFY mediaPlayerPositionChanged )
+    Q_PROPERTY( double time READ get_time WRITE set_time NOTIFY mediaPlayerTimeChanged )
     Q_PROPERTY( unsigned volume READ get_volume WRITE set_volume )
     Q_PROPERTY( bool fullscreen READ get_fullscreen WRITE set_fullscreen )
 
@@ -106,22 +106,22 @@ public:
 
 Q_SIGNALS:
     /* async events from libvlc */
-    void MediaPlayerMediaChanged();
-    void MediaPlayerNothingSpecial();
-    void MediaPlayerOpening();
-    void MediaPlayerBuffering();
-    void MediaPlayerPlaying();
-    void MediaPlayerPaused();
-    void MediaPlayerForward();
-    void MediaPlayerBackward();
-    void MediaPlayerEncounteredError();
-    void MediaPlayerEndReached();
-    void MediaPlayerStopped();
+    void mediaPlayerMediaChanged();
+    void mediaPlayerNothingSpecial();
+    void mediaPlayerOpening();
+    void mediaPlayerBuffering();
+    void mediaPlayerPlaying();
+    void mediaPlayerPaused();
+    void mediaPlayerForward();
+    void mediaPlayerBackward();
+    void mediaPlayerEncounteredError();
+    void mediaPlayerEndReached();
+    void mediaPlayerStopped();
 
-    void MediaPlayerTimeChanged();
-    void MediaPlayerPositionChanged();
-    void MediaPlayerSeekableChanged();
-    void MediaPlayerPausableChanged();
+    void mediaPlayerTimeChanged();
+    void mediaPlayerPositionChanged();
+    void mediaPlayerSeekableChanged();
+    void mediaPlayerPausableChanged();
 
 public:
     QmlVlcAudio*     get_audio()     { return &m_audio; }

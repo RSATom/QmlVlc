@@ -5,20 +5,20 @@ QmlVlcPlayerProxy::QmlVlcPlayerProxy( vlc::player* player, QObject* parent /*= 0
       m_playlist( *player ),  m_subtitle( *player ), m_video( *player ),
       m_mediaDesc( *player ), m_player( player )
 {
-    connect( this, SIGNAL( MediaPlayerPlaying() ), this, SIGNAL( playingChanged() ) );
-    connect( this, SIGNAL( MediaPlayerPaused() ), this, SIGNAL( playingChanged() ) );
-    connect( this, SIGNAL( MediaPlayerEncounteredError() ), this, SIGNAL( playingChanged() ) );
-    connect( this, SIGNAL( MediaPlayerEndReached() ), this, SIGNAL( playingChanged() ) );
-    connect( this, SIGNAL( MediaPlayerStopped() ), this, SIGNAL( playingChanged() ) );
+    connect( this, SIGNAL( mediaPlayerPlaying() ), this, SIGNAL( playingChanged() ) );
+    connect( this, SIGNAL( mediaPlayerPaused() ), this, SIGNAL( playingChanged() ) );
+    connect( this, SIGNAL( mediaPlayerEncounteredError() ), this, SIGNAL( playingChanged() ) );
+    connect( this, SIGNAL( mediaPlayerEndReached() ), this, SIGNAL( playingChanged() ) );
+    connect( this, SIGNAL( mediaPlayerStopped() ), this, SIGNAL( playingChanged() ) );
 
-    connect( this, SIGNAL( MediaPlayerNothingSpecial() ), this, SIGNAL( stateChanged() ) );
-    connect( this, SIGNAL( MediaPlayerOpening() ), this, SIGNAL( stateChanged() ) );
-    connect( this, SIGNAL( MediaPlayerBuffering() ), this, SIGNAL( stateChanged() ) );
-    connect( this, SIGNAL( MediaPlayerPlaying() ), this, SIGNAL( stateChanged() ) );
-    connect( this, SIGNAL( MediaPlayerPaused() ), this, SIGNAL( stateChanged() ) );
-    connect( this, SIGNAL( MediaPlayerEncounteredError() ), this, SIGNAL( stateChanged() ) );
-    connect( this, SIGNAL( MediaPlayerEndReached() ), this, SIGNAL( stateChanged() ) );
-    connect( this, SIGNAL( MediaPlayerStopped() ), this, SIGNAL( stateChanged() ) );
+    connect( this, SIGNAL( mediaPlayerNothingSpecial() ), this, SIGNAL( stateChanged() ) );
+    connect( this, SIGNAL( mediaPlayerOpening() ), this, SIGNAL( stateChanged() ) );
+    connect( this, SIGNAL( mediaPlayerBuffering() ), this, SIGNAL( stateChanged() ) );
+    connect( this, SIGNAL( mediaPlayerPlaying() ), this, SIGNAL( stateChanged() ) );
+    connect( this, SIGNAL( mediaPlayerPaused() ), this, SIGNAL( stateChanged() ) );
+    connect( this, SIGNAL( mediaPlayerEncounteredError() ), this, SIGNAL( stateChanged() ) );
+    connect( this, SIGNAL( mediaPlayerEndReached() ), this, SIGNAL( stateChanged() ) );
+    connect( this, SIGNAL( mediaPlayerStopped() ), this, SIGNAL( stateChanged() ) );
 }
 
 void QmlVlcPlayerProxy::classBegin()
@@ -87,62 +87,50 @@ void QmlVlcPlayerProxy::OnLibVlcEvent( const libvlc_event_t* e )
 {
     switch ( e->type ) {
     case libvlc_MediaPlayerMediaChanged:
-        Q_EMIT MediaPlayerMediaChanged();
+        Q_EMIT mediaPlayerMediaChanged();
         break;
     case libvlc_MediaPlayerNothingSpecial:
-        Q_EMIT MediaPlayerNothingSpecial();
+        Q_EMIT mediaPlayerNothingSpecial();
         break;
     case libvlc_MediaPlayerOpening:
-        Q_EMIT MediaPlayerOpening();
+        Q_EMIT mediaPlayerOpening();
         break;
     case libvlc_MediaPlayerBuffering:
-        Q_EMIT MediaPlayerBuffering();
+        Q_EMIT mediaPlayerBuffering();
         break;
     case libvlc_MediaPlayerPlaying:
-        Q_EMIT MediaPlayerPlaying();
+        Q_EMIT mediaPlayerPlaying();
         break;
     case libvlc_MediaPlayerPaused:
-        Q_EMIT MediaPlayerPaused();
+        Q_EMIT mediaPlayerPaused();
         break;
     case libvlc_MediaPlayerStopped:
-        Q_EMIT MediaPlayerStopped();
+        Q_EMIT mediaPlayerStopped();
         break;
     case libvlc_MediaPlayerForward:
-        Q_EMIT MediaPlayerForward();
+        Q_EMIT mediaPlayerForward();
         break;
     case libvlc_MediaPlayerBackward:
-        Q_EMIT MediaPlayerBackward();
+        Q_EMIT mediaPlayerBackward();
         break;
     case libvlc_MediaPlayerEndReached:
-        Q_EMIT MediaPlayerEndReached();
+        Q_EMIT mediaPlayerEndReached();
         break;
     case libvlc_MediaPlayerEncounteredError:
-        Q_EMIT MediaPlayerEncounteredError();
+        Q_EMIT mediaPlayerEncounteredError();
         break;
     case libvlc_MediaPlayerTimeChanged:
-        Q_EMIT MediaPlayerTimeChanged();
+        Q_EMIT mediaPlayerTimeChanged();
         break;
     case libvlc_MediaPlayerPositionChanged:
-        Q_EMIT MediaPlayerPositionChanged();
+        Q_EMIT mediaPlayerPositionChanged();
         break;
     case libvlc_MediaPlayerSeekableChanged:
-        Q_EMIT MediaPlayerSeekableChanged();
+        Q_EMIT mediaPlayerSeekableChanged();
         break;
     case libvlc_MediaPlayerPausableChanged:
-        Q_EMIT MediaPlayerPausableChanged();
+        Q_EMIT mediaPlayerPausableChanged();
         break;
-    //case libvlc_MediaPlayerTitleChanged:
-    //    Q_EMIT MediaPlayerTitleChanged();
-    //    break;
-    //case libvlc_MediaPlayerSnapshotTaken:
-    //    Q_EMIT MediaPlayerSnapshotTaken();
-    //    break;
-    //case libvlc_MediaPlayerLengthChanged:
-    //    Q_EMIT MediaPlayerLengthChanged();
-    //    break;
-    //case libvlc_MediaPlayerVout:
-    //    Q_EMIT MediaPlayerVout();
-    //    break;
     };
 }
 
