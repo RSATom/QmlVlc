@@ -1,5 +1,9 @@
 #include "QmlVlcPlaylist.h"
 
+#include <QStringList>
+
+#include "QmlVlcConfig.h"
+
 unsigned int QmlVlcPlaylist::get_itemCount()
 {
     return m_player.item_count();
@@ -18,6 +22,27 @@ int QmlVlcPlaylist::get_current()
 int QmlVlcPlaylist::add( const QString& mrl )
 {
     return m_player.add_media( mrl.toUtf8().data() );
+}
+
+int QmlVlcPlaylist::addWithOptions( const QString& mrl, const QStringList& options )
+{
+    QList<QByteArray> bufStorage;
+    std::vector<const char*> trusted_opts;
+    std::vector<const char*> untrusted_opts;
+
+    for( int i = 0; i < options.size(); ++i ) {
+        QByteArray& buf = *bufStorage.insert( bufStorage.end(), options[i].toUtf8() );
+        if( QmlVlcConfig::trustedEnvironment() )
+            trusted_opts.push_back( buf.data() );
+        else
+            untrusted_opts.push_back( buf.data() );
+    }
+
+    const char** untrusted_optv = untrusted_opts.empty() ? 0 : &untrusted_opts[0];
+    const char** trusted_optv = trusted_opts.empty() ? 0 : &trusted_opts[0];
+    return m_player.add_media( mrl.toUtf8().data(),
+                               untrusted_opts.size(), untrusted_optv,
+                               trusted_opts.size(), trusted_optv );
 }
 
 void QmlVlcPlaylist::play()

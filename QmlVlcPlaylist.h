@@ -25,6 +25,7 @@ public:
     int get_current();
 
     Q_INVOKABLE int add( const QString& mrl );
+    Q_INVOKABLE int addWithOptions( const QString& mrl, const QStringList& options );
 
     Q_INVOKABLE void play();
     Q_INVOKABLE bool playItem( unsigned idx );
