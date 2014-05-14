@@ -27,6 +27,11 @@ public:
 
     static libvlc_instance_t* createLibvlcInstance();
 
+    static void setTrustedEnvironment( bool trusted )
+        { _trustedEnvironment = trusted; }
+    static bool trustedEnvironment()
+        { return _trustedEnvironment; }
+
 private:
     static int _networkCacheTime;
     static bool _adjustFilter;
@@ -35,6 +40,7 @@ private:
     static bool _debug;
     static bool _noVideoTitleShow;
     static bool _hardwareAcceleration;
+    static bool _trustedEnvironment;
 };
 
 #endif // QMLVLCCONFIG_H
