@@ -114,7 +114,7 @@ int QSGVlcVideoFrameMaterial::compare( const QSGMaterial* other ) const
 {
     const QSGVlcVideoFrameMaterial* m =
             static_cast<const QSGVlcVideoFrameMaterial*>(other);
-    const auto texCount = sizeof( m_planeTexIds ) / sizeof( m_planeTexIds[0] );
+    const unsigned texCount = sizeof( m_planeTexIds ) / sizeof( m_planeTexIds[0] );
 
     for( unsigned i = 0; i < texCount; ++i ) {
         if( m_planeTexIds[i] != m->m_planeTexIds[i] )
