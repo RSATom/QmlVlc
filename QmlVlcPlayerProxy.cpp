@@ -96,7 +96,7 @@ void QmlVlcPlayerProxy::OnLibVlcEvent( const libvlc_event_t* e )
         Q_EMIT mediaPlayerOpening();
         break;
     case libvlc_MediaPlayerBuffering:
-        Q_EMIT mediaPlayerBuffering();
+        Q_EMIT mediaPlayerBuffering( e->u.media_player_buffering.new_cache );
         break;
     case libvlc_MediaPlayerPlaying:
         Q_EMIT mediaPlayerPlaying();
@@ -119,17 +119,19 @@ void QmlVlcPlayerProxy::OnLibVlcEvent( const libvlc_event_t* e )
     case libvlc_MediaPlayerEncounteredError:
         Q_EMIT mediaPlayerEncounteredError();
         break;
-    case libvlc_MediaPlayerTimeChanged:
-        Q_EMIT mediaPlayerTimeChanged();
+    case libvlc_MediaPlayerTimeChanged: {
+        double new_time = static_cast<double>( e->u.media_player_time_changed.new_time );
+        Q_EMIT mediaPlayerTimeChanged( new_time );
         break;
+    }
     case libvlc_MediaPlayerPositionChanged:
-        Q_EMIT mediaPlayerPositionChanged();
+        Q_EMIT mediaPlayerPositionChanged( e->u.media_player_position_changed.new_position );
         break;
     case libvlc_MediaPlayerSeekableChanged:
-        Q_EMIT mediaPlayerSeekableChanged();
+        Q_EMIT mediaPlayerSeekableChanged( e->u.media_player_seekable_changed.new_seekable != 0 );
         break;
     case libvlc_MediaPlayerPausableChanged:
-        Q_EMIT mediaPlayerPausableChanged();
+        Q_EMIT mediaPlayerPausableChanged( e->u.media_player_pausable_changed.new_pausable != 0 );
         break;
     };
 }
