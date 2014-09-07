@@ -109,7 +109,7 @@ Q_SIGNALS:
     void mediaPlayerMediaChanged();
     void mediaPlayerNothingSpecial();
     void mediaPlayerOpening();
-    void mediaPlayerBuffering( float );
+    void mediaPlayerBuffering( float percents );
     void mediaPlayerPlaying();
     void mediaPlayerPaused();
     void mediaPlayerForward();
@@ -118,10 +118,10 @@ Q_SIGNALS:
     void mediaPlayerEndReached();
     void mediaPlayerStopped();
 
-    void mediaPlayerTimeChanged( double );
-    void mediaPlayerPositionChanged( float );
-    void mediaPlayerSeekableChanged( bool );
-    void mediaPlayerPausableChanged( bool );
+    void mediaPlayerTimeChanged( double seconds );
+    void mediaPlayerPositionChanged( float position );
+    void mediaPlayerSeekableChanged( bool seekable );
+    void mediaPlayerPausableChanged( bool pausable );
 
 public:
     QmlVlcAudio*     get_audio()     { return &m_audio; }
