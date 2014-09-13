@@ -38,7 +38,7 @@ QmlVlcPlayerProxy::QmlVlcPlayerProxy( vlc::player* player, QObject* parent /*= 0
 
     connect( this, SIGNAL( mediaPlayerNothingSpecial() ), this, SIGNAL( stateChanged() ) );
     connect( this, SIGNAL( mediaPlayerOpening() ), this, SIGNAL( stateChanged() ) );
-    connect( this, SIGNAL( mediaPlayerBuffering() ), this, SIGNAL( stateChanged() ) );
+    connect( this, SIGNAL( mediaPlayerBuffering( float ) ), this, SIGNAL( stateChanged() ) );
     connect( this, SIGNAL( mediaPlayerPlaying() ), this, SIGNAL( stateChanged() ) );
     connect( this, SIGNAL( mediaPlayerPaused() ), this, SIGNAL( stateChanged() ) );
     connect( this, SIGNAL( mediaPlayerEncounteredError() ), this, SIGNAL( stateChanged() ) );
