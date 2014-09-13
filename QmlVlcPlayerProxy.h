@@ -61,7 +61,7 @@ public:
     Q_PROPERTY( QString mrl READ get_mrl WRITE set_mrl )
 
     Q_PROPERTY( bool playing READ get_playing NOTIFY playingChanged )
-    Q_PROPERTY( double length READ get_length NOTIFY mediaPlayerMediaChanged)
+    Q_PROPERTY( double length READ get_length NOTIFY mediaPlayerLengthChanged )
     Q_PROPERTY( double position READ get_position WRITE set_position NOTIFY mediaPlayerPositionChanged )
     Q_PROPERTY( double time READ get_time WRITE set_time NOTIFY mediaPlayerTimeChanged )
     Q_PROPERTY( unsigned volume READ get_volume WRITE set_volume )
@@ -147,6 +147,7 @@ Q_SIGNALS:
     void mediaPlayerPositionChanged( float position );
     void mediaPlayerSeekableChanged( bool seekable );
     void mediaPlayerPausableChanged( bool pausable );
+    void mediaPlayerLengthChanged( double length );
 
 public:
     QmlVlcAudio*     get_audio()     { return &m_audio; }

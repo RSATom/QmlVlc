@@ -89,7 +89,7 @@ void QmlVlcPlayerProxy::vlcEvents( bool Attach )
         case libvlc_MediaPlayerPausableChanged:
         //case libvlc_MediaPlayerTitleChanged:
         //case libvlc_MediaPlayerSnapshotTaken:
-        //case libvlc_MediaPlayerLengthChanged:
+        case libvlc_MediaPlayerLengthChanged:
         //case libvlc_MediaPlayerVout:
             if( Attach )
                 libvlc_event_attach( em, e, OnLibVlcEvent_proxy, this );
@@ -157,6 +157,12 @@ void QmlVlcPlayerProxy::OnLibVlcEvent( const libvlc_event_t* e )
         break;
     case libvlc_MediaPlayerPausableChanged:
         Q_EMIT mediaPlayerPausableChanged( e->u.media_player_pausable_changed.new_pausable != 0 );
+        break;
+    case libvlc_MediaPlayerLengthChanged: {
+            double new_length =
+                static_cast<double>( e->u.media_player_length_changed.new_length );
+            Q_EMIT mediaPlayerLengthChanged( new_length );
+        }
         break;
     };
 }
