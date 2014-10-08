@@ -201,8 +201,7 @@ void QmlVlcPlayerProxy::togglePause()
 
 void QmlVlcPlayerProxy::stop()
 {
-    //use async stop to avoid freeze (on network timeout for example).
-    player().stop( true );
+    player().stop();
 }
 
 void QmlVlcPlayerProxy::mute()

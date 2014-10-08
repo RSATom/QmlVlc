@@ -98,8 +98,7 @@ void QmlVlcPlaylist::togglePause()
 
 void QmlVlcPlaylist::stop()
 {
-    //use async stop to avoid freeze (on network timeout for example).
-    m_player.stop( true );
+    m_player.stop();
 }
 
 void QmlVlcPlaylist::next()
