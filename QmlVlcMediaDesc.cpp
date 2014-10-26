@@ -25,9 +25,12 @@
 
 #include "QmlVlcMediaDesc.h"
 
+////////////////////////////////////////////////////////////////////////////
+/// QmlVlcMediaDesc
+////////////////////////////////////////////////////////////////////////////
 QString QmlVlcMediaDesc::get_meta( libvlc_meta_t e_meta )
 {
-    std::string meta = m_player.current_media().meta( e_meta );
+    std::string meta = get_media().meta( e_meta );
     return QString::fromUtf8( meta.data(), meta.size() );
 }
 
@@ -114,4 +117,30 @@ QString QmlVlcMediaDesc::get_artworkURL()
 QString QmlVlcMediaDesc::get_trackID()
 {
     return get_meta( libvlc_meta_TrackID );
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// QmlVlcCurrentMediaDesc
+////////////////////////////////////////////////////////////////////////////
+QmlVlcCurrentMediaDesc::QmlVlcCurrentMediaDesc( vlc::player& player )
+    : m_player( player )
+{
+}
+
+vlc::media QmlVlcCurrentMediaDesc::get_media()
+{
+    return m_player.current_media();
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// QmlVlcMediaMediaDesc
+////////////////////////////////////////////////////////////////////////////
+QmlVlcMediaMediaDesc::QmlVlcMediaMediaDesc( const vlc::media& media )
+    : m_media( media )
+{
+}
+
+vlc::media QmlVlcMediaMediaDesc::get_media()
+{
+    return m_media;
 }

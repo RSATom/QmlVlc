@@ -32,13 +32,13 @@
 
 #include <QObject>
 
+////////////////////////////////////////////////////////////////////////////
+/// QmlVlcMediaDesc
+////////////////////////////////////////////////////////////////////////////
 class QmlVlcMediaDesc : public QObject
 {
     Q_OBJECT
 public:
-    QmlVlcMediaDesc( vlc::player& player )
-        : m_player( player ) {}
-
     Q_PROPERTY( QString title READ get_title )
     Q_PROPERTY( QString artist READ get_artist )
     Q_PROPERTY( QString genre READ get_genre )
@@ -78,8 +78,38 @@ public:
 private:
     QString get_meta( libvlc_meta_t e_meta );
 
+protected:
+    virtual vlc::media get_media() = 0;
+};
+
+////////////////////////////////////////////////////////////////////////////
+/// QmlVlcCurrentMediaDesc
+////////////////////////////////////////////////////////////////////////////
+class QmlVlcCurrentMediaDesc : public QmlVlcMediaDesc
+{
+public:
+    QmlVlcCurrentMediaDesc( vlc::player& player );
+
+protected:
+    virtual vlc::media get_media();
+
 private:
     vlc::player& m_player;
+};
+
+////////////////////////////////////////////////////////////////////////////
+/// QmlVlcMediaMediaDesc
+////////////////////////////////////////////////////////////////////////////
+class QmlVlcMediaMediaDesc : public QmlVlcMediaDesc
+{
+public:
+    QmlVlcMediaMediaDesc( const vlc::media& );
+
+protected:
+    virtual vlc::media get_media();
+
+private:
+    vlc::media m_media;
 };
 
 #endif // QMLVLCMEDIADESC_H
