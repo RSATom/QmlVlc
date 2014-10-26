@@ -116,7 +116,7 @@ void QmlVlcPlaylist::clear()
     m_player.clear_items();
 }
 
-bool QmlVlcPlaylist::removeItem( unsigned int idx )
+bool QmlVlcPlaylist::removeItem( unsigned idx )
 {
     return m_player.delete_item( idx );
 }
