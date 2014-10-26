@@ -85,7 +85,7 @@ public:
     Q_PROPERTY( QmlVlcPlaylist* playlist READ get_playlist CONSTANT )
     Q_PROPERTY( QmlVlcSubtitle* subtitle READ get_subtitle CONSTANT )
     Q_PROPERTY( QmlVlcVideo* video READ get_video CONSTANT )
-    Q_PROPERTY( QmlVlcMediaDesc* mediaDesc READ get_mediaDesc CONSTANT )
+    Q_PROPERTY( QmlVlcMediaDesc* mediaDescription READ get_mediaDesc CONSTANT )
 
 Q_SIGNALS:
     void playingChanged();
