@@ -49,10 +49,6 @@ void RegisterQmlVlcPlayer()
         qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcInput",
         QStringLiteral("VlcInput cannot be instantiated directly") );
-    qmlRegisterUncreatableType<QmlVlcPlaylistItems>(
-        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
-        "VlcPlaylistItems",
-        QStringLiteral("VlcPlaylistItems cannot be instantiated directly") );
     qmlRegisterUncreatableType<QmlVlcPlaylist>(
         qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcPlaylist",

@@ -30,20 +30,16 @@
 
 #include "libvlc_wrapper/vlc_player.h"
 
-#include "QmlVlcPlaylistItems.h"
-
 class QmlVlcPlaylist : public QObject
 {
     Q_OBJECT
 public:
     QmlVlcPlaylist( vlc::player& player )
-        : m_player( player ), m_items( player ) { }
+        : m_player( player ) { }
 
     Q_PROPERTY( unsigned itemCount READ get_itemCount )
     Q_PROPERTY( bool isPlaying READ get_isPlaying )
     Q_PROPERTY( int currentItem READ get_current )
-
-    Q_PROPERTY( QmlVlcPlaylistItems* items READ get_items CONSTANT )
 
     unsigned get_itemCount();
     bool get_isPlaying();
@@ -63,12 +59,8 @@ public:
     Q_INVOKABLE void clear();
     Q_INVOKABLE bool removeItem( unsigned idx );
 
-    QmlVlcPlaylistItems* get_items() { return &m_items; }
-
 private:
     vlc::player& m_player;
-
-    QmlVlcPlaylistItems m_items;
 };
 
 #endif //QMLVLCPLAYLIST_H
