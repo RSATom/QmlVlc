@@ -65,7 +65,6 @@ public:
     Q_PROPERTY( double position READ get_position WRITE set_position NOTIFY mediaPlayerPositionChanged )
     Q_PROPERTY( double time READ get_time WRITE set_time NOTIFY mediaPlayerTimeChanged )
     Q_PROPERTY( unsigned volume READ get_volume WRITE set_volume )
-    Q_PROPERTY( bool fullscreen READ get_fullscreen WRITE set_fullscreen )
 
     enum State {
         NothingSpecial = ::libvlc_NothingSpecial,
@@ -122,12 +121,7 @@ public:
     unsigned int get_volume();
     void set_volume( unsigned int );
 
-    bool get_fullscreen();
-    void set_fullscreen( bool fs );
-
     State get_state();
-
-    Q_INVOKABLE void toggleFullscreen();
 
 Q_SIGNALS:
     /* async events from libvlc */

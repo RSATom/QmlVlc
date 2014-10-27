@@ -274,19 +274,3 @@ QmlVlcPlayerProxy::State QmlVlcPlayerProxy::get_state()
 {
     return static_cast<State>( player().get_state() );
 }
-
-bool QmlVlcPlayerProxy::get_fullscreen()
-{
-    //FIXME!
-    return false;
-}
-
-void QmlVlcPlayerProxy::set_fullscreen( bool /*fs*/ )
-{
-    //FIXME!
-}
-
-void QmlVlcPlayerProxy::toggleFullscreen()
-{
-    //FIXME!
-}
