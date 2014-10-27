@@ -44,6 +44,9 @@ QmlVlcPlayerProxy::QmlVlcPlayerProxy( vlc::player* player, QObject* parent /*= 0
     connect( this, SIGNAL( mediaPlayerEncounteredError() ), this, SIGNAL( stateChanged() ) );
     connect( this, SIGNAL( mediaPlayerEndReached() ), this, SIGNAL( stateChanged() ) );
     connect( this, SIGNAL( mediaPlayerStopped() ), this, SIGNAL( stateChanged() ) );
+
+    connect( this, SIGNAL( mediaPlayerEncounteredError() ), this, SLOT( currentItemEndReached() ) );
+    connect( this, SIGNAL( mediaPlayerEndReached() ), this, SLOT( currentItemEndReached() ) );
 }
 
 void QmlVlcPlayerProxy::classBegin()
@@ -165,6 +168,12 @@ void QmlVlcPlayerProxy::OnLibVlcEvent( const libvlc_event_t* e )
         }
         break;
     };
+}
+
+void QmlVlcPlayerProxy::currentItemEndReached()
+{
+    if( vlc::mode_single != player().get_playback_mode() )
+        player().next();
 }
 
 QString QmlVlcPlayerProxy::get_vlcVersion()

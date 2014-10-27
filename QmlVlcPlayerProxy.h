@@ -143,6 +143,9 @@ Q_SIGNALS:
     void mediaPlayerPausableChanged( bool pausable );
     void mediaPlayerLengthChanged( double length );
 
+private Q_SLOTS:
+    void currentItemEndReached();
+
 public:
     QmlVlcAudio*     get_audio()     { return &m_audio; }
     QmlVlcInput*     get_input()     { return &m_input; }
