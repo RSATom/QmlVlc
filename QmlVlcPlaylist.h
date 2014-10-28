@@ -27,8 +27,11 @@
 #define QMLVLCPLAYLIST_H
 
 #include <QObject>
+#include <QQmlListProperty>
 
 #include "libvlc_wrapper/vlc_player.h"
+
+#include "QmlVlcMediaDesc.h"
 
 class QmlVlcPlaylist : public QObject
 {
@@ -37,13 +40,17 @@ public:
     QmlVlcPlaylist( vlc::player& player )
         : m_player( player ) { }
 
+    typedef QQmlListProperty<QmlVlcMediaDesc> ItemsProperty_t;
+
     Q_PROPERTY( unsigned itemCount READ get_itemCount )
     Q_PROPERTY( bool isPlaying READ get_isPlaying )
     Q_PROPERTY( int currentItem READ get_current )
+    Q_PROPERTY( QQmlListProperty<QmlVlcMediaDesc> items READ get_items )
 
     unsigned get_itemCount();
     bool get_isPlaying();
     int get_current();
+    ItemsProperty_t get_items();
 
     Q_INVOKABLE int add( const QString& mrl );
     Q_INVOKABLE int addWithOptions( const QString& mrl, const QStringList& options );
@@ -58,6 +65,11 @@ public:
     Q_INVOKABLE void prev();
     Q_INVOKABLE void clear();
     Q_INVOKABLE bool removeItem( unsigned idx );
+
+private:
+    static int itemsCount( ItemsProperty_t* );
+    static QmlVlcMediaDesc* getItem( ItemsProperty_t*, int index );
+    static void itemsClear( ItemsProperty_t* );
 
 private:
     vlc::player& m_player;

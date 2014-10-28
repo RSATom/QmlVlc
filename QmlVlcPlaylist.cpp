@@ -26,6 +26,7 @@
 #include "QmlVlcPlaylist.h"
 
 #include <QStringList>
+#include <QQmlEngine>
 
 #include "QmlVlcConfig.h"
 
@@ -42,6 +43,37 @@ bool QmlVlcPlaylist::get_isPlaying()
 int QmlVlcPlaylist::get_current()
 {
     return m_player.current_item();
+}
+
+int QmlVlcPlaylist::itemsCount( ItemsProperty_t* p )
+{
+    QmlVlcPlaylist* pl = static_cast<QmlVlcPlaylist*>( p->object );
+    return pl->get_itemCount();
+}
+
+QmlVlcMediaDesc* QmlVlcPlaylist::getItem( ItemsProperty_t* p, int index )
+{
+    QmlVlcPlaylist* pl = static_cast<QmlVlcPlaylist*>( p->object );
+
+    QmlVlcMediaMediaDesc* md =
+        new QmlVlcMediaMediaDesc( pl->m_player.get_media( index ) );
+    QQmlEngine::setObjectOwnership( md, QQmlEngine::JavaScriptOwnership );
+
+    return md;
+}
+
+void QmlVlcPlaylist::itemsClear( ItemsProperty_t* p )
+{
+    QmlVlcPlaylist* pl = static_cast<QmlVlcPlaylist*>( p->object );
+    return pl->clear();
+}
+
+QQmlListProperty<QmlVlcMediaDesc> QmlVlcPlaylist::get_items()
+
+{
+    return
+        ItemsProperty_t( this, 0, 0,
+                         itemsCount, getItem, itemsClear );
 }
 
 int QmlVlcPlaylist::add( const QString& mrl )
