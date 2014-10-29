@@ -119,6 +119,12 @@ QString QmlVlcMediaDesc::get_trackID()
     return get_meta( libvlc_meta_TrackID );
 }
 
+QString QmlVlcMediaDesc::get_mrl()
+{
+    std::string mrl = get_media().mrl();
+    return QString::fromUtf8( mrl.data(), mrl.size() );
+}
+
 ////////////////////////////////////////////////////////////////////////////
 /// QmlVlcCurrentMediaDesc
 ////////////////////////////////////////////////////////////////////////////

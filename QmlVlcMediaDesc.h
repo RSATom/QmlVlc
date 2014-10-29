@@ -56,6 +56,7 @@ public:
     Q_PROPERTY( QString encodedBy READ get_encodedBy )
     Q_PROPERTY( QString artworkURL READ get_artworkURL )
     Q_PROPERTY( QString trackID READ get_trackID )
+    Q_PROPERTY( QString mrl READ get_mrl )
 
     QString get_title();
     QString get_artist();
@@ -74,6 +75,7 @@ public:
     QString get_encodedBy();
     QString get_artworkURL();
     QString get_trackID();
+    QString get_mrl();
 
 private:
     QString get_meta( libvlc_meta_t e_meta );
