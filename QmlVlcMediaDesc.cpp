@@ -34,9 +34,19 @@ QString QmlVlcMediaDesc::get_meta( libvlc_meta_t e_meta )
     return QString::fromUtf8( meta.data(), meta.size() );
 }
 
+void QmlVlcMediaDesc::set_meta( libvlc_meta_t e_meta, const QString& meta )
+{
+    get_media().set_meta( e_meta, meta.toStdString() );
+}
+
 QString QmlVlcMediaDesc::get_title()
 {
     return get_meta( libvlc_meta_Title );
+}
+
+void QmlVlcMediaDesc::set_title( const QString& title )
+{
+    set_meta( libvlc_meta_Title, title );
 }
 
 QString QmlVlcMediaDesc::get_artist()
@@ -82,6 +92,11 @@ QString QmlVlcMediaDesc::get_date()
 QString QmlVlcMediaDesc::get_setting()
 {
     return get_meta( libvlc_meta_Setting );
+}
+
+void QmlVlcMediaDesc::set_setting( const QString& setting )
+{
+    set_meta( libvlc_meta_Setting, setting );
 }
 
 QString QmlVlcMediaDesc::get_URL()
