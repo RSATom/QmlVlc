@@ -49,6 +49,7 @@ protected:
 
 private:
     static void OnLibVlcEvent_proxy( const libvlc_event_t* e, void *param );
+    void OnLibVlcEvent( const libvlc_event_t* e );
     //libvlc events arrives from separate thread
     void vlcEvents( bool Attach );
 
@@ -91,8 +92,6 @@ Q_SIGNALS:
     void stateChanged();
 
 public:
-    void OnLibVlcEvent( const libvlc_event_t* e );
-
     //QML Api
     QString get_vlcVersion();
 
