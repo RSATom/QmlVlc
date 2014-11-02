@@ -39,7 +39,7 @@ class QmlVlcMediaDesc : public QObject
 {
     Q_OBJECT
 public:
-    Q_PROPERTY( QString title READ get_title WRITE set_title )
+    Q_PROPERTY( QString title READ get_title WRITE set_title NOTIFY titleChanged )
     Q_PROPERTY( QString artist READ get_artist )
     Q_PROPERTY( QString genre READ get_genre )
     Q_PROPERTY( QString copyright READ get_copyright )
@@ -81,6 +81,10 @@ public:
     QString get_artworkURL();
     QString get_trackID();
     QString get_mrl();
+
+Q_SIGNALS:
+    //will emit from QmlPlayerProxy for current item, and from set_title for all items
+    void titleChanged();
 
 private:
     QString get_meta( libvlc_meta_t e_meta );

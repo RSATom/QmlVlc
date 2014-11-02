@@ -37,6 +37,9 @@ QString QmlVlcMediaDesc::get_meta( libvlc_meta_t e_meta )
 void QmlVlcMediaDesc::set_meta( libvlc_meta_t e_meta, const QString& meta )
 {
     get_media().set_meta( e_meta, meta.toStdString() );
+
+    if( libvlc_meta_Title == e_meta )
+        Q_EMIT titleChanged();
 }
 
 QString QmlVlcMediaDesc::get_title()
