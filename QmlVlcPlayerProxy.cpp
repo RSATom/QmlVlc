@@ -47,6 +47,8 @@ QmlVlcPlayerProxy::QmlVlcPlayerProxy( vlc::player* player, QObject* parent /*= 0
 
     connect( this, SIGNAL( mediaPlayerEncounteredError() ), this, SLOT( currentItemEndReached() ) );
     connect( this, SIGNAL( mediaPlayerEndReached() ), this, SLOT( currentItemEndReached() ) );
+
+    connect( this, SIGNAL( mediaPlayerMediaChanged() ), &m_playlist, SIGNAL( currentItemChanged() ) );
 }
 
 void QmlVlcPlayerProxy::classBegin()

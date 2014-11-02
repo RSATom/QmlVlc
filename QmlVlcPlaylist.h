@@ -44,7 +44,7 @@ public:
 
     Q_PROPERTY( unsigned itemCount READ get_itemCount )
     Q_PROPERTY( bool isPlaying READ get_isPlaying )
-    Q_PROPERTY( int currentItem READ get_current )
+    Q_PROPERTY( int currentItem READ get_current NOTIFY currentItemChanged )
     Q_PROPERTY( QQmlListProperty<QmlVlcMediaDesc> items READ get_items )
 
     unsigned get_itemCount();
@@ -65,6 +65,10 @@ public:
     Q_INVOKABLE void prev();
     Q_INVOKABLE void clear();
     Q_INVOKABLE bool removeItem( unsigned idx );
+
+Q_SIGNALS:
+    //will emit from QmlPlayerProxy
+    void currentItemChanged();
 
 private:
     static int itemsCount( ItemsProperty_t* );
