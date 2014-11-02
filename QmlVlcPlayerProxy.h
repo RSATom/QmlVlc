@@ -135,6 +135,7 @@ Q_SIGNALS:
     void mediaPlayerEncounteredError();
     void mediaPlayerEndReached();
     void mediaPlayerStopped();
+    void mediaPlayerTitleChanged();
 
     void mediaPlayerTimeChanged( double seconds );
     void mediaPlayerPositionChanged( float position );

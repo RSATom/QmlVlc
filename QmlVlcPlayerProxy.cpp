@@ -92,7 +92,7 @@ void QmlVlcPlayerProxy::vlcEvents( bool Attach )
         case libvlc_MediaPlayerPositionChanged:
         case libvlc_MediaPlayerSeekableChanged:
         case libvlc_MediaPlayerPausableChanged:
-        //case libvlc_MediaPlayerTitleChanged:
+        case libvlc_MediaPlayerTitleChanged:
         //case libvlc_MediaPlayerSnapshotTaken:
         case libvlc_MediaPlayerLengthChanged:
         //case libvlc_MediaPlayerVout:
@@ -162,6 +162,9 @@ void QmlVlcPlayerProxy::OnLibVlcEvent( const libvlc_event_t* e )
         break;
     case libvlc_MediaPlayerPausableChanged:
         Q_EMIT mediaPlayerPausableChanged( e->u.media_player_pausable_changed.new_pausable != 0 );
+        break;
+    case libvlc_MediaPlayerTitleChanged:
+        Q_EMIT mediaPlayerTitleChanged();
         break;
     case libvlc_MediaPlayerLengthChanged: {
             double new_length =
