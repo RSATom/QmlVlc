@@ -11,7 +11,6 @@ HEADERS += \
     $$PWD/QmlVlcSurfacePlayerProxy.h \
     $$PWD/QmlVlcPlayer.h \
     $$PWD/QmlVlcPlaylist.h \
-    $$PWD/QmlVlcPlaylistItems.h \
     $$PWD/QmlVlcPositions.h \
     $$PWD/QmlVlcSubtitle.h \
     $$PWD/QmlVlcVideo.h \
@@ -33,7 +32,6 @@ SOURCES += \
     $$PWD/QmlVlcSurfacePlayerProxy.cpp \
     $$PWD/QmlVlcPlayer.cpp \
     $$PWD/QmlVlcPlaylist.cpp \
-    $$PWD/QmlVlcPlaylistItems.cpp \
     $$PWD/QmlVlcPositions.cpp \
     $$PWD/QmlVlcSubtitle.cpp \
     $$PWD/QmlVlcVideo.cpp \
