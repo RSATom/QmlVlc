@@ -75,3 +75,42 @@ libvlc_instance_t* QmlVlcConfig::createLibvlcInstance()
 
     return libvlc_new( opts.size(), opts.data() );
 }
+
+struct TrustedOption
+{
+    const char* name;
+    const char* value; //if 0 = all values are acceptable
+};
+
+static const TrustedOption trustedOptions[] = {
+    { ":rtsp-http-port", 0 },
+    { ":avformat-format", "mxg" },
+    { ":demux", "h264" },
+    { ":h264-fps", 0 },
+};
+
+bool QmlVlcConfig::isOptionTrusted( const QString& opt )
+{
+    if( trustedEnvironment() )
+        return true;
+
+    QStringList name2val = opt.split( '=' );
+    if( 2 != name2val.size() )
+        return false;
+
+    name2val[0] = name2val[0].trimmed();
+    name2val[1] = name2val[1].trimmed();
+
+    const unsigned tsz =
+        sizeof( trustedOptions ) / sizeof( trustedOptions[0] );
+
+    for( unsigned i = 0; i < tsz; ++i ) {
+        const TrustedOption& to = trustedOptions[i];
+        if( name2val[0] == to.name ) {
+            if( 0 == to.value || name2val[1] == to.value )
+                return true;
+        }
+    }
+
+    return true;
+}

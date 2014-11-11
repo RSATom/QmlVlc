@@ -57,6 +57,8 @@ public:
     static bool trustedEnvironment()
         { return _trustedEnvironment; }
 
+    static bool isOptionTrusted( const QString& );
+
 private:
     static int _networkCacheTime;
     static bool _adjustFilter;
