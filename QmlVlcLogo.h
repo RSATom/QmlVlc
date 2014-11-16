@@ -72,12 +72,12 @@ public:
     void set_y( unsigned y )
         { set_logo_int( libvlc_logo_y, y ); }
 
-    void enable()
+    Q_INVOKABLE void enable()
         { return set_logo_int( libvlc_logo_enable, 1 ); }
-    void disable()
+    Q_INVOKABLE void disable()
         { return set_logo_int( libvlc_logo_enable, 0 ); }
 
-    void file( const QString& );
+    Q_INVOKABLE void file( const QString& );
 
 private:
     int get_logo_int( libvlc_video_logo_option_t );
