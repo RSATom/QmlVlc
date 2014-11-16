@@ -37,10 +37,11 @@ public:
     QmlVlcInput( vlc::player& player )
         : m_player( player ) { }
 
-    Q_PROPERTY( double length READ get_length() )
-    Q_PROPERTY( double fps READ get_fps() )
-    Q_PROPERTY( bool hasVout READ get_hasVout() )
-    Q_PROPERTY( unsigned state READ get_state() )
+    Q_PROPERTY( double length READ get_length )
+    Q_PROPERTY( double fps READ get_fps )
+    Q_PROPERTY( bool hasVout READ get_hasVout )
+    Q_PROPERTY( unsigned state READ get_state )
+
     Q_PROPERTY( double position READ get_position WRITE set_position )
     Q_PROPERTY( double time READ get_time WRITE set_time )
     Q_PROPERTY( double rate READ get_rate WRITE set_rate )
