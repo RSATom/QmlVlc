@@ -41,9 +41,9 @@ public:
     Q_PROPERTY( double fps READ get_fps() )
     Q_PROPERTY( bool hasVout READ get_hasVout() )
     Q_PROPERTY( unsigned state READ get_state() )
-    Q_PROPERTY( double position READ get_position() )
-    Q_PROPERTY( double time READ get_time() )
-    Q_PROPERTY( double rate READ get_rate() )
+    Q_PROPERTY( double position READ get_position WRITE set_position )
+    Q_PROPERTY( double time READ get_time WRITE set_time )
+    Q_PROPERTY( double rate READ get_rate WRITE set_rate )
 
     double get_length();
     double get_fps();
