@@ -45,6 +45,11 @@ int QmlVlcPlaylist::get_current()
     return m_player.current_item();
 }
 
+void QmlVlcPlaylist::set_current( unsigned int idx )
+{
+    m_player.set_current( idx );
+}
+
 int QmlVlcPlaylist::itemsCount( ItemsProperty_t* p )
 {
     QmlVlcPlaylist* pl = static_cast<QmlVlcPlaylist*>( p->object );
@@ -110,11 +115,6 @@ void QmlVlcPlaylist::play()
 bool QmlVlcPlaylist::playItem( unsigned int idx )
 {
     return m_player.play( idx );
-}
-
-void QmlVlcPlaylist::setCurrentItem( unsigned int idx )
-{
-    m_player.set_current( idx );
 }
 
 void QmlVlcPlaylist::pause()

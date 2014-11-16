@@ -44,12 +44,16 @@ public:
 
     Q_PROPERTY( unsigned itemCount READ get_itemCount )
     Q_PROPERTY( bool isPlaying READ get_isPlaying )
-    Q_PROPERTY( int currentItem READ get_current NOTIFY currentItemChanged )
+
+    Q_PROPERTY( int currentItem READ get_current WRITE set_current NOTIFY currentItemChanged )
     Q_PROPERTY( QQmlListProperty<QmlVlcMediaDesc> items READ get_items )
 
     unsigned get_itemCount();
     bool get_isPlaying();
+
     int get_current();
+    void set_current( unsigned idx );
+
     ItemsProperty_t get_items();
 
     Q_INVOKABLE int add( const QString& mrl );
@@ -57,7 +61,6 @@ public:
 
     Q_INVOKABLE void play();
     Q_INVOKABLE bool playItem( unsigned idx );
-    Q_INVOKABLE void setCurrentItem( unsigned idx );
     Q_INVOKABLE void pause();
     Q_INVOKABLE void togglePause();
     Q_INVOKABLE void stop();
