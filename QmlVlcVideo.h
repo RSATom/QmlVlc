@@ -46,14 +46,15 @@ public:
     Q_PROPERTY( int track READ get_track WRITE set_track )
 
     Q_PROPERTY( QString aspectRatio READ get_aspectRatio WRITE set_aspectRatio )
-    Q_PROPERTY( QString crop READ get_crop WRITE set_crop )
-    Q_PROPERTY( int teletext READ get_teletext WRITE set_teletext )
 
+    Q_PROPERTY( QString crop READ get_crop WRITE set_crop )
     Q_PROPERTY( float contrast READ get_contrast WRITE set_contrast )
     Q_PROPERTY( float brightness READ get_brightness WRITE set_brightness )
     Q_PROPERTY( float hue READ get_hue WRITE set_hue )
     Q_PROPERTY( float saturation READ get_saturation WRITE set_saturation )
     Q_PROPERTY( float gamma READ get_gamma WRITE set_gamma )
+
+    Q_PROPERTY( int teletext READ get_teletext WRITE set_teletext )
 
     Q_PROPERTY( QmlVlcMarquee* marquee READ get_marquee CONSTANT )
     Q_PROPERTY( QmlVlcLogo* logo READ get_logo CONSTANT )
