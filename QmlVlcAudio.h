@@ -67,9 +67,9 @@ public:
     Output get_channel();
     void set_channel( Output );
 
-    void toggleMute();
+    Q_INVOKABLE void toggleMute();
 
-    QString description( unsigned trackID );
+    Q_INVOKABLE QString description( unsigned idx);
 
 private:
     vlc::player& m_player;
