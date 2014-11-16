@@ -82,8 +82,6 @@ public:
     int get_teletext();
     void set_teletext( unsigned );
 
-    void toggleTeletext();
-
     float get_contrast();
     void set_contrast( float v );
 
@@ -98,6 +96,8 @@ public:
 
     float get_gamma();
     void set_gamma( float v );
+
+	Q_INVOKABLE void toggleTeletext();
 
     QmlVlcMarquee*     get_marquee()     { return &m_marquee; }
     QmlVlcLogo*        get_logo()        { return &m_logo; }
