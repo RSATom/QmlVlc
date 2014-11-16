@@ -46,7 +46,6 @@ public:
     Q_PROPERTY( int track READ get_track WRITE set_track )
 
     Q_PROPERTY( QString aspectRatio READ get_aspectRatio WRITE set_aspectRatio )
-    Q_PROPERTY( unsigned subtitle READ get_subtitle WRITE set_subtitle )
     Q_PROPERTY( QString crop READ get_crop WRITE set_crop )
     Q_PROPERTY( int teletext READ get_teletext WRITE set_teletext )
     Q_PROPERTY( bool fullscreen READ get_fullscreen WRITE set_fullscreen )
@@ -76,9 +75,6 @@ public:
 
     QString get_aspectRatio();
     void set_aspectRatio( const QString& );
-
-    int get_subtitle();
-    void set_subtitle( unsigned );
 
     QString get_crop();
     void set_crop( const QString& );

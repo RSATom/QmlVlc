@@ -122,16 +122,6 @@ void QmlVlcVideo::set_aspectRatio( const QString& ar )
     libvlc_video_set_aspect_ratio( m_player.get_mp(), ar.toLatin1().constData() );
 }
 
-int QmlVlcVideo::get_subtitle()
-{
-    return libvlc_video_get_spu( m_player.get_mp() );
-}
-
-void QmlVlcVideo::set_subtitle( unsigned int t )
-{
-    libvlc_video_set_spu( m_player.get_mp(), t );
-}
-
 QString QmlVlcVideo::get_crop()
 {
     QString crop;
