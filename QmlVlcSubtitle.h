@@ -45,7 +45,7 @@ public:
     int get_track();
     void set_track( int idx );
 
-    QString description( unsigned i );
+    Q_INVOKABLE QString description( unsigned i );
 
 private:
     vlc::player& m_player;
