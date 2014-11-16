@@ -90,22 +90,6 @@ void QmlVlcVideo::set_track( int idx )
     m_player.video().set_track( idx );
 }
 
-bool QmlVlcVideo::get_fullscreen()
-{
-    //FIXME!
-    return false;
-}
-
-void QmlVlcVideo::set_fullscreen( bool /*fs*/ )
-{
-    //FIXME!
-}
-
-void QmlVlcVideo::toggleFullscreen()
-{
-    //FIXME!
-}
-
 QString QmlVlcVideo::get_aspectRatio()
 {
     QString aspectRatio;
@@ -146,11 +130,6 @@ int QmlVlcVideo::get_teletext()
 void QmlVlcVideo::set_teletext( unsigned int t )
 {
     return libvlc_video_set_teletext( m_player.get_mp(), t );
-}
-
-void QmlVlcVideo::toggleTeletext()
-{
-    libvlc_toggle_teletext( m_player.get_mp() );
 }
 
 float QmlVlcVideo::get_contrast()
@@ -201,4 +180,9 @@ float QmlVlcVideo::get_gamma()
 void QmlVlcVideo::set_gamma( float v )
 {
     return m_player.video().set_gamma( v );
+}
+
+void QmlVlcVideo::toggleTeletext()
+{
+    libvlc_toggle_teletext( m_player.get_mp() );
 }

@@ -48,7 +48,6 @@ public:
     Q_PROPERTY( QString aspectRatio READ get_aspectRatio WRITE set_aspectRatio )
     Q_PROPERTY( QString crop READ get_crop WRITE set_crop )
     Q_PROPERTY( int teletext READ get_teletext WRITE set_teletext )
-    Q_PROPERTY( bool fullscreen READ get_fullscreen WRITE set_fullscreen )
 
     Q_PROPERTY( float contrast READ get_contrast WRITE set_contrast )
     Q_PROPERTY( float brightness READ get_brightness WRITE set_brightness )
@@ -67,11 +66,6 @@ public:
 
     int get_track();
     void set_track( int idx );
-
-    bool get_fullscreen();
-    void set_fullscreen( bool fs );
-
-    void toggleFullscreen();
 
     QString get_aspectRatio();
     void set_aspectRatio( const QString& );
