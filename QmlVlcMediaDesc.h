@@ -39,7 +39,6 @@ class QmlVlcMediaDesc : public QObject
 {
     Q_OBJECT
 public:
-    Q_PROPERTY( QString title READ get_title WRITE set_title NOTIFY titleChanged )
     Q_PROPERTY( QString artist READ get_artist )
     Q_PROPERTY( QString genre READ get_genre )
     Q_PROPERTY( QString copyright READ get_copyright )
@@ -48,7 +47,6 @@ public:
     Q_PROPERTY( QString description READ get_description )
     Q_PROPERTY( QString rating READ get_rating )
     Q_PROPERTY( QString date READ get_date )
-    Q_PROPERTY( QString setting READ get_setting WRITE set_setting )
     Q_PROPERTY( QString URL READ get_URL )
     Q_PROPERTY( QString language READ get_language )
     Q_PROPERTY( QString nowPlaying READ get_nowPlaying )
@@ -57,6 +55,9 @@ public:
     Q_PROPERTY( QString artworkURL READ get_artworkURL )
     Q_PROPERTY( QString trackID READ get_trackID )
     Q_PROPERTY( QString mrl READ get_mrl )
+
+    Q_PROPERTY( QString title READ get_title WRITE set_title NOTIFY titleChanged )
+    Q_PROPERTY( QString setting READ get_setting WRITE set_setting )
 
     QString get_title();
     void set_title( const QString& );
