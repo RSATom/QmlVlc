@@ -50,6 +50,19 @@ void QmlVlcPlaylist::set_current( unsigned int idx )
     m_player.set_current( idx );
 }
 
+QmlVlcPlaylist::Mode QmlVlcPlaylist::get_mode()
+{
+    return static_cast<Mode>( m_player.get_playback_mode() );
+}
+
+void QmlVlcPlaylist::set_mode( QmlVlcPlaylist::Mode mode )
+{
+    if( mode > vlc::mode_last )
+        return;
+
+    return m_player.set_playback_mode( (vlc::playback_mode_e) mode );
+}
+
 int QmlVlcPlaylist::itemsCount( ItemsProperty_t* p )
 {
     QmlVlcPlaylist* pl = static_cast<QmlVlcPlaylist*>( p->object );

@@ -42,10 +42,19 @@ public:
 
     typedef QQmlListProperty<QmlVlcMediaDesc> ItemsProperty_t;
 
+    enum Mode {
+        Normal = vlc::mode_normal,
+        Loop = vlc::mode_loop,
+        Single = vlc::mode_single,
+    };
+    Q_ENUMS( Mode )
+
     Q_PROPERTY( unsigned itemCount READ get_itemCount )
     Q_PROPERTY( bool isPlaying READ get_isPlaying )
 
     Q_PROPERTY( int currentItem READ get_current WRITE set_current NOTIFY currentItemChanged )
+    Q_PROPERTY( Mode mode READ get_mode WRITE set_mode )
+
     Q_PROPERTY( QQmlListProperty<QmlVlcMediaDesc> items READ get_items )
 
     unsigned get_itemCount();
@@ -53,6 +62,9 @@ public:
 
     int get_current();
     void set_current( unsigned idx );
+
+    Mode get_mode();
+    void set_mode( Mode );
 
     ItemsProperty_t get_items();
 
