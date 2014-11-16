@@ -41,22 +41,26 @@ const int QmlVlcVersionMinor = 1;
 void RegisterQmlVlcPlayer()
 {
     // @uri QmlVlc
-    qmlRegisterUncreatableType<QmlVlcAudio>(
-        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
-        "VlcAudio",
-        QStringLiteral("VlcAudio cannot be instantiated directly") );
     qmlRegisterUncreatableType<QmlVlcInput>(
         qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcInput",
         QStringLiteral("VlcInput cannot be instantiated directly") );
-    qmlRegisterUncreatableType<QmlVlcPlaylist>(
+    qmlRegisterUncreatableType<QmlVlcVideo>(
         qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
-        "VlcPlaylist",
-        QStringLiteral("VlcPlaylist cannot be instantiated directly") );
+        "VlcVideo",
+        QStringLiteral("VlcVideo cannot be instantiated directly") );
+    qmlRegisterUncreatableType<QmlVlcAudio>(
+        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
+        "VlcAudio",
+        QStringLiteral("VlcAudio cannot be instantiated directly") );
     qmlRegisterUncreatableType<QmlVlcSubtitle>(
         qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcSubtitle",
         QStringLiteral("VlcSubtitle cannot be instantiated directly") );
+    qmlRegisterUncreatableType<QmlVlcPlaylist>(
+        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
+        "VlcPlaylist",
+        QStringLiteral("VlcPlaylist cannot be instantiated directly") );
     qmlRegisterUncreatableType<QmlVlcMarquee>(
         qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcMarquee",
@@ -69,10 +73,6 @@ void RegisterQmlVlcPlayer()
         qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcDeinterlace",
         QStringLiteral("VlcDeinterlace cannot be instantiated directly") );
-    qmlRegisterUncreatableType<QmlVlcVideo>(
-        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
-        "VlcVideo",
-        QStringLiteral("VlcVideo cannot be instantiated directly") );
     qmlRegisterUncreatableType<QmlVlcMediaDesc>(
         qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcMediaDesc",
