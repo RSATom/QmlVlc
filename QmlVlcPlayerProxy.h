@@ -59,13 +59,8 @@ public:
 
     Q_PROPERTY( QString vlcVersion READ get_vlcVersion )
 
-    Q_PROPERTY( QString mrl READ get_mrl WRITE set_mrl )
-
     Q_PROPERTY( bool playing READ get_playing NOTIFY playingChanged )
     Q_PROPERTY( double length READ get_length NOTIFY mediaPlayerLengthChanged )
-    Q_PROPERTY( double position READ get_position WRITE set_position NOTIFY mediaPlayerPositionChanged )
-    Q_PROPERTY( double time READ get_time WRITE set_time NOTIFY mediaPlayerTimeChanged )
-    Q_PROPERTY( unsigned volume READ get_volume WRITE set_volume )
 
     enum State {
         NothingSpecial = ::libvlc_NothingSpecial,
@@ -80,11 +75,16 @@ public:
     Q_ENUMS( State )
     Q_PROPERTY( State state READ get_state NOTIFY stateChanged )
 
-    Q_PROPERTY( QmlVlcAudio* audio READ get_audio CONSTANT )
+    Q_PROPERTY( QString mrl READ get_mrl WRITE set_mrl )
+    Q_PROPERTY( double position READ get_position WRITE set_position NOTIFY mediaPlayerPositionChanged )
+    Q_PROPERTY( double time READ get_time WRITE set_time NOTIFY mediaPlayerTimeChanged )
+    Q_PROPERTY( unsigned volume READ get_volume WRITE set_volume )
+
     Q_PROPERTY( QmlVlcInput* input READ get_input CONSTANT )
-    Q_PROPERTY( QmlVlcPlaylist* playlist READ get_playlist CONSTANT )
-    Q_PROPERTY( QmlVlcSubtitle* subtitle READ get_subtitle CONSTANT )
     Q_PROPERTY( QmlVlcVideo* video READ get_video CONSTANT )
+    Q_PROPERTY( QmlVlcAudio* audio READ get_audio CONSTANT )
+    Q_PROPERTY( QmlVlcSubtitle* subtitle READ get_subtitle CONSTANT )
+    Q_PROPERTY( QmlVlcPlaylist* playlist READ get_playlist CONSTANT )
     Q_PROPERTY( QmlVlcMediaDesc* mediaDescription READ get_mediaDesc CONSTANT )
 
 Q_SIGNALS:
