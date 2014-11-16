@@ -46,7 +46,8 @@ public:
     };
     Q_ENUMS( Output )
 
-    Q_PROPERTY( unsigned trackCount READ get_trackCount )
+    Q_PROPERTY( unsigned count READ get_trackCount )
+
     Q_PROPERTY( int track READ get_track WRITE set_track )
     Q_PROPERTY( bool mute READ get_mute WRITE set_mute )
     Q_PROPERTY( unsigned volume READ get_volume WRITE set_volume )

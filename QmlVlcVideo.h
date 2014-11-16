@@ -41,7 +41,8 @@ public:
 
     Q_PROPERTY( unsigned width READ get_width )
     Q_PROPERTY( unsigned height READ get_height )
-    Q_PROPERTY( unsigned trackCount READ get_trackCount )
+    Q_PROPERTY( unsigned count READ get_trackCount )
+
     Q_PROPERTY( int track READ get_track WRITE set_track )
 
     Q_PROPERTY( QString aspectRatio READ get_aspectRatio WRITE set_aspectRatio )
