@@ -28,7 +28,7 @@
 #include "SGVlcVideoNode.h"
 
 QmlVlcVideoSurface::QmlVlcVideoSurface()
-    : m_source( 0 ), m_frameUpdated( false )
+    : m_fillMode( PreserveAspectFit ), m_source( 0 ), m_frameUpdated( false )
 {
     setFlag( QQuickItem::ItemHasContents, true );
 }
@@ -36,6 +36,18 @@ QmlVlcVideoSurface::QmlVlcVideoSurface()
 QmlVlcVideoSurface::~QmlVlcVideoSurface()
 {
     setSource( 0 );
+}
+
+void QmlVlcVideoSurface::setFillMode( FillMode m )
+{
+    if( m_fillMode == m )
+        return;
+
+    m_fillMode = m;
+
+    update();
+
+    emit fillModeChanged( m );
 }
 
 void QmlVlcVideoSurface::setSource( QmlVlcSurfacePlayerProxy* source )
@@ -68,21 +80,31 @@ QSGNode* QmlVlcVideoSurface::updatePaintNode( QSGNode* oldNode,
 
     QRectF outRect( 0, 0, width(), height() );
 
-    const uint16_t fw = m_frame->width;
-    const uint16_t fh = m_frame->height;
+    if( Stretch != fillMode() ) {
+        const uint16_t fw = m_frame->width;
+        const uint16_t fh = m_frame->height;
 
-    const qreal frameAspect = qreal( fw ) / fh;
-    const qreal itemAspect = width() / height();
-    qreal outWidth = width();
-    qreal outHeight = height();
+        const qreal frameAspect = qreal( fw ) / fh;
+        const qreal itemAspect = width() / height();
+        qreal outWidth = width();
+        qreal outHeight = height();
 
-    if( frameAspect > itemAspect )
-        outHeight = outWidth / frameAspect;
-    else if( frameAspect < itemAspect )
-        outWidth = outHeight * frameAspect;
+        if( PreserveAspectFit == fillMode() ) {
+            if( frameAspect > itemAspect )
+                outHeight = outWidth / frameAspect;
+            else if( frameAspect < itemAspect )
+                outWidth = outHeight * frameAspect;
+        } else {
+            assert( PreserveAspectCrop == fillMode() );
+            if( frameAspect > itemAspect )
+                outWidth = outHeight * frameAspect;
+            else if( frameAspect < itemAspect )
+                 outHeight = outWidth / frameAspect;
+        }
 
-    outRect = QRectF( ( width() - outWidth ) / 2, ( height() - outHeight ) / 2,
-                       outWidth, outHeight );
+        outRect = QRectF( ( width() - outWidth ) / 2, ( height() - outHeight ) / 2,
+                           outWidth, outHeight );
+    }
 
     if( m_frameUpdated ) {
         node->setFrame( m_frame );

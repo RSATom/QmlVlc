@@ -38,11 +38,23 @@ class QmlVlcVideoSurface
 {
     Q_OBJECT
 
+    Q_PROPERTY( FillMode fillMode READ fillMode WRITE setFillMode NOTIFY fillModeChanged )
     Q_PROPERTY( QmlVlcSurfacePlayerProxy* source READ source WRITE setSource NOTIFY sourceChanged )
 
 public:
     QmlVlcVideoSurface();
     ~QmlVlcVideoSurface();
+
+    enum FillMode {
+        Stretch            = Qt::IgnoreAspectRatio,
+        PreserveAspectFit  = Qt::KeepAspectRatio,
+        PreserveAspectCrop = Qt::KeepAspectRatioByExpanding
+    };
+    Q_ENUMS( FillMode )
+
+    FillMode fillMode() const
+        { return m_fillMode; }
+    void setFillMode( FillMode mode );
 
     QmlVlcSurfacePlayerProxy* source() const
         { return m_source; }
@@ -55,8 +67,11 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void sourceChanged();
+    void fillModeChanged( FillMode mode );
 
 private:
+    FillMode m_fillMode;
+
     QPointer<QmlVlcSurfacePlayerProxy> m_source;
 
     bool m_frameUpdated;
