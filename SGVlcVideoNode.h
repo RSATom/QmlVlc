@@ -89,7 +89,7 @@ class SGVlcVideoNode : public QSGGeometryNode
 public:
     SGVlcVideoNode();
 
-    void setRect( const QRectF& rect );
+    void setRect( const QRectF& rect, const QRectF& sourceRect );
     void setFrame( const QSharedPointer<const QmlVlcI420Frame>& frame );
 
 private:

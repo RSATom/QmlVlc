@@ -209,8 +209,8 @@ void SGVlcVideoNode::setFrame( const QSharedPointer<const QmlVlcI420Frame>& fram
     markDirty( QSGNode::DirtyMaterial );
 }
 
-void SGVlcVideoNode::setRect( const QRectF& rect )
+void SGVlcVideoNode::setRect( const QRectF& rect, const QRectF& sourceRect )
 {
-    QSGGeometry::updateTexturedRectGeometry( &m_geometry, rect, QRectF( 0, 0, 1., 1. ) );
+    QSGGeometry::updateTexturedRectGeometry( &m_geometry, rect, sourceRect );
     markDirty( QSGNode::DirtyGeometry );
 }
