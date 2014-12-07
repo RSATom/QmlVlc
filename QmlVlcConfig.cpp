@@ -26,6 +26,7 @@
 #include "QmlVlcConfig.h"
 
 #include <QVector>
+#include <QStringList>
 
 int QmlVlcConfig::_networkCacheTime = -1;
 bool QmlVlcConfig::_adjustFilter = false;
