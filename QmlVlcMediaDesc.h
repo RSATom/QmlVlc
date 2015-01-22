@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2014, Sergey Radionov <rsatom_gmail.com>
+* Copyright © 2014-2015, Sergey Radionov <rsatom_gmail.com>
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -59,6 +59,10 @@ public:
     Q_PROPERTY( QString title READ get_title WRITE set_title NOTIFY titleChanged )
     Q_PROPERTY( QString setting READ get_setting WRITE set_setting )
 
+    Q_PROPERTY( bool disabled READ get_disabled WRITE set_disabled )
+
+    QmlVlcMediaDesc( vlc::player& player );
+
     QString get_title();
     void set_title( const QString& );
 
@@ -83,6 +87,9 @@ public:
     QString get_trackID();
     QString get_mrl();
 
+    bool get_disabled();
+    void set_disabled( bool disabled );
+
 Q_SIGNALS:
     //will emit from QmlPlayerProxy for current item, and from set_title for all items
     void titleChanged();
@@ -93,6 +100,9 @@ private:
 
 protected:
     virtual vlc::media get_media() = 0;
+
+protected:
+    vlc::player& m_player;
 };
 
 ////////////////////////////////////////////////////////////////////////////
@@ -105,9 +115,6 @@ public:
 
 protected:
     virtual vlc::media get_media();
-
-private:
-    vlc::player& m_player;
 };
 
 ////////////////////////////////////////////////////////////////////////////
@@ -116,7 +123,7 @@ private:
 class QmlVlcMediaMediaDesc : public QmlVlcMediaDesc
 {
 public:
-    QmlVlcMediaMediaDesc( const vlc::media& );
+    QmlVlcMediaMediaDesc( vlc::player& player, const vlc::media& );
 
 protected:
     virtual vlc::media get_media();

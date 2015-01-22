@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2014, Sergey Radionov <rsatom_gmail.com>
+* Copyright © 2014-2015, Sergey Radionov <rsatom_gmail.com>
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -28,6 +28,11 @@
 ////////////////////////////////////////////////////////////////////////////
 /// QmlVlcMediaDesc
 ////////////////////////////////////////////////////////////////////////////
+QmlVlcMediaDesc::QmlVlcMediaDesc( vlc::player& player )
+    : m_player(player)
+{
+}
+
 QString QmlVlcMediaDesc::get_meta( libvlc_meta_t e_meta )
 {
     std::string meta = get_media().meta( e_meta );
@@ -143,11 +148,25 @@ QString QmlVlcMediaDesc::get_mrl()
     return QString::fromUtf8( mrl.data(), mrl.size() );
 }
 
+bool QmlVlcMediaDesc::get_disabled()
+{
+    int idx = m_player.find_media_index( get_media() );
+    return idx < 0 ? false : m_player.is_item_disabled( idx );
+}
+
+void QmlVlcMediaDesc::set_disabled( bool disabled )
+{
+    int idx = m_player.find_media_index( get_media() );
+    if( idx >= 0 ) {
+        m_player.disable_item( idx, disabled );
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////
 /// QmlVlcCurrentMediaDesc
 ////////////////////////////////////////////////////////////////////////////
 QmlVlcCurrentMediaDesc::QmlVlcCurrentMediaDesc( vlc::player& player )
-    : m_player( player )
+    : QmlVlcMediaDesc( player )
 {
 }
 
@@ -159,8 +178,8 @@ vlc::media QmlVlcCurrentMediaDesc::get_media()
 ////////////////////////////////////////////////////////////////////////////
 /// QmlVlcMediaMediaDesc
 ////////////////////////////////////////////////////////////////////////////
-QmlVlcMediaMediaDesc::QmlVlcMediaMediaDesc( const vlc::media& media )
-    : m_media( media )
+QmlVlcMediaMediaDesc::QmlVlcMediaMediaDesc( vlc::player& player, const vlc::media& media )
+    : QmlVlcMediaDesc( player ), m_media( media )
 {
 }
 
