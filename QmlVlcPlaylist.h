@@ -80,6 +80,7 @@ public:
     Q_INVOKABLE void prev();
     Q_INVOKABLE void clear();
     Q_INVOKABLE bool removeItem( unsigned idx );
+    Q_INVOKABLE void advanceItem( unsigned idx, int count );
 
 Q_SIGNALS:
     //will emit from QmlPlayerProxy

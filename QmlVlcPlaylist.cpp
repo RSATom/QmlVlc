@@ -165,3 +165,8 @@ bool QmlVlcPlaylist::removeItem( unsigned idx )
 {
     return m_player.delete_item( idx );
 }
+
+void QmlVlcPlaylist::advanceItem( unsigned idx, int count )
+{
+    m_player.advance_item( idx, count );
+}
