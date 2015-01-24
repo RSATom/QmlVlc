@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2014, Sergey Radionov <rsatom_gmail.com>
+* Copyright © 2014-2015, Sergey Radionov <rsatom_gmail.com>
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -120,8 +120,9 @@ QSGVlcVideoFrameMaterial::QSGVlcVideoFrameMaterial()
 
 QSGVlcVideoFrameMaterial::~QSGVlcVideoFrameMaterial()
 {
+    QOpenGLFunctions* f = QOpenGLContext::currentContext()->functions();
     if( m_planeTexIds[0] || m_planeTexIds[1] || m_planeTexIds[2] )
-        glDeleteTextures( sizeof( m_planeTexIds ) / sizeof( m_planeTexIds[0] ), m_planeTexIds );
+        f->glDeleteTextures( sizeof( m_planeTexIds ) / sizeof( m_planeTexIds[0] ), m_planeTexIds );
 }
 
 QSGMaterialType* QSGVlcVideoFrameMaterial::type() const
@@ -156,8 +157,9 @@ void QSGVlcVideoFrameMaterial::setFrame( const QSharedPointer<const QmlVlcI420Fr
 
 void QSGVlcVideoFrameMaterial::bindPlanes()
 {
+    QOpenGLFunctions* f = QOpenGLContext::currentContext()->functions();
     if( 0 == m_planeTexIds[0] && 0 == m_planeTexIds[1] && 0 == m_planeTexIds[2] )
-        glGenTextures( sizeof( m_planeTexIds ) / sizeof( m_planeTexIds[0] ), m_planeTexIds );
+        f->glGenTextures( sizeof( m_planeTexIds ) / sizeof( m_planeTexIds[0] ), m_planeTexIds );
 
     QSharedPointer<const QmlVlcI420Frame> tmpFrame;
     m_frame.swap( tmpFrame );
@@ -182,15 +184,15 @@ void QSGVlcVideoFrameMaterial::bindPlane( GLenum texUnit, GLuint texId, const vo
 {
     QOpenGLFunctions* f = QOpenGLContext::currentContext()->functions();
     f->glActiveTexture( texUnit );
-    glBindTexture( GL_TEXTURE_2D, texId );
+    f->glBindTexture( GL_TEXTURE_2D, texId );
     if( plane ) {
-        glTexImage2D( GL_TEXTURE_2D, 0, GL_LUMINANCE,
-                      width, height, 0,
-                      GL_LUMINANCE, GL_UNSIGNED_BYTE, plane );
-        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+        f->glTexImage2D( GL_TEXTURE_2D, 0, GL_LUMINANCE,
+                         width, height, 0,
+                         GL_LUMINANCE, GL_UNSIGNED_BYTE, plane );
+        f->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+        f->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+        f->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+        f->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
     }
 }
 
