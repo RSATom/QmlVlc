@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2014, Sergey Radionov <rsatom_gmail.com>
+* Copyright © 2014, Sergey Radionov <rsatom_gmail.com>
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
