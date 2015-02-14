@@ -137,7 +137,7 @@ Q_SIGNALS:
     void mediaPlayerStopped();
     void mediaPlayerTitleChanged();
 
-    void mediaPlayerTimeChanged( double seconds );
+    void mediaPlayerTimeChanged( double time );
     void mediaPlayerPositionChanged( float position );
     void mediaPlayerSeekableChanged( bool seekable );
     void mediaPlayerPausableChanged( bool pausable );
