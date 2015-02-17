@@ -52,6 +52,7 @@ public:
     Q_PROPERTY( bool mute READ get_mute WRITE set_mute )
     Q_PROPERTY( unsigned volume READ get_volume WRITE set_volume )
     Q_PROPERTY( Output channel READ get_channel WRITE set_channel )
+    Q_PROPERTY( int delay READ get_delay WRITE set_delay )
 
     unsigned get_trackCount();
 
@@ -66,6 +67,10 @@ public:
 
     Output get_channel();
     void set_channel( Output );
+
+    //in milliseconds
+    int get_delay();
+    void set_delay( int );
 
     Q_INVOKABLE void toggleMute();
 

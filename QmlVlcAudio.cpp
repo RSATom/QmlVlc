@@ -102,3 +102,13 @@ QString QmlVlcAudio::description( unsigned int trackID )
 
     return track_name;
 }
+
+int QmlVlcAudio::get_delay()
+{
+    return m_player.audio().get_delay();
+}
+
+void QmlVlcAudio::set_delay( int delay )
+{
+    m_player.audio().set_delay( delay );
+}
