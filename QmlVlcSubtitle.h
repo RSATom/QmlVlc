@@ -40,10 +40,16 @@ public:
     Q_PROPERTY( unsigned count READ get_trackCount )
 
     Q_PROPERTY( int track READ get_track WRITE set_track )
+    Q_PROPERTY( int delay READ get_delay WRITE set_delay )
+
     unsigned get_trackCount();
 
     int get_track();
     void set_track( int idx );
+
+    //in milliseconds
+    int get_delay();
+    void set_delay( int );
 
     Q_INVOKABLE QString description( unsigned i );
 

@@ -67,3 +67,13 @@ QString QmlVlcSubtitle::description( unsigned int sID )
 
     return s_name;
 }
+
+int QmlVlcSubtitle::get_delay()
+{
+    return m_player.subtitles().get_delay();
+}
+
+void QmlVlcSubtitle::set_delay( int delay )
+{
+    m_player.subtitles().set_delay( delay );
+}
