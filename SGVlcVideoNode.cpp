@@ -29,6 +29,12 @@
 
 #include "QmlVlcVideoFrame.h"
 
+#if ( QT_VERSION < QT_VERSION_CHECK( 5, 3, 0 ) )
+#define F( x ) x
+#else
+#define F( x ) f->x
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 // QSGVlcVideoFrameMaterialShader
 char const* const* QSGVlcVideoFrameMaterialShader::attributeNames() const
@@ -122,7 +128,7 @@ QSGVlcVideoFrameMaterial::~QSGVlcVideoFrameMaterial()
 {
     QOpenGLFunctions* f = QOpenGLContext::currentContext()->functions();
     if( m_planeTexIds[0] || m_planeTexIds[1] || m_planeTexIds[2] )
-        f->glDeleteTextures( sizeof( m_planeTexIds ) / sizeof( m_planeTexIds[0] ), m_planeTexIds );
+        F( glDeleteTextures( sizeof( m_planeTexIds ) / sizeof( m_planeTexIds[0] ), m_planeTexIds ) );
 }
 
 QSGMaterialType* QSGVlcVideoFrameMaterial::type() const
@@ -159,7 +165,7 @@ void QSGVlcVideoFrameMaterial::bindPlanes()
 {
     QOpenGLFunctions* f = QOpenGLContext::currentContext()->functions();
     if( 0 == m_planeTexIds[0] && 0 == m_planeTexIds[1] && 0 == m_planeTexIds[2] )
-        f->glGenTextures( sizeof( m_planeTexIds ) / sizeof( m_planeTexIds[0] ), m_planeTexIds );
+        F( glGenTextures( sizeof( m_planeTexIds ) / sizeof( m_planeTexIds[0] ), m_planeTexIds ) );
 
     QSharedPointer<const QmlVlcI420Frame> tmpFrame;
     m_frame.swap( tmpFrame );
@@ -184,15 +190,15 @@ void QSGVlcVideoFrameMaterial::bindPlane( GLenum texUnit, GLuint texId, const vo
 {
     QOpenGLFunctions* f = QOpenGLContext::currentContext()->functions();
     f->glActiveTexture( texUnit );
-    f->glBindTexture( GL_TEXTURE_2D, texId );
+    F( glBindTexture( GL_TEXTURE_2D, texId ) );
     if( plane ) {
-        f->glTexImage2D( GL_TEXTURE_2D, 0, GL_LUMINANCE,
+        F( glTexImage2D( GL_TEXTURE_2D, 0, GL_LUMINANCE,
                          width, height, 0,
-                         GL_LUMINANCE, GL_UNSIGNED_BYTE, plane );
-        f->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-        f->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-        f->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-        f->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+                         GL_LUMINANCE, GL_UNSIGNED_BYTE, plane ) );
+        F( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR ) );
+        F( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR ) );
+        F( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE ) );
+        F( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE ) );
     }
 }
 
