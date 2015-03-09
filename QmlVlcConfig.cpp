@@ -74,6 +74,11 @@ libvlc_instance_t* QmlVlcConfig::createLibvlcInstance()
     if( _noVideoTitleShow )
         opts.push_back( "--no-video-title-show" );
 
+    if( _hardwareAcceleration ) {
+        opts.push_back( "--ffmpeg-hw" );
+        opts.push_back( "--avcodec-hw=any" );
+    }
+
     return libvlc_new( opts.size(), opts.data() );
 }
 
