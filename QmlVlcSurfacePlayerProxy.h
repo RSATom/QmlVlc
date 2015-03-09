@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright © 2014, Sergey Radionov <rsatom_gmail.com>
+* Copyright © 2014-2015, Sergey Radionov <rsatom_gmail.com>
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -36,14 +36,15 @@ class QmlVlcSurfacePlayerProxy
 public:
     explicit QmlVlcSurfacePlayerProxy( vlc::player* player, QObject* parent = 0 );
     virtual void classBegin();
+    ~QmlVlcSurfacePlayerProxy();
 
     void registerVideoSurface( QmlVlcVideoSurface* s )
-        { m_videoOutput.registerVideoSurface( s ); }
+        { m_videoOutput->registerVideoSurface( s ); }
     void unregisterVideoSurface( QmlVlcVideoSurface* s )
-        { m_videoOutput.unregisterVideoSurface( s ); }
+        { m_videoOutput->unregisterVideoSurface( s ); }
 
 private:
-    QmlVlcVideoOutput m_videoOutput;
+    QScopedPointer<QmlVlcVideoOutput> m_videoOutput;
 };
 
 #endif // QMLVLCSURFACEPLAYERPROXY_H

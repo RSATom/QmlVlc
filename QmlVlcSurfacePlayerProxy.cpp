@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright © 2014, Sergey Radionov <rsatom_gmail.com>
+* Copyright © 2014-2015, Sergey Radionov <rsatom_gmail.com>
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -27,7 +27,7 @@
 
 QmlVlcSurfacePlayerProxy::QmlVlcSurfacePlayerProxy( vlc::player* player, QObject* parent )
     : QmlVlcPlayerProxy( player, parent ),
-      m_videoOutput( player )
+      m_videoOutput( new QmlVlcVideoOutput( player ) )
 {
 }
 
@@ -35,5 +35,9 @@ void QmlVlcSurfacePlayerProxy::classBegin()
 {
     QmlVlcPlayerProxy::classBegin();
 
-    m_videoOutput.init();
+    m_videoOutput->init();
+}
+
+QmlVlcSurfacePlayerProxy::~QmlVlcSurfacePlayerProxy()
+{
 }
