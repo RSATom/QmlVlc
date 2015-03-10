@@ -53,6 +53,9 @@ public:
     void registerVideoSurface( QmlVlcVideoSurface* s );
     void unregisterVideoSurface( QmlVlcVideoSurface* s );
 
+    QList<QmlVlcVideoSurface*> attachedSurfaces() const
+        { return m_attachedSurfaces; }
+
 private:
     Q_INVOKABLE void frameUpdated();
 
