@@ -44,8 +44,8 @@ class QmlVlcPlayerProxy
     Q_INTERFACES(QQmlParserStatus)
 
 protected:
-    virtual void classBegin();
-    virtual void componentComplete();
+    virtual void classBegin() override;
+    virtual void componentComplete() override;
 
 private:
     static void OnLibVlcEvent_proxy( const libvlc_event_t* e, void *param );
