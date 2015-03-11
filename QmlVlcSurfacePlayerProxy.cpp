@@ -25,6 +25,8 @@
 
 #include "QmlVlcSurfacePlayerProxy.h"
 
+#include "QmlVlcVideoSurface.h"
+
 QmlVlcSurfacePlayerProxy::QmlVlcSurfacePlayerProxy( vlc::player* player, QObject* parent )
     : QmlVlcPlayerProxy( player, parent ),
       m_videoOutput( new QmlVlcVideoOutput( player ) )
@@ -40,4 +42,31 @@ void QmlVlcSurfacePlayerProxy::classBegin()
 
 QmlVlcSurfacePlayerProxy::~QmlVlcSurfacePlayerProxy()
 {
+}
+
+void QmlVlcSurfacePlayerProxy::swap( QmlVlcSurfacePlayerProxy* pp )
+{
+    if( !pp || pp == this )
+        return;
+
+    QList<QmlVlcVideoSurface*> surfaces = m_videoOutput->attachedSurfaces();
+    QList<QmlVlcVideoSurface*> ppSurfaces = pp->m_videoOutput->attachedSurfaces();
+
+    for( auto* s: surfaces ) {
+        s->setSource( nullptr );
+    }
+    for( auto* s: ppSurfaces ) {
+        s->setSource( nullptr );
+    }
+
+    player().swap( &pp->player() );
+
+    m_videoOutput.swap( pp->m_videoOutput );
+
+    for( auto* s: surfaces ) {
+        s->setSource( pp );
+    }
+    for( auto* s: ppSurfaces ) {
+        s->setSource( this );
+    }
 }

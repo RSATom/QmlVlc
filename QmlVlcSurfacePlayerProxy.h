@@ -43,6 +43,8 @@ public:
     void unregisterVideoSurface( QmlVlcVideoSurface* s )
         { m_videoOutput->unregisterVideoSurface( s ); }
 
+    Q_INVOKABLE void swap( QmlVlcSurfacePlayerProxy* );
+
 private:
     QScopedPointer<QmlVlcVideoOutput> m_videoOutput;
 };

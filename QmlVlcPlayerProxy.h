@@ -38,7 +38,8 @@
 
 class QmlVlcPlayerProxy
     : public QObject,
-      public QQmlParserStatus
+      public QQmlParserStatus,
+      private vlc::media_player_events_callback
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
@@ -46,12 +47,10 @@ class QmlVlcPlayerProxy
 protected:
     virtual void classBegin() override;
     virtual void componentComplete() override;
+    void classEnd();
 
 private:
-    static void OnLibVlcEvent_proxy( const libvlc_event_t* e, void *param );
-    void OnLibVlcEvent( const libvlc_event_t* e );
-    //libvlc events arrives from separate thread
-    void vlcEvents( bool Attach );
+    void media_player_event( const libvlc_event_t* e ) override;
 
 public:
     explicit QmlVlcPlayerProxy( vlc::player* player, QObject* parent = 0 );
@@ -166,6 +165,6 @@ protected:
     vlc::player& player() { assert( m_player ); return *m_player; }
 
 private:
-    vlc::player *const m_player;
+    vlc::player* m_player;
 };
 #endif // QMLVLCPLAYERPROXY_H

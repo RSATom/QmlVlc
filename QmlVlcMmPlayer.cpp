@@ -41,6 +41,8 @@ QmlVlcMmPlayer::QmlVlcMmPlayer( QObject* parent )
 
 QmlVlcMmPlayer::~QmlVlcMmPlayer()
 {
+    classEnd();
+
     m_player.close();
     if( m_libvlc ) {
         libvlc_free( m_libvlc );

@@ -55,67 +55,28 @@ QmlVlcPlayerProxy::QmlVlcPlayerProxy( vlc::player* player, QObject* parent /*= 0
 
 void QmlVlcPlayerProxy::classBegin()
 {
-    vlcEvents( true );
+    player().register_callback( this );
 }
 
 void QmlVlcPlayerProxy::componentComplete()
 {
 }
 
-QmlVlcPlayerProxy::~QmlVlcPlayerProxy()
+void QmlVlcPlayerProxy::classEnd()
 {
-    vlcEvents( false );
-}
-
-void QmlVlcPlayerProxy::vlcEvents( bool Attach )
-{
-    if( !player().is_open() )
-        return;
-
-    libvlc_event_manager_t* em =
-        libvlc_media_player_event_manager( player().get_mp() );
-    if( !em )
-        return;
-
-    for( int e = libvlc_MediaPlayerMediaChanged; e <= libvlc_MediaPlayerVout; ++e ) {
-        switch( e ){
-        case libvlc_MediaPlayerMediaChanged:
-        case libvlc_MediaPlayerNothingSpecial:
-        case libvlc_MediaPlayerOpening:
-        case libvlc_MediaPlayerBuffering:
-        case libvlc_MediaPlayerPlaying:
-        case libvlc_MediaPlayerPaused:
-        case libvlc_MediaPlayerStopped:
-        case libvlc_MediaPlayerForward:
-        case libvlc_MediaPlayerBackward:
-        case libvlc_MediaPlayerEndReached:
-        case libvlc_MediaPlayerEncounteredError:
-        case libvlc_MediaPlayerTimeChanged:
-        case libvlc_MediaPlayerPositionChanged:
-        case libvlc_MediaPlayerSeekableChanged:
-        case libvlc_MediaPlayerPausableChanged:
-        case libvlc_MediaPlayerTitleChanged:
-        //case libvlc_MediaPlayerSnapshotTaken:
-        case libvlc_MediaPlayerLengthChanged:
-        //case libvlc_MediaPlayerVout:
-            if( Attach )
-                libvlc_event_attach( em, e, OnLibVlcEvent_proxy, this );
-            else
-                libvlc_event_detach( em, e, OnLibVlcEvent_proxy, this );
-            break;
-        }
+    if( m_player ) {
+        player().unregister_callback( this );
+        m_player = nullptr;
     }
 }
 
-//libvlc events arrives from separate thread
-void QmlVlcPlayerProxy::OnLibVlcEvent_proxy( const libvlc_event_t* e, void *param )
+QmlVlcPlayerProxy::~QmlVlcPlayerProxy()
 {
-    QmlVlcPlayerProxy* this_ = static_cast<QmlVlcPlayerProxy*>( param );
-    this_->OnLibVlcEvent( e );
+    classEnd();
 }
 
 //libvlc events arrives from separate thread
-void QmlVlcPlayerProxy::OnLibVlcEvent( const libvlc_event_t* e )
+void QmlVlcPlayerProxy::media_player_event( const libvlc_event_t* e )
 {
     switch ( e->type ) {
     case libvlc_MediaPlayerMediaChanged:
