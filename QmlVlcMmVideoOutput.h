@@ -47,6 +47,7 @@ class QmlVlcMmVideoOutput
 public:
     explicit QmlVlcMmVideoOutput( vlc::player* player, QObject *parent = 0 );
     void init();
+    ~QmlVlcMmVideoOutput();
 
     QAbstractVideoSurface* videoSurface() const { return m_videoSurface; }
     void setVideoSurface( QAbstractVideoSurface* s );
