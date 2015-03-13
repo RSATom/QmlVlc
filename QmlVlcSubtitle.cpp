@@ -25,7 +25,14 @@
 
 #include "QmlVlcSubtitle.h"
 
+#include <QDir>
 #include <QUrl>
+#include <QNetworkRequest>
+
+QmlVlcSubtitle::QmlVlcSubtitle( vlc::player& player )
+    : m_player( player ), m_networkReply( nullptr )
+{
+}
 
 unsigned QmlVlcSubtitle::get_trackCount()
 {
@@ -80,10 +87,53 @@ void QmlVlcSubtitle::set_delay( int delay )
     m_player.subtitles().set_delay( delay );
 }
 
-bool QmlVlcSubtitle::load( const QUrl& url )
+void QmlVlcSubtitle::networkDataReady()
 {
-    if( url.isLocalFile() )
-        return m_player.subtitles().load( url.toEncoded().constData() );
+    m_downloadingFile.write( m_networkReply->readAll() );
+}
 
-    return false;
+void QmlVlcSubtitle::downloadFinished()
+{
+    if( QNetworkReply::NoError == m_networkReply->error() ) {
+        m_downloadingFile.rename( m_downloadingFile.fileName() + m_networkReply->url().fileName() );
+        const QString nativePath =
+            QDir::toNativeSeparators( m_downloadingFile.fileName() );
+        if( m_player.subtitles().load( nativePath.toUtf8().constData() ) ) {
+            Q_EMIT loadFinished();
+        } else {
+            Q_EMIT loadError();
+        }
+    } else {
+        Q_EMIT loadError();
+    }
+    m_downloadingFile.close();
+    m_networkReply->deleteLater();
+    m_networkReply = nullptr;
+}
+
+void QmlVlcSubtitle::load( const QUrl& url )
+{
+    if( m_networkReply )
+        return;
+
+    if( url.isLocalFile() ) {
+        const QString nativePath = QDir::toNativeSeparators( url.toLocalFile() );
+        if( m_player.subtitles().load( nativePath.toUtf8().constData() ) ) {
+            Q_EMIT loadFinished();
+        } else {
+            Q_EMIT loadError();
+        }
+    } else {
+        m_downloadingFile.setFileTemplate( m_downloadingFile.fileTemplate() );
+        if( !m_downloadingFile.open() ) {
+            Q_EMIT loadError();
+        }
+
+        m_networkReply = m_networkManager.get( QNetworkRequest( url ) );
+        m_networkReply->setReadBufferSize( 4096 );
+        connect( m_networkReply, &QNetworkReply::readyRead,
+                 this, &QmlVlcSubtitle::networkDataReady );
+        connect( m_networkReply, &QNetworkReply::finished,
+                 this, &QmlVlcSubtitle::downloadFinished );
+    }
 }
