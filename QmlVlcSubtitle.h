@@ -53,6 +53,8 @@ public:
 
     Q_INVOKABLE QString description( unsigned i );
 
+    Q_INVOKABLE bool load( const QUrl& );
+
 private:
     vlc::player& m_player;
 };
