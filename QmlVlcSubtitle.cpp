@@ -25,6 +25,8 @@
 
 #include "QmlVlcSubtitle.h"
 
+#include <QUrl>
+
 unsigned QmlVlcSubtitle::get_trackCount()
 {
     return m_player.subtitles().track_count();
@@ -76,4 +78,12 @@ int QmlVlcSubtitle::get_delay()
 void QmlVlcSubtitle::set_delay( int delay )
 {
     m_player.subtitles().set_delay( delay );
+}
+
+bool QmlVlcSubtitle::load( const QUrl& url )
+{
+    if( url.isLocalFile() )
+        return m_player.subtitles().load( url.toEncoded().constData() );
+
+    return false;
 }
