@@ -42,7 +42,7 @@ QmlVlcPlayer::~QmlVlcPlayer()
 
     m_player.close();
     if( m_libvlc ) {
-        libvlc_free( m_libvlc );
+        libvlc_release( m_libvlc );
         m_libvlc = 0;
     }
 }
