@@ -27,6 +27,9 @@
 #define SUBTITLE_H
 
 #include <QObject>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QTemporaryFile>
 
 #include "libvlc_wrapper/vlc_player.h"
 
@@ -34,8 +37,7 @@ class QmlVlcSubtitle : public QObject
 {
     Q_OBJECT
 public:
-    QmlVlcSubtitle( vlc::player& player )
-        : m_player( player ) { }
+    QmlVlcSubtitle( vlc::player& player );
 
     Q_PROPERTY( unsigned count READ get_trackCount )
 
@@ -53,10 +55,21 @@ public:
 
     Q_INVOKABLE QString description( unsigned i );
 
-    Q_INVOKABLE bool load( const QUrl& );
+    Q_INVOKABLE void load( const QUrl& );
+
+Q_SIGNALS:
+    void loadFinished();
+    void loadError();
+
+private Q_SLOTS:
+    void networkDataReady();
+    void downloadFinished();
 
 private:
     vlc::player& m_player;
+    QNetworkAccessManager m_networkManager;
+    QNetworkReply* m_networkReply;
+    QTemporaryFile m_downloadingFile;
 };
 
 #endif //SUBTITLE_H
