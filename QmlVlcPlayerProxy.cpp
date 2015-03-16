@@ -25,6 +25,8 @@
 
 #include "QmlVlcPlayerProxy.h"
 
+#include <QDebug>
+
 QmlVlcPlayerProxy::QmlVlcPlayerProxy( vlc::player* player, QObject* parent /*= 0*/ )
     : QObject( parent ), m_audio( *player ), m_input( *player ),
       m_playlist( *player ), m_subtitle( *player ), m_video( *player ),
@@ -81,9 +83,68 @@ QmlVlcPlayerProxy::~QmlVlcPlayerProxy()
     classEnd();
 }
 
+void LogEvent( const libvlc_event_t* e )
+{
+    switch ( e->type ) {
+    case libvlc_MediaPlayerMediaChanged:
+        qDebug() << "mediaPlayerMediaChanged";
+        break;
+    case libvlc_MediaPlayerNothingSpecial:
+        qDebug() << "mediaPlayerNothingSpecial";
+        break;
+    case libvlc_MediaPlayerOpening:
+        qDebug() << "mediaPlayerOpening";
+        break;
+    case libvlc_MediaPlayerBuffering:
+        qDebug() << "mediaPlayerBuffering";
+        break;
+    case libvlc_MediaPlayerPlaying:
+        qDebug() << "mediaPlayerPlaying";
+        break;
+    case libvlc_MediaPlayerPaused:
+        qDebug() << "mediaPlayerPaused";
+        break;
+    case libvlc_MediaPlayerStopped:
+        qDebug() << "mediaPlayerStopped";
+        break;
+    case libvlc_MediaPlayerForward:
+        qDebug() << "mediaPlayerForward";
+        break;
+    case libvlc_MediaPlayerBackward:
+        qDebug() << "mediaPlayerBackward";
+        break;
+    case libvlc_MediaPlayerEndReached:
+        qDebug() << "mediaPlayerEndReached";
+        break;
+    case libvlc_MediaPlayerEncounteredError:
+        qDebug() << "mediaPlayerEncounteredError";
+        break;
+    case libvlc_MediaPlayerTimeChanged:
+        qDebug() << "mediaPlayerTimeChanged";
+        break;
+    case libvlc_MediaPlayerPositionChanged:
+        qDebug() << "mediaPlayerPositionChanged";
+        break;
+    case libvlc_MediaPlayerSeekableChanged:
+        qDebug() << "mediaPlayerSeekableChanged";
+        break;
+    case libvlc_MediaPlayerPausableChanged:
+        qDebug() << "mediaPlayerPausableChanged";
+        break;
+    case libvlc_MediaPlayerTitleChanged:
+        qDebug() << "mediaPlayerTitleChanged";
+        break;
+    case libvlc_MediaPlayerLengthChanged:
+        qDebug() << "mediaPlayerLengthChanged";
+        break;
+    };
+}
+
 //libvlc events arrives from separate thread
 void QmlVlcPlayerProxy::media_player_event( const libvlc_event_t* e )
 {
+    //LogEvent( e );
+
     switch ( e->type ) {
     case libvlc_MediaPlayerMediaChanged:
         Q_EMIT mediaPlayerMediaChanged();
