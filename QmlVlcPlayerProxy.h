@@ -27,6 +27,7 @@
 #define QMLVLCPLAYERPROXY_H
 
 #include <QObject>
+#include <QTimer>
 
 #include "QmlVlcVideoOutput.h"
 #include "QmlVlcAudio.h"
@@ -166,5 +167,6 @@ protected:
 
 private:
     vlc::player* m_player;
+    QTimer m_errorTimer;
 };
 #endif // QMLVLCPLAYERPROXY_H

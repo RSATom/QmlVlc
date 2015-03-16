@@ -30,6 +30,9 @@ QmlVlcPlayerProxy::QmlVlcPlayerProxy( vlc::player* player, QObject* parent /*= 0
       m_playlist( *player ), m_subtitle( *player ), m_video( *player ),
       m_currentMediaDesc( *player ), m_player( player )
 {
+    m_errorTimer.setInterval( 1000 );
+    m_errorTimer.setSingleShot( true );
+
     connect( this, SIGNAL( mediaPlayerPlaying() ), this, SIGNAL( playingChanged() ) );
     connect( this, SIGNAL( mediaPlayerPaused() ), this, SIGNAL( playingChanged() ) );
     connect( this, SIGNAL( mediaPlayerEncounteredError() ), this, SIGNAL( playingChanged() ) );
@@ -45,9 +48,12 @@ QmlVlcPlayerProxy::QmlVlcPlayerProxy( vlc::player* player, QObject* parent /*= 0
     connect( this, SIGNAL( mediaPlayerEndReached() ), this, SIGNAL( stateChanged() ) );
     connect( this, SIGNAL( mediaPlayerStopped() ), this, SIGNAL( stateChanged() ) );
 
-    connect( this, SIGNAL( mediaPlayerEncounteredError() ), this, SLOT( currentItemEndReached() ) );
+    connect( this, SIGNAL( mediaPlayerEncounteredError() ), &m_errorTimer, SLOT( start() ) );
+    connect( &m_errorTimer, SIGNAL( timeout() ), this, SLOT( currentItemEndReached() ) );
+    connect( this, SIGNAL( mediaPlayerEndReached() ), &m_errorTimer, SLOT( stop() ) );
     connect( this, SIGNAL( mediaPlayerEndReached() ), this, SLOT( currentItemEndReached() ) );
 
+    connect( this, SIGNAL( mediaPlayerMediaChanged() ), &m_errorTimer, SLOT( stop() ) );
     connect( this, SIGNAL( mediaPlayerMediaChanged() ), &m_playlist, SIGNAL( currentItemChanged() ) );
 
     connect( this, SIGNAL( mediaPlayerTitleChanged() ), &m_currentMediaDesc, SIGNAL( titleChanged() ) );
