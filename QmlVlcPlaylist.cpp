@@ -87,7 +87,6 @@ void QmlVlcPlaylist::itemsClear( ItemsProperty_t* p )
 }
 
 QQmlListProperty<QmlVlcMediaDesc> QmlVlcPlaylist::get_items()
-
 {
     return
         ItemsProperty_t( this, 0, 0,
