@@ -27,9 +27,12 @@
 #define SUBTITLE_H
 
 #include <QObject>
+#include <QTemporaryDir>
+#include <QTemporaryFile>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include <QTemporaryFile>
+#include <QByteArray>
+#include <QLinkedList>
 
 #include "libvlc_wrapper/vlc_player.h"
 
@@ -38,6 +41,30 @@ class QmlVlcSubtitle : public QObject
     Q_OBJECT
 public:
     QmlVlcSubtitle( vlc::player& player );
+
+    enum Type {
+        Microdvd    = 0,
+        Subrip      = 1,
+        //Subviewer   = 2,
+        //Ssa1        = 3,
+        //Ssa2_4      = 4,
+        //Ass         = 5,
+        //Vplayer     = 6,
+        //Sami        = 7,
+        //Dvdsubtitle = 8,
+        //Mpl2        = 9,
+        //Aqt         = 10,
+        //Pjs         = 11,
+        //Mpsub       = 12,
+        //Jacosub     = 13,
+        //Psb         = 14,
+        //Realtext    = 15,
+        Dks         = 16,
+        //Subviewer1  = 17,
+        Vtt         = 18,
+    };
+
+    Q_ENUMS( Type )
 
     Q_PROPERTY( unsigned count READ get_trackCount )
 
@@ -56,6 +83,10 @@ public:
     Q_INVOKABLE QString description( unsigned i );
 
     Q_INVOKABLE void load( const QUrl& );
+    Q_INVOKABLE bool loadFromString( const QByteArray& subtitles,
+                                     Type type );
+
+    void eraseLoaded();
 
 Q_SIGNALS:
     void loadFinished();
@@ -66,10 +97,15 @@ private Q_SLOTS:
     void downloadFinished();
 
 private:
+    bool loadFromFile( QTemporaryFile* );
+
+private:
     vlc::player& m_player;
     QNetworkAccessManager m_networkManager;
     QNetworkReply* m_networkReply;
-    QTemporaryFile m_downloadingFile;
+    QScopedPointer<QTemporaryDir> m_subtitlesDir;
+    QScopedPointer<QTemporaryFile> m_subtitleFile;
+    unsigned m_loadedCount;
 };
 
 #endif //SUBTITLE_H

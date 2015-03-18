@@ -57,6 +57,8 @@ QmlVlcPlayerProxy::QmlVlcPlayerProxy( vlc::player* player, QObject* parent /*= 0
 
     connect( this, SIGNAL( mediaPlayerMediaChanged() ), &m_errorTimer, SLOT( stop() ) );
     connect( this, SIGNAL( mediaPlayerMediaChanged() ), &m_playlist, SIGNAL( currentItemChanged() ) );
+    connect( this, &QmlVlcPlayerProxy::mediaPlayerMediaChanged,
+             get_subtitle(), &QmlVlcSubtitle::eraseLoaded );
 
     connect( this, SIGNAL( mediaPlayerTitleChanged() ), &m_currentMediaDesc, SIGNAL( titleChanged() ) );
 }
