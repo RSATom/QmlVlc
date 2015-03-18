@@ -25,14 +25,21 @@
 
 #include "QmlVlcSubtitle.h"
 
+#include <cassert>
+
 #include <QDir>
 #include <QUrl>
 #include <QNetworkRequest>
 
+enum {
+    MAX_SUBTITLE_SIZE    = ( 1 << 20 ), //= 1MB
+    MAX_LOADED_SUBTITLES = 30,
+};
+
 QmlVlcSubtitle::QmlVlcSubtitle( vlc::player& player )
-    : m_player( player ), m_networkReply( nullptr )
+    : m_player( player ), m_networkReply( nullptr ), m_loadedCount( 0 )
 {
-}
+ QT_BEGIN_NAMESPACE}
 
 unsigned QmlVlcSubtitle::get_trackCount()
 {
@@ -87,34 +94,65 @@ void QmlVlcSubtitle::set_delay( int delay )
     m_player.subtitles().set_delay( delay );
 }
 
+bool QmlVlcSubtitle::loadFromFile( QTemporaryFile* subtitleFile )
+{
+    const QString nativePath =
+        QDir::toNativeSeparators( subtitleFile->fileName() );
+    if( m_player.subtitles().load( nativePath.toUtf8().constData() ) ) {
+        subtitleFile->setAutoRemove( false );
+        ++m_loadedCount;
+        return true;
+    }
+
+    return false;
+}
+
 void QmlVlcSubtitle::networkDataReady()
 {
-    m_downloadingFile.write( m_networkReply->readAll() );
+    if( !m_subtitleFile || !m_networkReply ) {
+        assert( false );
+        return;
+    }
+
+    if( m_subtitleFile->size() < MAX_SUBTITLE_SIZE )
+        m_subtitleFile->write( m_networkReply->readAll() );
+    else
+        m_networkReply->abort();
 }
 
 void QmlVlcSubtitle::downloadFinished()
 {
-    if( QNetworkReply::NoError == m_networkReply->error() ) {
-        m_downloadingFile.rename( m_downloadingFile.fileName() + m_networkReply->url().fileName() );
-        const QString nativePath =
-            QDir::toNativeSeparators( m_downloadingFile.fileName() );
-        if( m_player.subtitles().load( nativePath.toUtf8().constData() ) ) {
-            Q_EMIT loadFinished();
-        } else {
-            Q_EMIT loadError();
-        }
+    if( !m_networkReply ) {
+        assert( false );
+        return;
+    }
+
+    if( QNetworkReply::NoError == m_networkReply->error() && m_subtitleFile &&
+        m_subtitleFile->rename( m_subtitleFile->fileName() + QStringLiteral( "." ) +
+                                QFileInfo( m_networkReply->url().fileName() ).suffix() ) &&
+        loadFromFile( m_subtitleFile.data() ) )
+    {
+        Q_EMIT loadFinished();
     } else {
         Q_EMIT loadError();
     }
-    m_downloadingFile.close();
+
     m_networkReply->deleteLater();
     m_networkReply = nullptr;
+    m_subtitleFile.reset();
 }
 
 void QmlVlcSubtitle::load( const QUrl& url )
 {
-    if( m_networkReply )
+    if( m_networkReply  )
         return;
+
+    assert( !m_subtitleFile );
+
+    if( m_loadedCount >= MAX_LOADED_SUBTITLES ) {
+        Q_EMIT loadError();
+        return;
+    }
 
     if( url.isLocalFile() ) {
         const QString nativePath = QDir::toNativeSeparators( url.toLocalFile() );
@@ -124,10 +162,24 @@ void QmlVlcSubtitle::load( const QUrl& url )
             Q_EMIT loadError();
         }
     } else {
-        m_downloadingFile.setFileTemplate( m_downloadingFile.fileTemplate() );
-        if( !m_downloadingFile.open() ) {
+        if( !m_subtitlesDir )
+            m_subtitlesDir.reset( new QTemporaryDir );
+
+        if( !m_subtitlesDir->isValid() ) {
             Q_EMIT loadError();
+            return;
         }
+
+        QScopedPointer<QTemporaryFile> subtitleFile(
+            new QTemporaryFile( m_subtitlesDir->path() +
+                                QDir::separator() +
+                                QStringLiteral( "url-sub-XXXXXX" ) ) );
+        if( !subtitleFile->open() ) {
+            Q_EMIT loadError();
+            return;
+        }
+
+        m_subtitleFile.swap( subtitleFile );
 
         m_networkReply = m_networkManager.get( QNetworkRequest( url ) );
         m_networkReply->setReadBufferSize( 4096 );
@@ -136,4 +188,74 @@ void QmlVlcSubtitle::load( const QUrl& url )
         connect( m_networkReply, &QNetworkReply::finished,
                  this, &QmlVlcSubtitle::downloadFinished );
     }
+}
+
+QString GetExtension( QmlVlcSubtitle::Type type )
+{
+    switch( type ) {
+        case QmlVlcSubtitle::Microdvd:
+            return QStringLiteral( "sub" );
+        case QmlVlcSubtitle::Subrip:
+            return QStringLiteral( "srt" );
+        //case QmlVlcSubtitle::Subviewer:
+        //case QmlVlcSubtitle::Ssa1:
+        //case QmlVlcSubtitle::Ssa2_4:
+        //case QmlVlcSubtitle::Ass:
+        //case QmlVlcSubtitle::Vplayer:
+        //case QmlVlcSubtitle::Sami:
+        //case QmlVlcSubtitle::Dvdsubtitle:
+        //case QmlVlcSubtitle::Mpl2:
+        //case QmlVlcSubtitle::Aqt:
+        //case QmlVlcSubtitle::Pjs:
+        //case QmlVlcSubtitle::Mpsub:
+        //case QmlVlcSubtitle::Jacosub:
+        //case QmlVlcSubtitle::Psb:
+        //case QmlVlcSubtitle::Realtext:
+        case QmlVlcSubtitle::Dks:
+            return QStringLiteral( "dks" );
+        //case QmlVlcSubtitle::Subviewer1:
+        case QmlVlcSubtitle::Vtt:
+            return QStringLiteral( "vtt" );
+    }
+
+    assert( false );
+    return QString();
+}
+
+bool QmlVlcSubtitle::loadFromString( const QByteArray& subtitle, Type type )
+{
+    const QString ext = GetExtension( type );
+    if( m_loadedCount >= MAX_LOADED_SUBTITLES ||
+        ext.isEmpty() || subtitle.size() > MAX_SUBTITLE_SIZE )
+    {
+        return false;
+    }
+
+    if( !m_subtitlesDir )
+        m_subtitlesDir.reset( new QTemporaryDir );
+
+    if( !m_subtitlesDir->isValid() )
+        return false;
+
+    QTemporaryFile subtitleFile( m_subtitlesDir->path() +
+                                 QDir::separator() +
+                                 QStringLiteral( "str-sub-XXXXXX." ) + ext );
+
+    return
+        subtitleFile.open() &&
+        subtitleFile.write( subtitle ) &&
+        loadFromFile( &subtitleFile );
+}
+
+void QmlVlcSubtitle::eraseLoaded()
+{
+    if( m_networkReply )
+        m_networkReply->abort();
+
+    if( m_subtitleFile )
+        m_subtitleFile.reset();
+
+    m_subtitlesDir.reset();
+
+    m_loadedCount = 0;
 }
