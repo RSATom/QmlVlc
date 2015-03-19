@@ -9,3 +9,7 @@ Platform independent, and should work on any platform supported by Qt and Vlc ( 
 Simple usage demo is available: [QmlVlcDemo](https://github.com/RSATom/QmlVlcDemo)
 
 Uses almost the same api as [FBVLC](http://code.google.com/p/fbvlc/wiki/FBVLC_API?ts=1396926615&updated=FBVLC_API) uses.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/RSATom/qmlvlc/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
