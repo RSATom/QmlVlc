@@ -36,6 +36,13 @@ QmlVlcMmVideoOutput::QmlVlcMmVideoOutput( vlc::player* player, QObject* parent /
 {
 }
 
+QmlVlcMmVideoOutput::~QmlVlcMmVideoOutput()
+{
+    //we should force closing vmem here,
+    //to avoid pure virtual member call in vlc::basic_vmem_wrapper
+    vlc::basic_vmem_wrapper::close();
+}
+
 void QmlVlcMmVideoOutput::init()
 {
     assert( m_player && m_player->is_open() );
