@@ -38,7 +38,7 @@ QmlVlcConfig::QmlVlcConfig()
     : _networkCacheTime( -1 ), _adjustFilter( false ), _marqueeFilter( false ),
       _logoFilter( false ), _debug( false ), _noVideoTitleShow( true ),
       _hardwareAcceleration( false ), _trustedEnvironment( false ),
-      _libvlcCounter( 0 )
+      _libvlcCounter( 0 ), _libvlc( nullptr )
 {
 
 }
@@ -133,6 +133,12 @@ bool QmlVlcConfig::isOptionTrusted( const QString& opt ) const
 
 libvlc_instance_t* QmlVlcConfig::createLibvlcInstance()
 {
+    Q_ASSERT( ( _libvlcCounter && _libvlc ) || ( !_libvlcCounter && !_libvlc ) );
+    if( _libvlc ) {
+        ++_libvlcCounter;
+        return _libvlc;
+    }
+
     QVector<const char*> opts;
 
     QByteArray networkCachingBuf;
@@ -173,13 +179,21 @@ libvlc_instance_t* QmlVlcConfig::createLibvlcInstance()
         opts.push_back( "--avcodec-hw=any" );
     }
 
-    ++_libvlcCounter;
+    _libvlc = libvlc_new( opts.size(), opts.data() );
+    _libvlcCounter = 1;
 
-    return libvlc_new( opts.size(), opts.data() );
+    return _libvlc;
 }
 
 void QmlVlcConfig::releaseLibvlcInstance( libvlc_instance_t* libvlc )
 {
-    libvlc_release( libvlc );
-    --_libvlcCounter;
+    if( !_libvlcCounter || libvlc != _libvlc ) {
+        Q_ASSERT( false );
+        return;
+    }
+
+    if( !--_libvlcCounter ) {
+        libvlc_release( _libvlc );
+        _libvlc = nullptr;
+    }
 }

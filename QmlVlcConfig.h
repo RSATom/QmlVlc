@@ -71,6 +71,7 @@ private:
     bool _hardwareAcceleration;
     bool _trustedEnvironment;
     unsigned _libvlcCounter;
+    libvlc_instance_t* _libvlc;
 };
 
 #endif // QMLVLCCONFIG_H
