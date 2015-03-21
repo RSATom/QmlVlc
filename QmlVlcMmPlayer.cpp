@@ -32,7 +32,7 @@ QmlVlcMmPlayer::QmlVlcMmPlayer( QObject* parent )
       m_libvlc( 0 ),
       m_videoOutput( &m_player )
 {
-    m_libvlc = QmlVlcConfig::createLibvlcInstance();
+    m_libvlc = QmlVlcConfig::instance().createLibvlcInstance();
     if( m_libvlc ) {
         m_player.open( m_libvlc );
         m_videoOutput.init();
@@ -45,7 +45,7 @@ QmlVlcMmPlayer::~QmlVlcMmPlayer()
 
     m_player.close();
     if( m_libvlc ) {
-        libvlc_release( m_libvlc );
+        QmlVlcConfig::instance().releaseLibvlcInstance( m_libvlc );
         m_libvlc = 0;
     }
 }
