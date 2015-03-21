@@ -28,14 +28,108 @@
 #include <QVector>
 #include <QStringList>
 
-int QmlVlcConfig::_networkCacheTime = -1;
-bool QmlVlcConfig::_adjustFilter = false;
-bool QmlVlcConfig::_marqueeFilter = false;
-bool QmlVlcConfig::_logoFilter = false;
-bool QmlVlcConfig::_debug = false;
-bool QmlVlcConfig::_noVideoTitleShow = true;
-bool QmlVlcConfig::_hardwareAcceleration = false;
-bool QmlVlcConfig::_trustedEnvironment = false;
+QmlVlcConfig& QmlVlcConfig::instance()
+{
+    static QmlVlcConfig instance;
+    return instance;
+}
+
+QmlVlcConfig::QmlVlcConfig()
+    : _networkCacheTime( -1 ), _adjustFilter( false ), _marqueeFilter( false ),
+      _logoFilter( false ), _debug( false ), _noVideoTitleShow( true ),
+      _hardwareAcceleration( false ), _trustedEnvironment( false ),
+      _libvlcCounter( 0 )
+{
+
+}
+QmlVlcConfig::~QmlVlcConfig()
+{
+    Q_ASSERT( 0 == _libvlcCounter );
+}
+
+void QmlVlcConfig::setNetworkCacheTime( int time )
+{
+    _networkCacheTime = time;
+}
+
+void QmlVlcConfig::enableAdjustFilter( bool enable )
+{
+    _adjustFilter = enable;
+}
+
+void QmlVlcConfig::enableMarqueeFilter( bool enable )
+{
+    _marqueeFilter = enable;
+}
+
+void QmlVlcConfig::enableLogoFilter( bool enable )
+{
+    _logoFilter = enable;
+}
+
+void QmlVlcConfig::enableDebug( bool enable )
+{
+    _debug = enable;
+}
+
+void QmlVlcConfig::enableNoVideoTitleShow( bool enable )
+{
+    _noVideoTitleShow = enable;
+}
+
+void QmlVlcConfig::enableHardwareAcceleration( bool enable )
+{
+    _hardwareAcceleration = enable;
+}
+
+void QmlVlcConfig::setTrustedEnvironment( bool trusted )
+{
+    _trustedEnvironment = trusted;
+}
+
+bool QmlVlcConfig::trustedEnvironment() const
+{
+    return _trustedEnvironment;
+}
+
+struct TrustedOption
+{
+    const char* name;
+    const char* value; //if 0 = all values are acceptable
+};
+
+static const TrustedOption trustedOptions[] = {
+    { ":rtsp-http-port", 0 },
+    { ":avformat-format", "mxg" },
+    { ":demux", "h264" },
+    { ":h264-fps", 0 },
+};
+
+bool QmlVlcConfig::isOptionTrusted( const QString& opt ) const
+{
+    if( trustedEnvironment() )
+        return true;
+
+    QStringList name2val = opt.split( '=' );
+    if( 2 != name2val.size() )
+        return false;
+
+    name2val[0] = name2val[0].trimmed();
+    name2val[1] = name2val[1].trimmed();
+
+    const unsigned tsz =
+        sizeof( trustedOptions ) / sizeof( trustedOptions[0] );
+
+    for( unsigned i = 0; i < tsz; ++i ) {
+        const TrustedOption& to = trustedOptions[i];
+        if( name2val[0] == to.name ) {
+            if( 0 == to.value || name2val[1] == to.value )
+                return true;
+        }
+    }
+
+    return true;
+}
 
 libvlc_instance_t* QmlVlcConfig::createLibvlcInstance()
 {
@@ -79,44 +173,13 @@ libvlc_instance_t* QmlVlcConfig::createLibvlcInstance()
         opts.push_back( "--avcodec-hw=any" );
     }
 
+    ++_libvlcCounter;
+
     return libvlc_new( opts.size(), opts.data() );
 }
 
-struct TrustedOption
+void QmlVlcConfig::releaseLibvlcInstance( libvlc_instance_t* libvlc )
 {
-    const char* name;
-    const char* value; //if 0 = all values are acceptable
-};
-
-static const TrustedOption trustedOptions[] = {
-    { ":rtsp-http-port", 0 },
-    { ":avformat-format", "mxg" },
-    { ":demux", "h264" },
-    { ":h264-fps", 0 },
-};
-
-bool QmlVlcConfig::isOptionTrusted( const QString& opt )
-{
-    if( trustedEnvironment() )
-        return true;
-
-    QStringList name2val = opt.split( '=' );
-    if( 2 != name2val.size() )
-        return false;
-
-    name2val[0] = name2val[0].trimmed();
-    name2val[1] = name2val[1].trimmed();
-
-    const unsigned tsz =
-        sizeof( trustedOptions ) / sizeof( trustedOptions[0] );
-
-    for( unsigned i = 0; i < tsz; ++i ) {
-        const TrustedOption& to = trustedOptions[i];
-        if( name2val[0] == to.name ) {
-            if( 0 == to.value || name2val[1] == to.value )
-                return true;
-        }
-    }
-
-    return true;
+    libvlc_release( libvlc );
+    --_libvlcCounter;
 }

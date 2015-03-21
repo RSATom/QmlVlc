@@ -106,7 +106,7 @@ int QmlVlcPlaylist::addWithOptions( const QString& mrl, const QStringList& optio
 
     for( int i = 0; i < options.size(); ++i ) {
         QByteArray& buf = *bufStorage.insert( bufStorage.end(), options[i].toUtf8() );
-        if( QmlVlcConfig::isOptionTrusted( options[i] ) )
+        if( QmlVlcConfig::instance().isOptionTrusted( options[i] ) )
             trusted_opts.push_back( buf.data() );
         else
             untrusted_opts.push_back( buf.data() );

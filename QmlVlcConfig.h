@@ -30,44 +30,47 @@
 
 #include <vlc/vlc.h>
 
+//this class is not thread safe
 class QmlVlcConfig
     : public QObject
 {
     Q_OBJECT
 public:
-    static void setNetworkCacheTime( int time )
-        { _networkCacheTime = time; }
-    static void enableAdjustFilter( bool enable )
-        { _adjustFilter = enable; }
-    static void enableMarqueeFilter( bool enable )
-        { _marqueeFilter = enable; }
-    static void enableLogoFilter( bool enable )
-        { _logoFilter = enable; }
-    static void enableDebug( bool enable )
-        { _debug = enable; }
-    static void enableNoVideoTitleShow( bool enable )
-        { _noVideoTitleShow = enable; }
-    static void enableHardwareAcceleration( bool enable )
-        { _hardwareAcceleration = enable; }
+    static QmlVlcConfig& instance();
 
-    static libvlc_instance_t* createLibvlcInstance();
+    void setNetworkCacheTime( int time );
+    void enableAdjustFilter( bool enable );
+    void enableMarqueeFilter( bool enable );
+    void enableLogoFilter( bool enable );
+    void enableDebug( bool enable );
+    void enableNoVideoTitleShow( bool enable );
+    void enableHardwareAcceleration( bool enable );
 
-    static void setTrustedEnvironment( bool trusted )
-        { _trustedEnvironment = trusted; }
-    static bool trustedEnvironment()
-        { return _trustedEnvironment; }
+    void setTrustedEnvironment( bool trusted );
+    bool trustedEnvironment() const;
 
-    static bool isOptionTrusted( const QString& );
+    bool isOptionTrusted( const QString& ) const;
+
+    libvlc_instance_t* createLibvlcInstance();
+    void releaseLibvlcInstance( libvlc_instance_t* );
 
 private:
-    static int _networkCacheTime;
-    static bool _adjustFilter;
-    static bool _marqueeFilter;
-    static bool _logoFilter;
-    static bool _debug;
-    static bool _noVideoTitleShow;
-    static bool _hardwareAcceleration;
-    static bool _trustedEnvironment;
+    QmlVlcConfig();
+    ~QmlVlcConfig();
+
+    QmlVlcConfig( QmlVlcConfig& ) = delete;
+    QmlVlcConfig& operator= ( QmlVlcConfig& ) = delete;
+
+private:
+    int _networkCacheTime;
+    bool _adjustFilter;
+    bool _marqueeFilter;
+    bool _logoFilter;
+    bool _debug;
+    bool _noVideoTitleShow;
+    bool _hardwareAcceleration;
+    bool _trustedEnvironment;
+    unsigned _libvlcCounter;
 };
 
 #endif // QMLVLCCONFIG_H

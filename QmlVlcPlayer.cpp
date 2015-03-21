@@ -31,7 +31,7 @@ QmlVlcPlayer::QmlVlcPlayer( QObject* parent )
     : QmlVlcSurfacePlayerProxy( &m_player, parent ),
       m_libvlc( 0 )
 {
-    m_libvlc = QmlVlcConfig::createLibvlcInstance();
+    m_libvlc = QmlVlcConfig::instance().createLibvlcInstance();
     if( m_libvlc )
         m_player.open( m_libvlc );
 }
@@ -42,7 +42,7 @@ QmlVlcPlayer::~QmlVlcPlayer()
 
     m_player.close();
     if( m_libvlc ) {
-        libvlc_release( m_libvlc );
+        QmlVlcConfig::instance().releaseLibvlcInstance( m_libvlc );
         m_libvlc = 0;
     }
 }
