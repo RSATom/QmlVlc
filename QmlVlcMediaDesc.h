@@ -90,6 +90,8 @@ public:
     bool get_disabled();
     void set_disabled( bool disabled );
 
+    virtual vlc::media get_media() = 0;
+
 Q_SIGNALS:
     //will emit from QmlPlayerProxy for current item, and from set_title for all items
     void titleChanged();
@@ -97,9 +99,6 @@ Q_SIGNALS:
 private:
     QString get_meta( libvlc_meta_t e_meta );
     void set_meta( libvlc_meta_t e_meta, const QString& meta );
-
-protected:
-    virtual vlc::media get_media() = 0;
 
 protected:
     vlc::player& m_player;
