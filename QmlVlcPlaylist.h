@@ -31,7 +31,7 @@
 
 #include "libvlc_wrapper/vlc_player.h"
 
-#include "QmlVlcMediaDesc.h"
+#include "QmlVlcMedia.h"
 
 class QmlVlcPlaylist : public QObject
 {
@@ -40,7 +40,7 @@ public:
     QmlVlcPlaylist( vlc::player& player )
         : m_player( player ) { }
 
-    typedef QQmlListProperty<QmlVlcMediaDesc> ItemsProperty_t;
+    typedef QQmlListProperty<QmlVlcMedia> ItemsProperty_t;
 
     enum Mode {
         Normal = vlc::mode_normal,
@@ -55,7 +55,7 @@ public:
     Q_PROPERTY( int currentItem READ get_current WRITE set_current NOTIFY currentItemChanged )
     Q_PROPERTY( Mode mode READ get_mode WRITE set_mode )
 
-    Q_PROPERTY( QQmlListProperty<QmlVlcMediaDesc> items READ get_items )
+    Q_PROPERTY( QQmlListProperty<QmlVlcMedia> items READ get_items )
 
     unsigned get_itemCount();
     bool get_isPlaying();
@@ -69,7 +69,7 @@ public:
     ItemsProperty_t get_items();
 
     Q_INVOKABLE int add( const QString& mrl );
-    Q_INVOKABLE int add( QmlVlcMediaDesc* media );
+    Q_INVOKABLE int add( QmlVlcMedia* media );
     Q_INVOKABLE int addWithOptions( const QString& mrl, const QStringList& options );
 
     Q_INVOKABLE void play();
@@ -89,7 +89,7 @@ Q_SIGNALS:
 
 private:
     static int itemsCount( ItemsProperty_t* );
-    static QmlVlcMediaDesc* getItem( ItemsProperty_t*, int index );
+    static QmlVlcMedia* getItem( ItemsProperty_t*, int index );
     static void itemsClear( ItemsProperty_t* );
 
 private:

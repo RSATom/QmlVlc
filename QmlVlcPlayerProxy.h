@@ -35,7 +35,7 @@
 #include "QmlVlcPlaylist.h"
 #include "QmlVlcSubtitle.h"
 #include "QmlVlcVideo.h"
-#include "QmlVlcMediaDesc.h"
+#include "QmlVlcMedia.h"
 
 class QmlVlcPlayerProxy
     : public QObject,
@@ -85,7 +85,7 @@ public:
     Q_PROPERTY( QmlVlcAudio* audio READ get_audio CONSTANT )
     Q_PROPERTY( QmlVlcSubtitle* subtitle READ get_subtitle CONSTANT )
     Q_PROPERTY( QmlVlcPlaylist* playlist READ get_playlist CONSTANT )
-    Q_PROPERTY( QmlVlcMediaDesc* mediaDescription READ get_mediaDesc CONSTANT )
+    Q_PROPERTY( QmlVlcMedia* mediaDescription READ get_mediaDesc CONSTANT )
 
 Q_SIGNALS:
     void playingChanged();
@@ -152,15 +152,15 @@ public:
     QmlVlcPlaylist*  get_playlist()  { return &m_playlist; }
     QmlVlcSubtitle*  get_subtitle()  { return &m_subtitle; }
     QmlVlcVideo*     get_video()     { return &m_video; }
-    QmlVlcMediaDesc* get_mediaDesc() { return &m_currentMediaDesc; }
+    QmlVlcMedia*     get_mediaDesc() { return &m_currentMediaDesc; }
 
 private:
-    QmlVlcAudio            m_audio;
-    QmlVlcInput            m_input;
-    QmlVlcPlaylist         m_playlist;
-    QmlVlcSubtitle         m_subtitle;
-    QmlVlcVideo            m_video;
-    QmlVlcCurrentMediaDesc m_currentMediaDesc;
+    QmlVlcAudio        m_audio;
+    QmlVlcInput        m_input;
+    QmlVlcPlaylist     m_playlist;
+    QmlVlcSubtitle     m_subtitle;
+    QmlVlcVideo        m_video;
+    QmlVlcCurrentMedia m_currentMediaDesc;
 
 protected:
     vlc::player& player() { assert( m_player ); return *m_player; }

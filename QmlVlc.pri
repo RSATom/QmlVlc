@@ -6,7 +6,7 @@ HEADERS += \
     $$PWD/QmlVlcInput.h \
     $$PWD/QmlVlcLogo.h \
     $$PWD/QmlVlcMarquee.h \
-    $$PWD/QmlVlcMediaDesc.h \
+    $$PWD/QmlVlcMedia.h \
     $$PWD/QmlVlcPlayerProxy.h \
     $$PWD/QmlVlcSurfacePlayerProxy.h \
     $$PWD/QmlVlcPlayer.h \
@@ -27,7 +27,7 @@ SOURCES += \
     $$PWD/QmlVlcInput.cpp \
     $$PWD/QmlVlcLogo.cpp \
     $$PWD/QmlVlcMarquee.cpp \
-    $$PWD/QmlVlcMediaDesc.cpp \
+    $$PWD/QmlVlcMedia.cpp \
     $$PWD/QmlVlcPlayerProxy.cpp \
     $$PWD/QmlVlcSurfacePlayerProxy.cpp \
     $$PWD/QmlVlcPlayer.cpp \

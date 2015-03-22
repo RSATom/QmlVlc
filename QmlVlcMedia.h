@@ -23,8 +23,7 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef QMLVLCMEDIADESC_H
-#define QMLVLCMEDIADESC_H
+#pragma once
 
 #include <QObject>
 
@@ -33,9 +32,9 @@
 #include <QObject>
 
 ////////////////////////////////////////////////////////////////////////////
-/// QmlVlcMediaDesc
+/// QmlVlcMedia
 ////////////////////////////////////////////////////////////////////////////
-class QmlVlcMediaDesc : public QObject
+class QmlVlcMedia : public QObject
 {
     Q_OBJECT
 public:
@@ -61,7 +60,7 @@ public:
 
     Q_PROPERTY( bool disabled READ get_disabled WRITE set_disabled )
 
-    QmlVlcMediaDesc( vlc::player& player );
+    QmlVlcMedia( vlc::player& player );
 
     QString get_title();
     void set_title( const QString& );
@@ -105,24 +104,24 @@ protected:
 };
 
 ////////////////////////////////////////////////////////////////////////////
-/// QmlVlcCurrentMediaDesc
+/// QmlVlcCurrentMedia
 ////////////////////////////////////////////////////////////////////////////
-class QmlVlcCurrentMediaDesc : public QmlVlcMediaDesc
+class QmlVlcCurrentMedia : public QmlVlcMedia
 {
 public:
-    QmlVlcCurrentMediaDesc( vlc::player& player );
+    QmlVlcCurrentMedia( vlc::player& player );
 
 protected:
     virtual vlc::media get_media() const;
 };
 
 ////////////////////////////////////////////////////////////////////////////
-/// QmlVlcMediaMediaDesc
+/// QmlVlcMediaMedia
 ////////////////////////////////////////////////////////////////////////////
-class QmlVlcMediaMediaDesc : public QmlVlcMediaDesc
+class QmlVlcMediaMedia : public QmlVlcMedia
 {
 public:
-    QmlVlcMediaMediaDesc( vlc::player& player, const vlc::media& );
+    QmlVlcMediaMedia( vlc::player& player, const vlc::media& );
 
 protected:
     virtual vlc::media get_media() const;
@@ -130,5 +129,3 @@ protected:
 private:
     vlc::media m_media;
 };
-
-#endif // QMLVLCMEDIADESC_H

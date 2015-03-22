@@ -23,23 +23,23 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "QmlVlcMediaDesc.h"
+#include "QmlVlcMedia.h"
 
 ////////////////////////////////////////////////////////////////////////////
-/// QmlVlcMediaDesc
+/// QmlVlcMedia
 ////////////////////////////////////////////////////////////////////////////
-QmlVlcMediaDesc::QmlVlcMediaDesc( vlc::player& player )
+QmlVlcMedia::QmlVlcMedia( vlc::player& player )
     : m_player(player)
 {
 }
 
-QString QmlVlcMediaDesc::get_meta( libvlc_meta_t e_meta )
+QString QmlVlcMedia::get_meta( libvlc_meta_t e_meta )
 {
     std::string meta = get_media().meta( e_meta );
     return QString::fromUtf8( meta.data(), meta.size() );
 }
 
-void QmlVlcMediaDesc::set_meta( libvlc_meta_t e_meta, const QString& meta )
+void QmlVlcMedia::set_meta( libvlc_meta_t e_meta, const QString& meta )
 {
     get_media().set_meta( e_meta, meta.toStdString() );
 
@@ -47,114 +47,114 @@ void QmlVlcMediaDesc::set_meta( libvlc_meta_t e_meta, const QString& meta )
         Q_EMIT titleChanged();
 }
 
-QString QmlVlcMediaDesc::get_title()
+QString QmlVlcMedia::get_title()
 {
     return get_meta( libvlc_meta_Title );
 }
 
-void QmlVlcMediaDesc::set_title( const QString& title )
+void QmlVlcMedia::set_title( const QString& title )
 {
     set_meta( libvlc_meta_Title, title );
 }
 
-QString QmlVlcMediaDesc::get_artist()
+QString QmlVlcMedia::get_artist()
 {
     return get_meta( libvlc_meta_Artist );
 }
 
-QString QmlVlcMediaDesc::get_genre()
+QString QmlVlcMedia::get_genre()
 {
     return get_meta( libvlc_meta_Genre );
 }
 
-QString QmlVlcMediaDesc::get_copyright()
+QString QmlVlcMedia::get_copyright()
 {
     return get_meta( libvlc_meta_Copyright );
 }
 
-QString QmlVlcMediaDesc::get_album()
+QString QmlVlcMedia::get_album()
 {
     return get_meta( libvlc_meta_Album );
 }
 
-QString QmlVlcMediaDesc::get_trackNumber()
+QString QmlVlcMedia::get_trackNumber()
 {
     return get_meta( libvlc_meta_TrackNumber );
 }
 
-QString QmlVlcMediaDesc::get_description()
+QString QmlVlcMedia::get_description()
 {
     return get_meta( libvlc_meta_Description );
 }
 
-QString QmlVlcMediaDesc::get_rating()
+QString QmlVlcMedia::get_rating()
 {
     return get_meta( libvlc_meta_Rating );
 }
 
-QString QmlVlcMediaDesc::get_date()
+QString QmlVlcMedia::get_date()
 {
     return get_meta( libvlc_meta_Date );
 }
 
-QString QmlVlcMediaDesc::get_setting()
+QString QmlVlcMedia::get_setting()
 {
     return get_meta( libvlc_meta_Setting );
 }
 
-void QmlVlcMediaDesc::set_setting( const QString& setting )
+void QmlVlcMedia::set_setting( const QString& setting )
 {
     set_meta( libvlc_meta_Setting, setting );
 }
 
-QString QmlVlcMediaDesc::get_URL()
+QString QmlVlcMedia::get_URL()
 {
     return get_meta( libvlc_meta_URL );
 }
 
-QString QmlVlcMediaDesc::get_language()
+QString QmlVlcMedia::get_language()
 {
     return get_meta( libvlc_meta_Language );
 }
 
-QString QmlVlcMediaDesc::get_nowPlaying()
+QString QmlVlcMedia::get_nowPlaying()
 {
     return get_meta( libvlc_meta_NowPlaying );
 }
 
-QString QmlVlcMediaDesc::get_publisher()
+QString QmlVlcMedia::get_publisher()
 {
     return get_meta( libvlc_meta_Publisher );
 }
 
-QString QmlVlcMediaDesc::get_encodedBy()
+QString QmlVlcMedia::get_encodedBy()
 {
     return get_meta( libvlc_meta_EncodedBy );
 }
 
-QString QmlVlcMediaDesc::get_artworkURL()
+QString QmlVlcMedia::get_artworkURL()
 {
     return get_meta( libvlc_meta_ArtworkURL );
 }
 
-QString QmlVlcMediaDesc::get_trackID()
+QString QmlVlcMedia::get_trackID()
 {
     return get_meta( libvlc_meta_TrackID );
 }
 
-QString QmlVlcMediaDesc::get_mrl()
+QString QmlVlcMedia::get_mrl()
 {
     std::string mrl = get_media().mrl();
     return QString::fromUtf8( mrl.data(), mrl.size() );
 }
 
-bool QmlVlcMediaDesc::get_disabled()
+bool QmlVlcMedia::get_disabled()
 {
     int idx = m_player.find_media_index( get_media() );
     return idx < 0 ? false : m_player.is_item_disabled( idx );
 }
 
-void QmlVlcMediaDesc::set_disabled( bool disabled )
+void QmlVlcMedia::set_disabled( bool disabled )
 {
     int idx = m_player.find_media_index( get_media() );
     if( idx >= 0 ) {
@@ -163,27 +163,27 @@ void QmlVlcMediaDesc::set_disabled( bool disabled )
 }
 
 ////////////////////////////////////////////////////////////////////////////
-/// QmlVlcCurrentMediaDesc
+/// QmlVlcCurrentMedia
 ////////////////////////////////////////////////////////////////////////////
-QmlVlcCurrentMediaDesc::QmlVlcCurrentMediaDesc( vlc::player& player )
-    : QmlVlcMediaDesc( player )
+QmlVlcCurrentMedia::QmlVlcCurrentMedia( vlc::player& player )
+    : QmlVlcMedia( player )
 {
 }
 
-vlc::media QmlVlcCurrentMediaDesc::get_media() const
+vlc::media QmlVlcCurrentMedia::get_media() const
 {
     return m_player.current_media();
 }
 
 ////////////////////////////////////////////////////////////////////////////
-/// QmlVlcMediaMediaDesc
+/// QmlVlcMediaMedia
 ////////////////////////////////////////////////////////////////////////////
-QmlVlcMediaMediaDesc::QmlVlcMediaMediaDesc( vlc::player& player, const vlc::media& media )
-    : QmlVlcMediaDesc( player ), m_media( media )
+QmlVlcMediaMedia::QmlVlcMediaMedia( vlc::player& player, const vlc::media& media )
+    : QmlVlcMedia( player ), m_media( media )
 {
 }
 
-vlc::media QmlVlcMediaMediaDesc::get_media() const
+vlc::media QmlVlcMediaMedia::get_media() const
 {
     return m_media;
 }

@@ -73,7 +73,7 @@ void RegisterQmlVlcPlayer()
         qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcDeinterlace",
         QStringLiteral("VlcDeinterlace cannot be instantiated directly") );
-    qmlRegisterUncreatableType<QmlVlcMediaDesc>(
+    qmlRegisterUncreatableType<QmlVlcMedia>(
         qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcMediaDesc",
         QStringLiteral("VlcMediaDesc cannot be instantiated directly") );
