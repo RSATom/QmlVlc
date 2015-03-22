@@ -92,7 +92,7 @@ public:
     float get_gamma();
     void set_gamma( float v );
 
-	Q_INVOKABLE void toggleTeletext();
+    Q_INVOKABLE void toggleTeletext();
 
     QmlVlcMarquee*     get_marquee()     { return &m_marquee; }
     QmlVlcLogo*        get_logo()        { return &m_logo; }

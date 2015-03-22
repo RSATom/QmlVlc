@@ -44,7 +44,7 @@ public:
 
     enum Mode {
         Normal = vlc::mode_normal,
-        Loop = vlc::mode_loop,
+        Loop   = vlc::mode_loop,
         Single = vlc::mode_single,
     };
     Q_ENUMS( Mode )
