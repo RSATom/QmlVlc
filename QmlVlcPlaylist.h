@@ -31,14 +31,14 @@
 
 #include "libvlc_wrapper/vlc_player.h"
 
+class QmlVlcPlayerProxy; //#include "QmlVlcPlayerProxy.h"
 #include "QmlVlcMedia.h"
 
 class QmlVlcPlaylist : public QObject
 {
     Q_OBJECT
 public:
-    QmlVlcPlaylist( vlc::player& player )
-        : m_player( player ) { }
+    QmlVlcPlaylist( QmlVlcPlayerProxy* owner );
 
     typedef QQmlListProperty<QmlVlcMedia> ItemsProperty_t;
 
@@ -92,8 +92,10 @@ private:
     static QmlVlcMedia* getItem( ItemsProperty_t*, int index );
     static void itemsClear( ItemsProperty_t* );
 
+    inline vlc::player& player();
+
 private:
-    vlc::player& m_player;
+    QmlVlcPlayerProxy *const m_owner;
 };
 
 #endif //QMLVLCPLAYLIST_H

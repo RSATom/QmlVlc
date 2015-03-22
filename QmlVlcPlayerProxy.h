@@ -122,6 +122,9 @@ public:
 
     State get_state();
 
+    vlc::player& player()
+        { assert( m_player ); return *m_player; }
+
 Q_SIGNALS:
     /* async events from libvlc */
     void mediaPlayerMediaChanged();
@@ -161,9 +164,6 @@ private:
     QmlVlcSubtitle     m_subtitle;
     QmlVlcVideo        m_video;
     QmlVlcCurrentMedia m_currentMediaDesc;
-
-protected:
-    vlc::player& player() { assert( m_player ); return *m_player; }
 
 private:
     vlc::player* m_player;

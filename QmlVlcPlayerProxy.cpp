@@ -29,8 +29,8 @@
 
 QmlVlcPlayerProxy::QmlVlcPlayerProxy( vlc::player* player, QObject* parent /*= 0*/ )
     : QObject( parent ), m_audio( *player ), m_input( *player ),
-      m_playlist( *player ), m_subtitle( *player ), m_video( *player ),
-      m_currentMediaDesc( *player ), m_player( player )
+      m_playlist( this ), m_subtitle( *player ), m_video( *player ),
+      m_currentMediaDesc( this ), m_player( player )
 {
     m_errorTimer.setInterval( 1000 );
     m_errorTimer.setSingleShot( true );

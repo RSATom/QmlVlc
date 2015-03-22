@@ -25,11 +25,13 @@
 
 #include "QmlVlcMedia.h"
 
+#include "QmlVlcPlayerProxy.h"
+
 ////////////////////////////////////////////////////////////////////////////
 /// QmlVlcMedia
 ////////////////////////////////////////////////////////////////////////////
-QmlVlcMedia::QmlVlcMedia( vlc::player& player )
-    : m_player(player)
+QmlVlcMedia::QmlVlcMedia( QmlVlcPlayerProxy* mediaOwner )
+    : m_mediaOwner( mediaOwner )
 {
 }
 
@@ -150,40 +152,57 @@ QString QmlVlcMedia::get_mrl()
 
 bool QmlVlcMedia::get_disabled()
 {
-    int idx = m_player.find_media_index( get_media() );
-    return idx < 0 ? false : m_player.is_item_disabled( idx );
+    if( !m_mediaOwner )
+        return false;
+
+    vlc::player& player = m_mediaOwner->player();
+
+    int idx = player.find_media_index( get_media() );
+    return idx < 0 ? false : player.is_item_disabled( idx );
 }
 
 void QmlVlcMedia::set_disabled( bool disabled )
 {
-    int idx = m_player.find_media_index( get_media() );
+    if( !m_mediaOwner )
+        return;
+
+    vlc::player& player = m_mediaOwner->player();
+
+    int idx = player.find_media_index( get_media() );
     if( idx >= 0 ) {
-        m_player.disable_item( idx, disabled );
+        player.disable_item( idx, disabled );
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////
 /// QmlVlcCurrentMedia
 ////////////////////////////////////////////////////////////////////////////
-QmlVlcCurrentMedia::QmlVlcCurrentMedia( vlc::player& player )
-    : QmlVlcMedia( player )
+QmlVlcCurrentMedia::QmlVlcCurrentMedia( QmlVlcPlayerProxy* mediaOwner )
+    : QmlVlcMedia( mediaOwner )
 {
 }
 
 vlc::media QmlVlcCurrentMedia::get_media() const
 {
-    return m_player.current_media();
+    if( !m_mediaOwner )
+        return vlc::media();
+
+    return m_mediaOwner->player().current_media();
 }
 
 ////////////////////////////////////////////////////////////////////////////
 /// QmlVlcMediaMedia
 ////////////////////////////////////////////////////////////////////////////
-QmlVlcMediaMedia::QmlVlcMediaMedia( vlc::player& player, const vlc::media& media )
-    : QmlVlcMedia( player ), m_media( media )
+QmlVlcMediaMedia::QmlVlcMediaMedia( QmlVlcPlayerProxy* mediaOwner,
+                                    const vlc::media& media )
+    : QmlVlcMedia( mediaOwner ), m_media( media )
 {
 }
 
 vlc::media QmlVlcMediaMedia::get_media() const
 {
+    if( !m_mediaOwner )
+        return vlc::media();
+
     return m_media;
 }

@@ -29,30 +29,41 @@
 #include <QQmlEngine>
 
 #include "QmlVlcConfig.h"
+#include "QmlVlcPlayerProxy.h"
+
+QmlVlcPlaylist::QmlVlcPlaylist( QmlVlcPlayerProxy* owner )
+    : m_owner( owner )
+{
+}
+
+vlc::player& QmlVlcPlaylist::player()
+{
+    return m_owner->player();
+}
 
 unsigned int QmlVlcPlaylist::get_itemCount()
 {
-    return m_player.item_count();
+    return player().item_count();
 }
 
 bool QmlVlcPlaylist::get_isPlaying()
 {
-    return m_player.is_playing();
+    return player().is_playing();
 }
 
 int QmlVlcPlaylist::get_current()
 {
-    return m_player.current_item();
+    return player().current_item();
 }
 
 void QmlVlcPlaylist::set_current( unsigned int idx )
 {
-    m_player.set_current( idx );
+    player().set_current( idx );
 }
 
 QmlVlcPlaylist::Mode QmlVlcPlaylist::get_mode()
 {
-    return static_cast<Mode>( m_player.get_playback_mode() );
+    return static_cast<Mode>( player().get_playback_mode() );
 }
 
 void QmlVlcPlaylist::set_mode( QmlVlcPlaylist::Mode mode )
@@ -60,7 +71,7 @@ void QmlVlcPlaylist::set_mode( QmlVlcPlaylist::Mode mode )
     if( mode > Single )
         return;
 
-    return m_player.set_playback_mode( (vlc::playback_mode_e) mode );
+    return player().set_playback_mode( (vlc::playback_mode_e) mode );
 }
 
 int QmlVlcPlaylist::itemsCount( ItemsProperty_t* p )
@@ -74,7 +85,7 @@ QmlVlcMedia* QmlVlcPlaylist::getItem( ItemsProperty_t* p, int index )
     QmlVlcPlaylist* pl = static_cast<QmlVlcPlaylist*>( p->object );
 
     QmlVlcMediaMedia* md =
-        new QmlVlcMediaMedia( pl->m_player, pl->m_player.get_media( index ) );
+        new QmlVlcMediaMedia( pl->m_owner, pl->player().get_media( index ) );
     QQmlEngine::setObjectOwnership( md, QQmlEngine::JavaScriptOwnership );
 
     return md;
@@ -95,7 +106,7 @@ QQmlListProperty<QmlVlcMedia> QmlVlcPlaylist::get_items()
 
 int QmlVlcPlaylist::add( const QString& mrl )
 {
-    return m_player.add_media( mrl.toUtf8().data() );
+    return player().add_media( mrl.toUtf8().data() );
 }
 
 int QmlVlcPlaylist::add( QmlVlcMedia* media )
@@ -103,7 +114,7 @@ int QmlVlcPlaylist::add( QmlVlcMedia* media )
     if( !media )
         return -1;
 
-    return m_player.add_media( media->get_media() );
+    return player().add_media( media->get_media() );
 }
 
 int QmlVlcPlaylist::addWithOptions( const QString& mrl, const QStringList& options )
@@ -122,58 +133,58 @@ int QmlVlcPlaylist::addWithOptions( const QString& mrl, const QStringList& optio
 
     const char** untrusted_optv = untrusted_opts.empty() ? 0 : &untrusted_opts[0];
     const char** trusted_optv = trusted_opts.empty() ? 0 : &trusted_opts[0];
-    return m_player.add_media( mrl.toUtf8().data(),
+    return player().add_media( mrl.toUtf8().data(),
                                untrusted_opts.size(), untrusted_optv,
                                trusted_opts.size(), trusted_optv );
 }
 
 void QmlVlcPlaylist::play()
 {
-    m_player.play();
+    player().play();
 }
 
 bool QmlVlcPlaylist::playItem( unsigned int idx )
 {
-    return m_player.play( idx );
+    return player().play( idx );
 }
 
 void QmlVlcPlaylist::pause()
 {
-    m_player.pause();
+    player().pause();
 }
 
 void QmlVlcPlaylist::togglePause()
 {
-    if ( m_player.is_playing() ) m_player.pause();
-    else m_player.play();
+    if ( player().is_playing() ) player().pause();
+    else player().play();
 }
 
 void QmlVlcPlaylist::stop()
 {
-    m_player.stop();
+    player().stop();
 }
 
 void QmlVlcPlaylist::next()
 {
-    m_player.next();
+    player().next();
 }
 
 void QmlVlcPlaylist::prev()
 {
-    m_player.prev();
+    player().prev();
 }
 
 void QmlVlcPlaylist::clear()
 {
-    m_player.clear_items();
+    player().clear_items();
 }
 
 bool QmlVlcPlaylist::removeItem( unsigned idx )
 {
-    return m_player.delete_item( idx );
+    return player().delete_item( idx );
 }
 
 void QmlVlcPlaylist::advanceItem( unsigned idx, int count )
 {
-    m_player.advance_item( idx, count );
+    player().advance_item( idx, count );
 }

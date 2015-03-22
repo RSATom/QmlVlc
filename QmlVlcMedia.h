@@ -30,6 +30,9 @@
 #include "libvlc_wrapper/vlc_player.h"
 
 #include <QObject>
+#include <QPointer>
+
+class QmlVlcPlayerProxy; //#include "QmlVlcPlayerProxy.h"
 
 ////////////////////////////////////////////////////////////////////////////
 /// QmlVlcMedia
@@ -60,7 +63,7 @@ public:
 
     Q_PROPERTY( bool disabled READ get_disabled WRITE set_disabled )
 
-    QmlVlcMedia( vlc::player& player );
+    QmlVlcMedia( QmlVlcPlayerProxy* mediaOwner );
 
     QString get_title();
     void set_title( const QString& );
@@ -100,7 +103,7 @@ private:
     void set_meta( libvlc_meta_t e_meta, const QString& meta );
 
 protected:
-    vlc::player& m_player;
+    QPointer<QmlVlcPlayerProxy> m_mediaOwner;
 };
 
 ////////////////////////////////////////////////////////////////////////////
@@ -109,7 +112,7 @@ protected:
 class QmlVlcCurrentMedia : public QmlVlcMedia
 {
 public:
-    QmlVlcCurrentMedia( vlc::player& player );
+    QmlVlcCurrentMedia( QmlVlcPlayerProxy* mediaOwner );
 
 protected:
     virtual vlc::media get_media() const;
@@ -121,7 +124,7 @@ protected:
 class QmlVlcMediaMedia : public QmlVlcMedia
 {
 public:
-    QmlVlcMediaMedia( vlc::player& player, const vlc::media& );
+    QmlVlcMediaMedia( QmlVlcPlayerProxy* mediaOwner, const vlc::media& );
 
 protected:
     virtual vlc::media get_media() const;
