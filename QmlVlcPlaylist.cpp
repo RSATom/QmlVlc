@@ -98,6 +98,14 @@ int QmlVlcPlaylist::add( const QString& mrl )
     return m_player.add_media( mrl.toUtf8().data() );
 }
 
+int QmlVlcPlaylist::add( QmlVlcMediaDesc* media )
+{
+    if( !media )
+        return -1;
+
+    return m_player.add_media( media->get_media() );
+}
+
 int QmlVlcPlaylist::addWithOptions( const QString& mrl, const QStringList& options )
 {
     QList<QByteArray> bufStorage;

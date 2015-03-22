@@ -90,7 +90,7 @@ public:
     bool get_disabled();
     void set_disabled( bool disabled );
 
-    virtual vlc::media get_media() = 0;
+    virtual vlc::media get_media() const = 0;
 
 Q_SIGNALS:
     //will emit from QmlPlayerProxy for current item, and from set_title for all items
@@ -113,7 +113,7 @@ public:
     QmlVlcCurrentMediaDesc( vlc::player& player );
 
 protected:
-    virtual vlc::media get_media();
+    virtual vlc::media get_media() const;
 };
 
 ////////////////////////////////////////////////////////////////////////////
@@ -125,7 +125,7 @@ public:
     QmlVlcMediaMediaDesc( vlc::player& player, const vlc::media& );
 
 protected:
-    virtual vlc::media get_media();
+    virtual vlc::media get_media() const;
 
 private:
     vlc::media m_media;

@@ -170,7 +170,7 @@ QmlVlcCurrentMediaDesc::QmlVlcCurrentMediaDesc( vlc::player& player )
 {
 }
 
-vlc::media QmlVlcCurrentMediaDesc::get_media()
+vlc::media QmlVlcCurrentMediaDesc::get_media() const
 {
     return m_player.current_media();
 }
@@ -183,7 +183,7 @@ QmlVlcMediaMediaDesc::QmlVlcMediaMediaDesc( vlc::player& player, const vlc::medi
 {
 }
 
-vlc::media QmlVlcMediaMediaDesc::get_media()
+vlc::media QmlVlcMediaMediaDesc::get_media() const
 {
     return m_media;
 }

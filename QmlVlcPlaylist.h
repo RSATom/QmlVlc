@@ -69,6 +69,7 @@ public:
     ItemsProperty_t get_items();
 
     Q_INVOKABLE int add( const QString& mrl );
+    Q_INVOKABLE int add( QmlVlcMediaDesc* media );
     Q_INVOKABLE int addWithOptions( const QString& mrl, const QStringList& options );
 
     Q_INVOKABLE void play();
