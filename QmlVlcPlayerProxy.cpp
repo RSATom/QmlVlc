@@ -35,32 +35,53 @@ QmlVlcPlayerProxy::QmlVlcPlayerProxy( vlc::player* player, QObject* parent /*= 0
     m_errorTimer.setInterval( 1000 );
     m_errorTimer.setSingleShot( true );
 
-    connect( this, SIGNAL( mediaPlayerPlaying() ), this, SIGNAL( playingChanged() ) );
-    connect( this, SIGNAL( mediaPlayerPaused() ), this, SIGNAL( playingChanged() ) );
-    connect( this, SIGNAL( mediaPlayerEncounteredError() ), this, SIGNAL( playingChanged() ) );
-    connect( this, SIGNAL( mediaPlayerEndReached() ), this, SIGNAL( playingChanged() ) );
-    connect( this, SIGNAL( mediaPlayerStopped() ), this, SIGNAL( playingChanged() ) );
+    connect( this, SIGNAL( mediaPlayerPlaying() ),
+             this, SIGNAL( playingChanged() ), Qt::QueuedConnection );
+    connect( this, SIGNAL( mediaPlayerPaused() ),
+             this, SIGNAL( playingChanged() ), Qt::QueuedConnection );
+    connect( this, SIGNAL( mediaPlayerEncounteredError() ),
+             this, SIGNAL( playingChanged() ), Qt::QueuedConnection );
+    connect( this, SIGNAL( mediaPlayerEndReached() ),
+             this, SIGNAL( playingChanged() ), Qt::QueuedConnection );
+    connect( this, SIGNAL( mediaPlayerStopped() ),
+             this, SIGNAL( playingChanged() ), Qt::QueuedConnection );
 
-    connect( this, SIGNAL( mediaPlayerNothingSpecial() ), this, SIGNAL( stateChanged() ) );
-    connect( this, SIGNAL( mediaPlayerOpening() ), this, SIGNAL( stateChanged() ) );
-    connect( this, SIGNAL( mediaPlayerBuffering( float ) ), this, SIGNAL( stateChanged() ) );
-    connect( this, SIGNAL( mediaPlayerPlaying() ), this, SIGNAL( stateChanged() ) );
-    connect( this, SIGNAL( mediaPlayerPaused() ), this, SIGNAL( stateChanged() ) );
-    connect( this, SIGNAL( mediaPlayerEncounteredError() ), this, SIGNAL( stateChanged() ) );
-    connect( this, SIGNAL( mediaPlayerEndReached() ), this, SIGNAL( stateChanged() ) );
-    connect( this, SIGNAL( mediaPlayerStopped() ), this, SIGNAL( stateChanged() ) );
+    connect( this, SIGNAL( mediaPlayerNothingSpecial() ),
+             this, SIGNAL( stateChanged() ), Qt::QueuedConnection );
+    connect( this, SIGNAL( mediaPlayerOpening() ),
+             this, SIGNAL( stateChanged() ), Qt::QueuedConnection );
+    connect( this, SIGNAL( mediaPlayerBuffering( float ) ),
+             this, SIGNAL( stateChanged() ), Qt::QueuedConnection );
+    connect( this, SIGNAL( mediaPlayerPlaying() ),
+             this, SIGNAL( stateChanged() ), Qt::QueuedConnection );
+    connect( this, SIGNAL( mediaPlayerPaused() ),
+             this, SIGNAL( stateChanged() ), Qt::QueuedConnection );
+    connect( this, SIGNAL( mediaPlayerEncounteredError() ),
+             this, SIGNAL( stateChanged() ), Qt::QueuedConnection );
+    connect( this, SIGNAL( mediaPlayerEndReached() ),
+             this, SIGNAL( stateChanged() ), Qt::QueuedConnection );
+    connect( this, SIGNAL( mediaPlayerStopped() ),
+             this, SIGNAL( stateChanged() ), Qt::QueuedConnection );
 
-    connect( this, SIGNAL( mediaPlayerEncounteredError() ), &m_errorTimer, SLOT( start() ) );
-    connect( &m_errorTimer, SIGNAL( timeout() ), this, SLOT( currentItemEndReached() ) );
-    connect( this, SIGNAL( mediaPlayerEndReached() ), &m_errorTimer, SLOT( stop() ) );
-    connect( this, SIGNAL( mediaPlayerEndReached() ), this, SLOT( currentItemEndReached() ) );
+    connect( this, SIGNAL( mediaPlayerEncounteredError() ),
+             &m_errorTimer, SLOT( start() ) );
+    connect( &m_errorTimer, SIGNAL( timeout() ),
+             this, SLOT( currentItemEndReached() ) );
 
-    connect( this, SIGNAL( mediaPlayerMediaChanged() ), &m_errorTimer, SLOT( stop() ) );
-    connect( this, SIGNAL( mediaPlayerMediaChanged() ), &m_playlist, SIGNAL( currentItemChanged() ) );
+    connect( this, SIGNAL( mediaPlayerEndReached() ),
+             &m_errorTimer, SLOT( stop() ) );
+    connect( this, SIGNAL( mediaPlayerEndReached() ),
+             this, SLOT( currentItemEndReached() ) );
+
+    connect( this, SIGNAL( mediaPlayerMediaChanged() ),
+             &m_errorTimer, SLOT( stop() ) );
+    connect( this, SIGNAL( mediaPlayerMediaChanged() ),
+             &m_playlist, SIGNAL( currentItemChanged() ), Qt::QueuedConnection );
     connect( this, &QmlVlcPlayerProxy::mediaPlayerMediaChanged,
              get_subtitle(), &QmlVlcSubtitle::eraseLoaded );
 
-    connect( this, SIGNAL( mediaPlayerTitleChanged() ), &m_currentMediaDesc, SIGNAL( titleChanged() ) );
+    connect( this, SIGNAL( mediaPlayerTitleChanged() ),
+             &m_currentMediaDesc, SIGNAL( titleChanged() ), Qt::QueuedConnection );
 }
 
 void QmlVlcPlayerProxy::classBegin()
