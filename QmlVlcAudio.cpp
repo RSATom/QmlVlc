@@ -36,7 +36,7 @@ QmlVlcAudio::~QmlVlcAudio()
     m_player.audio().unregister_callback( this );
 }
 
-void QmlVlcAudio::audio_event( const vlc::audio_event_e e )
+void QmlVlcAudio::audio_event( vlc::audio_event_e e )
 {
     switch( e ) {
         case vlc::audio_event_e::mute_changed:
@@ -45,6 +45,8 @@ void QmlVlcAudio::audio_event( const vlc::audio_event_e e )
         case vlc::audio_event_e::volume_changed:
             Q_EMIT volumeChanged();
             break;
+        default:
+            assert( false );
     }
 }
 

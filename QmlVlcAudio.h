@@ -82,7 +82,7 @@ Q_SIGNALS:
     void volumeChanged();
 
 protected:
-    void audio_event( const vlc::audio_event_e e ) override;
+    void audio_event( vlc::audio_event_e e ) override;
 
 private:
     vlc::player& m_player;
