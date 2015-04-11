@@ -25,6 +25,29 @@
 
 #include "QmlVlcAudio.h"
 
+QmlVlcAudio::QmlVlcAudio( vlc::player& player )
+    : m_player( player )
+{
+    m_player.audio().register_callback( this );
+}
+
+QmlVlcAudio::~QmlVlcAudio()
+{
+    m_player.audio().unregister_callback( this );
+}
+
+void QmlVlcAudio::audio_event( const vlc::audio_event_e e )
+{
+    switch( e ) {
+        case vlc::audio_event_e::mute_changed:
+            Q_EMIT muteChanged();
+            break;
+        case vlc::audio_event_e::volume_changed:
+            Q_EMIT volumeChanged();
+            break;
+    }
+}
+
 unsigned QmlVlcAudio::get_trackCount()
 {
     return m_player.audio().track_count();
