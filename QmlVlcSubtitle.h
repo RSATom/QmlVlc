@@ -23,8 +23,7 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef SUBTITLE_H
-#define SUBTITLE_H
+#pragma once
 
 #include <QObject>
 #include <QTemporaryDir>
@@ -107,5 +106,3 @@ private:
     QScopedPointer<QTemporaryFile> m_subtitleFile;
     unsigned m_loadedCount;
 };
-
-#endif //SUBTITLE_H

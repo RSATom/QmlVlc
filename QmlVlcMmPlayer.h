@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright © 2014, Sergey Radionov <rsatom_gmail.com>
+* Copyright © 2014-2015, Sergey Radionov <rsatom_gmail.com>
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -23,8 +23,7 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef QMLVLCMMPLAYER_H
-#define QMLVLCMMPLAYER_H
+#pragma once
 
 #include "QmlVlcPlayerProxy.h"
 #include "QmlVlcMmVideoOutput.h"
@@ -49,5 +48,3 @@ private:
     vlc::player m_player;
     QmlVlcMmVideoOutput m_videoOutput;
 };
-
-#endif // QMLVLCMMPLAYER_H

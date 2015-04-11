@@ -23,8 +23,7 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef QMLVLCAUDIO_H
-#define QMLVLCAUDIO_H
+#pragma once
 
 #include <QObject>
 
@@ -88,5 +87,3 @@ protected:
 private:
     vlc::player& m_player;
 };
-
-#endif //QMLVLCAUDIO_H

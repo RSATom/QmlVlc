@@ -23,8 +23,7 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef QMLVLCSURFACEPLAYERPROXY_H
-#define QMLVLCSURFACEPLAYERPROXY_H
+#pragma once
 
 #include "QmlVlcPlayerProxy.h"
 #include "QmlVlcVideoOutput.h"
@@ -48,5 +47,3 @@ public:
 private:
     QScopedPointer<QmlVlcVideoOutput> m_videoOutput;
 };
-
-#endif // QMLVLCSURFACEPLAYERPROXY_H

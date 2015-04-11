@@ -23,8 +23,7 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef QMLVLCPLAYERPROXY_H
-#define QMLVLCPLAYERPROXY_H
+#pragma once
 
 #include <QObject>
 #include <QTimer>
@@ -169,4 +168,3 @@ private:
     vlc::player* m_player;
     QTimer m_errorTimer;
 };
-#endif // QMLVLCPLAYERPROXY_H

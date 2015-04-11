@@ -23,8 +23,7 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef QMLVLCPLAYLIST_H
-#define QMLVLCPLAYLIST_H
+#pragma once
 
 #include <QObject>
 #include <QQmlListProperty>
@@ -97,5 +96,3 @@ private:
 private:
     QmlVlcPlayerProxy *const m_owner;
 };
-
-#endif //QMLVLCPLAYLIST_H

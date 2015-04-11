@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright © 2014, Sergey Radionov <rsatom_gmail.com>
+* Copyright © 2014-2015, Sergey Radionov <rsatom_gmail.com>
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -23,8 +23,7 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef QMLVLCVIDEOOUTPUT_H
-#define QMLVLCVIDEOOUTPUT_H
+#pragma once
 
 #include <cassert>
 
@@ -81,5 +80,3 @@ private:
     QSharedPointer<QmlVlcI420Frame> m_decodeFrame;
     QSharedPointer<QmlVlcI420Frame> m_renderFrame;
 };
-
-#endif //QMLVLCVIDEOOUTPUT_H

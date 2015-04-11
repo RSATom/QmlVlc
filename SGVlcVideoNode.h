@@ -23,8 +23,7 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef SGVLCVIDEONODE_H
-#define SGVLCVIDEONODE_H
+#pragma once
 
 #include <QSharedPointer>
 
@@ -96,5 +95,3 @@ private:
     QSGGeometry m_geometry;
     QSGVlcVideoFrameMaterial m_material;
 };
-
-#endif
