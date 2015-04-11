@@ -27,7 +27,8 @@
 
 #include "QmlVlcVideoSurface.h"
 
-QmlVlcSurfacePlayerProxy::QmlVlcSurfacePlayerProxy( vlc::player* player, QObject* parent )
+QmlVlcSurfacePlayerProxy::QmlVlcSurfacePlayerProxy( const std::shared_ptr<vlc::player>& player,
+                                                    QObject* parent )
     : QmlVlcPlayerProxy( player, parent ),
       m_videoOutput( new QmlVlcVideoOutput( player ) )
 {

@@ -26,6 +26,7 @@
 #pragma once
 
 #include <cassert>
+#include <memory>
 
 #include <QObject>
 #include <QMutex>
@@ -44,7 +45,8 @@ class QmlVlcMmVideoOutput
 {
     Q_OBJECT
 public:
-    explicit QmlVlcMmVideoOutput( vlc::player* player, QObject *parent = 0 );
+    explicit QmlVlcMmVideoOutput( const std::shared_ptr<vlc::player>& player,
+                                  QObject *parent = 0 );
     void init();
     ~QmlVlcMmVideoOutput();
 
@@ -76,7 +78,7 @@ protected:
     vlc::player& player() { assert( m_player ); return *m_player; }
 
 private:
-    vlc::player *const m_player;
+    std::shared_ptr<vlc::player> m_player;
     QAbstractVideoSurface* m_videoSurface;
 
     QVideoSurfaceFormat m_surfaceFormat;

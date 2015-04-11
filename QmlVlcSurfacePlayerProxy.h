@@ -33,7 +33,8 @@ class QmlVlcSurfacePlayerProxy
 {
     Q_OBJECT
 public:
-    explicit QmlVlcSurfacePlayerProxy( vlc::player* player, QObject* parent = 0 );
+    explicit QmlVlcSurfacePlayerProxy( const std::shared_ptr<vlc::player>& player,
+                                       QObject* parent = 0 );
     virtual void classBegin();
     ~QmlVlcSurfacePlayerProxy();
 

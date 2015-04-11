@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright © 2014, Sergey Radionov <rsatom_gmail.com>
+* Copyright © 2014-2015, Sergey Radionov <rsatom_gmail.com>
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -28,13 +28,13 @@
 #include "QmlVlcConfig.h"
 
 QmlVlcMmPlayer::QmlVlcMmPlayer( QObject* parent )
-    : QmlVlcPlayerProxy( &m_player, parent ),
+    : QmlVlcPlayerProxy( std::make_shared<vlc::player>(), parent ),
       m_libvlc( 0 ),
-      m_videoOutput( &m_player )
+      m_videoOutput( player_ptr() )
 {
     m_libvlc = QmlVlcConfig::instance().createLibvlcInstance();
     if( m_libvlc ) {
-        m_player.open( m_libvlc );
+        player().open( m_libvlc );
         m_videoOutput.init();
     }
 }
@@ -43,7 +43,7 @@ QmlVlcMmPlayer::~QmlVlcMmPlayer()
 {
     classEnd();
 
-    m_player.close();
+    player().close();
     if( m_libvlc ) {
         QmlVlcConfig::instance().releaseLibvlcInstance( m_libvlc );
         m_libvlc = 0;

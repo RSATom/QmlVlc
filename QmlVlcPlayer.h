@@ -37,5 +37,4 @@ public:
 
 private:
     libvlc_instance_t* m_libvlc;
-    vlc::player m_player;
 };

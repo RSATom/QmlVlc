@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright © 2014, Sergey Radionov <rsatom_gmail.com>
+* Copyright © 2014-2015, Sergey Radionov <rsatom_gmail.com>
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -27,7 +27,8 @@
 
 #include <QAbstractVideoSurface>
 
-QmlVlcMmVideoOutput::QmlVlcMmVideoOutput( vlc::player* player, QObject* parent /*= 0*/ )
+QmlVlcMmVideoOutput::QmlVlcMmVideoOutput( const std::shared_ptr<vlc::player>& player,
+                                          QObject* parent /*= 0*/ )
     : QObject( parent ), m_player( player ), m_videoSurface( 0 ),
       m_pixelFormat( QVideoFrame::Format_Invalid ),
       m_frameWidth( 0 ), m_frameHeight( 0 ),

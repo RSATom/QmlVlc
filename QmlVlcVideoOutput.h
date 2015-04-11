@@ -26,6 +26,7 @@
 #pragma once
 
 #include <cassert>
+#include <memory>
 
 #include <QSharedPointer>
 #include <QQmlParserStatus>
@@ -45,7 +46,8 @@ class QmlVlcVideoOutput
 {
     Q_OBJECT
 public:
-    explicit QmlVlcVideoOutput( vlc::player* player, QObject* parent = 0 );
+    explicit QmlVlcVideoOutput( const std::shared_ptr<vlc::player>& player,
+                                QObject* parent = 0 );
     void init();
     ~QmlVlcVideoOutput();
 
@@ -73,7 +75,7 @@ private:
     //end (for libvlc_video_set_callbacks)
 
 private:
-    vlc::player *const m_player;
+    std::shared_ptr<vlc::player> m_player;
 
     QList<QmlVlcVideoSurface*> m_attachedSurfaces;
 

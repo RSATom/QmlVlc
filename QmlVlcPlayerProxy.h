@@ -53,7 +53,8 @@ private:
     void media_player_event( const libvlc_event_t* e ) override;
 
 public:
-    explicit QmlVlcPlayerProxy( vlc::player* player, QObject* parent = 0 );
+    explicit QmlVlcPlayerProxy( const std::shared_ptr<vlc::player>& player,
+                                QObject* parent = 0 );
     ~QmlVlcPlayerProxy();
 
     Q_PROPERTY( QString vlcVersion READ get_vlcVersion )
@@ -124,6 +125,9 @@ public:
     vlc::player& player()
         { assert( m_player ); return *m_player; }
 
+    const std::shared_ptr<vlc::player>& player_ptr()
+        { return m_player; }
+
 Q_SIGNALS:
     /* async events from libvlc */
     void mediaPlayerMediaChanged();
@@ -157,6 +161,8 @@ public:
     QmlVlcMedia*     get_mediaDesc() { return &m_currentMediaDesc; }
 
 private:
+    std::shared_ptr<vlc::player> m_player;
+
     QmlVlcAudio        m_audio;
     QmlVlcInput        m_input;
     QmlVlcPlaylist     m_playlist;
@@ -164,7 +170,5 @@ private:
     QmlVlcVideo        m_video;
     QmlVlcCurrentMedia m_currentMediaDesc;
 
-private:
-    vlc::player* m_player;
     QTimer m_errorTimer;
 };

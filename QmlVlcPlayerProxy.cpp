@@ -27,7 +27,8 @@
 
 #include <QDebug>
 
-QmlVlcPlayerProxy::QmlVlcPlayerProxy( vlc::player* player, QObject* parent /*= 0*/ )
+QmlVlcPlayerProxy::QmlVlcPlayerProxy( const std::shared_ptr<vlc::player>& player,
+                                      QObject* parent /*= 0*/ )
     : QObject( parent ), m_audio( *player ), m_input( *player ),
       m_playlist( this ), m_subtitle( *player ), m_video( *player ),
       m_currentMediaDesc( this ), m_player( player )
@@ -97,7 +98,6 @@ void QmlVlcPlayerProxy::classEnd()
 {
     if( m_player ) {
         player().unregister_callback( this );
-        m_player = nullptr;
     }
 }
 
