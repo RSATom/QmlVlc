@@ -78,7 +78,7 @@ public:
     Q_PROPERTY( QString mrl READ get_mrl WRITE set_mrl )
     Q_PROPERTY( double position READ get_position WRITE set_position NOTIFY mediaPlayerPositionChanged )
     Q_PROPERTY( double time READ get_time WRITE set_time NOTIFY mediaPlayerTimeChanged )
-    Q_PROPERTY( unsigned volume READ get_volume WRITE set_volume )
+    Q_PROPERTY( unsigned volume READ get_volume WRITE set_volume NOTIFY volumeChanged )
 
     Q_PROPERTY( QmlVlcInput* input READ get_input CONSTANT )
     Q_PROPERTY( QmlVlcVideo* video READ get_video CONSTANT )
@@ -148,6 +148,8 @@ Q_SIGNALS:
     void mediaPlayerSeekableChanged( bool seekable );
     void mediaPlayerPausableChanged( bool pausable );
     void mediaPlayerLengthChanged( double length );
+
+    void volumeChanged();
 
 private Q_SLOTS:
     void currentItemEndReached();

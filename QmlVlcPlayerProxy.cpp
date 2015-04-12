@@ -83,6 +83,9 @@ QmlVlcPlayerProxy::QmlVlcPlayerProxy( const std::shared_ptr<vlc::player>& player
 
     connect( this, SIGNAL( mediaPlayerTitleChanged() ),
              &m_currentMediaDesc, SIGNAL( titleChanged() ), Qt::QueuedConnection );
+
+    connect( get_audio(), SIGNAL( volumeChanged() ),
+             this, SIGNAL( volumeChanged() ), Qt::QueuedConnection );
 }
 
 void QmlVlcPlayerProxy::classBegin()
