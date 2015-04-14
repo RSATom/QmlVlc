@@ -45,19 +45,29 @@ QmlVlcSurfacePlayerProxy::~QmlVlcSurfacePlayerProxy()
 {
 }
 
+void QmlVlcSurfacePlayerProxy::registerVideoSurface( QmlVlcVideoSurface* s )
+{
+   m_videoOutput->registerVideoSurface( s );
+}
+
+void QmlVlcSurfacePlayerProxy::unregisterVideoSurface( QmlVlcVideoSurface* s )
+{
+    m_videoOutput->unregisterVideoSurface( s );
+}
+
 void QmlVlcSurfacePlayerProxy::swap( QmlVlcSurfacePlayerProxy* pp )
 {
     if( !pp || pp == this )
         return;
 
-    QList<QmlVlcVideoSurface*> surfaces = m_videoOutput->attachedSurfaces();
-    QList<QmlVlcVideoSurface*> ppSurfaces = pp->m_videoOutput->attachedSurfaces();
+    QList<QmlVlcGenericVideoSurface*> surfaces = m_videoOutput->attachedSurfaces();
+    QList<QmlVlcGenericVideoSurface*> ppSurfaces = pp->m_videoOutput->attachedSurfaces();
 
     for( auto* s: surfaces ) {
-        s->setSource( nullptr );
+        static_cast<QmlVlcVideoSurface*>( s )->setSource( nullptr );
     }
     for( auto* s: ppSurfaces ) {
-        s->setSource( nullptr );
+        static_cast<QmlVlcVideoSurface*>( s )->setSource( nullptr );
     }
 
     player().swap( &pp->player() );
@@ -65,9 +75,9 @@ void QmlVlcSurfacePlayerProxy::swap( QmlVlcSurfacePlayerProxy* pp )
     m_videoOutput.swap( pp->m_videoOutput );
 
     for( auto* s: surfaces ) {
-        s->setSource( pp );
+        static_cast<QmlVlcVideoSurface*>( s )->setSource( pp );
     }
     for( auto* s: ppSurfaces ) {
-        s->setSource( this );
+        static_cast<QmlVlcVideoSurface*>( s )->setSource( this );
     }
 }

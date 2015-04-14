@@ -27,6 +27,7 @@
 
 #include "QmlVlcPlayerProxy.h"
 #include "QmlVlcVideoOutput.h"
+#include "QmlVlcVideoSurface.h"
 
 class QmlVlcSurfacePlayerProxy
     : public QmlVlcPlayerProxy
@@ -38,10 +39,8 @@ public:
     virtual void classBegin();
     ~QmlVlcSurfacePlayerProxy();
 
-    void registerVideoSurface( QmlVlcVideoSurface* s )
-        { m_videoOutput->registerVideoSurface( s ); }
-    void unregisterVideoSurface( QmlVlcVideoSurface* s )
-        { m_videoOutput->unregisterVideoSurface( s ); }
+    void registerVideoSurface( QmlVlcVideoSurface* s );
+    void unregisterVideoSurface( QmlVlcVideoSurface* s );
 
     Q_INVOKABLE void swap( QmlVlcSurfacePlayerProxy* );
 

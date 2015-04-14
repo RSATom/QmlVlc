@@ -25,6 +25,8 @@
 
 #include "QmlVlcVideoSurface.h"
 
+#include "QmlVlcSurfacePlayerProxy.h"
+
 QmlVlcVideoSurface::QmlVlcVideoSurface()
     : m_source( 0 )
 {

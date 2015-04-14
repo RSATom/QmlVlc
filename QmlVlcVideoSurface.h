@@ -28,7 +28,7 @@
 #include <QPointer>
 
 #include "QmlVlcGenericVideoSurface.h"
-#include "QmlVlcSurfacePlayerProxy.h"
+class QmlVlcSurfacePlayerProxy; //#include "QmlVlcSurfacePlayerProxy.h"
 
 class QmlVlcVideoSurface
     : public QmlVlcGenericVideoSurface

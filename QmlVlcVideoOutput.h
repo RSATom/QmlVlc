@@ -38,7 +38,7 @@
 
 #include "QmlVlcVideoFrame.h"
 
-class QmlVlcVideoSurface; //#include "QmlVlcVideoSurface.h"
+class QmlVlcGenericVideoSurface; //#include "QmlVlcGenericVideoSurface.h"
 
 class QmlVlcVideoOutput
     : public QObject,
@@ -51,10 +51,10 @@ public:
     void init();
     ~QmlVlcVideoOutput();
 
-    void registerVideoSurface( QmlVlcVideoSurface* s );
-    void unregisterVideoSurface( QmlVlcVideoSurface* s );
+    void registerVideoSurface( QmlVlcGenericVideoSurface* s );
+    void unregisterVideoSurface( QmlVlcGenericVideoSurface* s );
 
-    QList<QmlVlcVideoSurface*> attachedSurfaces() const
+    QList<QmlVlcGenericVideoSurface*> attachedSurfaces() const
         { return m_attachedSurfaces; }
 
 private:
@@ -77,7 +77,7 @@ private:
 private:
     std::shared_ptr<vlc::player> m_player;
 
-    QList<QmlVlcVideoSurface*> m_attachedSurfaces;
+    QList<QmlVlcGenericVideoSurface*> m_attachedSurfaces;
 
     QSharedPointer<QmlVlcI420Frame> m_decodeFrame;
     QSharedPointer<QmlVlcI420Frame> m_renderFrame;
