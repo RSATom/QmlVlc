@@ -23,30 +23,47 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "QmlVlcVideoSurface.h"
+#pragma once
 
-QmlVlcVideoSurface::QmlVlcVideoSurface()
-    : m_source( 0 )
+#include <QQuickItem>
+#include <QSharedPointer>
+
+struct QmlVlcI420Frame;//#include "QmlVlcVideoFrame.h"
+
+class QmlVlcGenericVideoSurface
+    : public QQuickItem
 {
-}
+    Q_OBJECT
 
-QmlVlcVideoSurface::~QmlVlcVideoSurface()
-{
-    setSource( 0 );
-}
+    Q_PROPERTY( FillMode fillMode READ fillMode WRITE setFillMode NOTIFY fillModeChanged )
 
-void QmlVlcVideoSurface::setSource( QmlVlcSurfacePlayerProxy* source )
-{
-    if( source == m_source.data() )
-        return;
+public:
+    QmlVlcGenericVideoSurface();
+    ~QmlVlcGenericVideoSurface();
 
-    if( m_source )
-        m_source->unregisterVideoSurface( this );
+    enum FillMode {
+        Stretch            = Qt::IgnoreAspectRatio,
+        PreserveAspectFit  = Qt::KeepAspectRatio,
+        PreserveAspectCrop = Qt::KeepAspectRatioByExpanding
+    };
+    Q_ENUMS( FillMode )
 
-    m_source = source;
+    FillMode fillMode() const
+        { return m_fillMode; }
+    void setFillMode( FillMode mode );
 
-    if( m_source )
-        m_source->registerVideoSurface( this );
+    virtual QSGNode* updatePaintNode( QSGNode*, UpdatePaintNodeData* );
 
-    Q_EMIT sourceChanged();
-}
+public Q_SLOTS:
+    void presentFrame( const QSharedPointer<const QmlVlcI420Frame>& frame );
+
+Q_SIGNALS:
+    void sourceChanged();
+    void fillModeChanged( FillMode mode );
+
+private:
+    FillMode m_fillMode;
+
+    bool m_frameUpdated;
+    QSharedPointer<const QmlVlcI420Frame> m_frame;
+};
