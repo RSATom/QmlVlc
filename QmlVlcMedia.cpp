@@ -99,16 +99,6 @@ QString QmlVlcMedia::get_date()
     return get_meta( libvlc_meta_Date );
 }
 
-QString QmlVlcMedia::get_setting()
-{
-    return get_meta( libvlc_meta_Setting );
-}
-
-void QmlVlcMedia::set_setting( const QString& setting )
-{
-    set_meta( libvlc_meta_Setting, setting );
-}
-
 QString QmlVlcMedia::get_URL()
 {
     return get_meta( libvlc_meta_URL );
@@ -171,6 +161,34 @@ void QmlVlcMedia::set_disabled( bool disabled )
     int idx = player.find_media_index( get_media() );
     if( idx >= 0 ) {
         player.disable_item( idx, disabled );
+    }
+}
+
+QString QmlVlcMedia::get_setting()
+{
+    if( !m_mediaOwner )
+        return false;
+
+    vlc::player& player = m_mediaOwner->player();
+
+    int idx = player.find_media_index( get_media() );
+    if( idx >= 0 ) {
+        QString::fromStdString( player.get_item_data( idx ) );
+    }
+
+    return QString();
+}
+
+void QmlVlcMedia::set_setting( const QString& setting )
+{
+    if( !m_mediaOwner )
+        return;
+
+    vlc::player& player = m_mediaOwner->player();
+
+    int idx = player.find_media_index( get_media() );
+    if( idx >= 0 ) {
+        player.set_item_data( idx, setting.toStdString() );
     }
 }
 
