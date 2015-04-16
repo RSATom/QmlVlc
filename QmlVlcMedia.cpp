@@ -173,7 +173,7 @@ QString QmlVlcMedia::get_setting()
 
     int idx = player.find_media_index( get_media() );
     if( idx >= 0 ) {
-        QString::fromStdString( player.get_item_data( idx ) );
+        return QString::fromStdString( player.get_item_data( idx ) );
     }
 
     return QString();
