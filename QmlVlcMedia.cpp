@@ -167,7 +167,7 @@ void QmlVlcMedia::set_disabled( bool disabled )
 QString QmlVlcMedia::get_setting()
 {
     if( !m_mediaOwner )
-        return false;
+        return QString();
 
     vlc::player& player = m_mediaOwner->player();
 
