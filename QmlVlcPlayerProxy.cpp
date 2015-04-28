@@ -47,22 +47,46 @@ QmlVlcPlayerProxy::QmlVlcPlayerProxy( const std::shared_ptr<vlc::player>& player
     connect( this, SIGNAL( mediaPlayerStopped() ),
              this, SIGNAL( playingChanged() ), Qt::QueuedConnection );
 
-    connect( this, SIGNAL( mediaPlayerNothingSpecial() ),
-             this, SIGNAL( stateChanged() ), Qt::QueuedConnection );
-    connect( this, SIGNAL( mediaPlayerOpening() ),
-             this, SIGNAL( stateChanged() ), Qt::QueuedConnection );
-    connect( this, SIGNAL( mediaPlayerBuffering( float ) ),
-             this, SIGNAL( stateChanged() ), Qt::QueuedConnection );
-    connect( this, SIGNAL( mediaPlayerPlaying() ),
-             this, SIGNAL( stateChanged() ), Qt::QueuedConnection );
-    connect( this, SIGNAL( mediaPlayerPaused() ),
-             this, SIGNAL( stateChanged() ), Qt::QueuedConnection );
-    connect( this, SIGNAL( mediaPlayerEncounteredError() ),
-             this, SIGNAL( stateChanged() ), Qt::QueuedConnection );
-    connect( this, SIGNAL( mediaPlayerEndReached() ),
-             this, SIGNAL( stateChanged() ), Qt::QueuedConnection );
-    connect( this, SIGNAL( mediaPlayerStopped() ),
-             this, SIGNAL( stateChanged() ), Qt::QueuedConnection );
+    connect( this, &QmlVlcPlayerProxy::mediaPlayerNothingSpecial,
+        [this] () {
+            Q_EMIT stateChanged( NothingSpecial );
+        } );
+
+    connect( this, &QmlVlcPlayerProxy::mediaPlayerOpening,
+        [this] () {
+            Q_EMIT stateChanged( Opening );
+        } );
+
+    connect( this, &QmlVlcPlayerProxy::mediaPlayerBuffering,
+        [this] ( float ) {
+            Q_EMIT stateChanged( Buffering );
+        } );
+
+    connect( this, &QmlVlcPlayerProxy::mediaPlayerPlaying,
+        [this] () {
+            Q_EMIT stateChanged( Playing );
+        } );
+
+    connect( this, &QmlVlcPlayerProxy::mediaPlayerPaused,
+        [this] () {
+            Q_EMIT stateChanged( Paused );
+        } );
+
+    connect( this, &QmlVlcPlayerProxy::mediaPlayerEncounteredError,
+        [this] () {
+            Q_EMIT stateChanged( Error );
+        } );
+
+    connect( this, &QmlVlcPlayerProxy::mediaPlayerEndReached,
+        [this] () {
+            Q_EMIT stateChanged( Ended );
+        } );
+
+    connect( this, &QmlVlcPlayerProxy::mediaPlayerStopped,
+        [this] () {
+            Q_EMIT stateChanged( Stopped );
+        } );
+
 
     connect( this, SIGNAL( mediaPlayerEncounteredError() ),
              &m_errorTimer, SLOT( start() ) );

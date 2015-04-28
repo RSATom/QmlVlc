@@ -89,7 +89,7 @@ public:
 
 Q_SIGNALS:
     void playingChanged();
-    void stateChanged();
+    void stateChanged( State state );
 
 public:
     //QML Api
