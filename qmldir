@@ -1,0 +1,2 @@
+module rsatom.qml.vlc
+plugin qmlvlcplugin
