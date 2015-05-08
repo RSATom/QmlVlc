@@ -34,6 +34,8 @@ QmlVlcPlayer::QmlVlcPlayer( QObject* parent )
     m_libvlc = QmlVlcConfig::instance().createLibvlcInstance();
     if( m_libvlc )
         player().open( m_libvlc );
+    else
+        qCritical("Couldn't create libvlc instance. Check vlc plugins dir.");
 }
 
 QmlVlcPlayer::~QmlVlcPlayer()
