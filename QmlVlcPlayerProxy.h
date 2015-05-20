@@ -89,7 +89,7 @@ public:
 
 Q_SIGNALS:
     void playingChanged();
-    void stateChanged( State state );
+    void stateChanged( QmlVlcPlayerProxy::State state );
 
 public:
     //QML Api
