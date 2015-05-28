@@ -37,6 +37,11 @@ QmlVlcVideoSurface::~QmlVlcVideoSurface()
     setSource( 0 );
 }
 
+QmlVlcSurfacePlayerProxy* QmlVlcVideoSurface::source() const
+{
+    return m_source;
+}
+
 void QmlVlcVideoSurface::setSource( QmlVlcSurfacePlayerProxy* source )
 {
     if( source == m_source.data() )

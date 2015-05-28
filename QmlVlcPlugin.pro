@@ -1,10 +1,9 @@
-include(QmlVlc.pri)
+include( QmlVlc.pri )
 
 CONFIG += c++11
-LIBS += -lvlc
-TARGET = qmlvlcplugin
+TARGET = QmlVlcPlugin
 
-PLUGIN_IMPORT_PATH = rsatom/qml/vlc
+PLUGIN_IMPORT_PATH = RSATom/QmlVlc
 
 TEMPLATE = lib
 CONFIG += qt plugin
@@ -17,6 +16,5 @@ qmldir.files += $$_PRO_FILE_PWD_/qmldir
 qmldir.path += $$target.path
 INSTALLS += qmldir
 
-HEADERS += qmlvlc_plugin.h
-
-
+HEADERS += QmlVlcPlugin.h
+SOURCES += QmlVlcPlugin.cpp

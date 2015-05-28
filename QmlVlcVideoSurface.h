@@ -41,8 +41,7 @@ public:
     QmlVlcVideoSurface();
     ~QmlVlcVideoSurface();
 
-    QmlVlcSurfacePlayerProxy* source() const
-        { return m_source; }
+    QmlVlcSurfacePlayerProxy* source() const;
     void setSource( QmlVlcSurfacePlayerProxy* source );
 
 Q_SIGNALS:

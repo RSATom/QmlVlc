@@ -1,3 +1,5 @@
+include( libvlc_wrapper/libvlc_wrapper.pri )
+
 HEADERS += \
     $$PWD/QmlVlc.h \
     $$PWD/QmlVlcConfig.h \
@@ -55,5 +57,3 @@ contains( QT, multimedia ) {
 }
 
 INCLUDEPATH += $$PWD
-
-include(libvlc_wrapper/libvlc_wrapper.pri)

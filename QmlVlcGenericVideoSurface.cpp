@@ -25,6 +25,8 @@
 
 #include "QmlVlcGenericVideoSurface.h"
 
+#include <stdint.h>
+
 #include "QmlVlcVideoFrame.h"
 #include "SGVlcVideoNode.h"
 

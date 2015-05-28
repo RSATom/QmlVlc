@@ -34,7 +34,7 @@
 #include "QmlVlcMmPlayer.h"
 #endif
 
-const char* qmlVlcUri = "rsatom.qml.vlc";
+const char* qmlVlcUri = "QmlVlc";
 const int QmlVlcVersionMajor = 0;
 const int QmlVlcVersionMinor = 1;
 
