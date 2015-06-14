@@ -36,6 +36,8 @@
 #include "QmlVlcVideo.h"
 #include "QmlVlcMedia.h"
 
+struct LibvlcEvent;
+
 class QmlVlcPlayerProxy
     : public QObject,
       public QQmlParserStatus,
@@ -151,8 +153,12 @@ Q_SIGNALS:
 
     void volumeChanged();
 
+protected:
+    bool event( QEvent* ) override;
+
 private Q_SLOTS:
     void currentItemEndReached();
+    void handleLibvlcEvent( const LibvlcEvent& );
 
 public:
     QmlVlcAudio*     get_audio()     { return &m_audio; }

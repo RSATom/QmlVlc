@@ -26,6 +26,20 @@
 #include "QmlVlcPlayerProxy.h"
 
 #include <QDebug>
+#include <QEvent>
+#include <QCoreApplication>
+
+struct LibvlcEvent : public QEvent
+{
+    enum {
+        LibvlcEventId = QEvent::User,
+    };
+
+    LibvlcEvent( const libvlc_event_t& libvlcEvent )
+        : QEvent( static_cast<QEvent::Type>( LibvlcEventId ) ), _libvlcEvent( libvlcEvent ) {}
+
+    libvlc_event_t _libvlcEvent;
+};
 
 QmlVlcPlayerProxy::QmlVlcPlayerProxy( const std::shared_ptr<vlc::player>& player,
                                       QObject* parent /*= 0*/ )
@@ -37,58 +51,6 @@ QmlVlcPlayerProxy::QmlVlcPlayerProxy( const std::shared_ptr<vlc::player>& player
 
     m_errorTimer.setInterval( 1000 );
     m_errorTimer.setSingleShot( true );
-
-    connect( this, SIGNAL( mediaPlayerPlaying() ),
-             this, SIGNAL( playingChanged() ), Qt::QueuedConnection );
-    connect( this, SIGNAL( mediaPlayerPaused() ),
-             this, SIGNAL( playingChanged() ), Qt::QueuedConnection );
-    connect( this, SIGNAL( mediaPlayerEncounteredError() ),
-             this, SIGNAL( playingChanged() ), Qt::QueuedConnection );
-    connect( this, SIGNAL( mediaPlayerEndReached() ),
-             this, SIGNAL( playingChanged() ), Qt::QueuedConnection );
-    connect( this, SIGNAL( mediaPlayerStopped() ),
-             this, SIGNAL( playingChanged() ), Qt::QueuedConnection );
-
-    connect( this, &QmlVlcPlayerProxy::mediaPlayerNothingSpecial,
-        [this] () {
-            Q_EMIT stateChanged( NothingSpecial );
-        } );
-
-    connect( this, &QmlVlcPlayerProxy::mediaPlayerOpening,
-        [this] () {
-            Q_EMIT stateChanged( Opening );
-        } );
-
-    connect( this, &QmlVlcPlayerProxy::mediaPlayerBuffering,
-        [this] ( float ) {
-            Q_EMIT stateChanged( Buffering );
-        } );
-
-    connect( this, &QmlVlcPlayerProxy::mediaPlayerPlaying,
-        [this] () {
-            Q_EMIT stateChanged( Playing );
-        } );
-
-    connect( this, &QmlVlcPlayerProxy::mediaPlayerPaused,
-        [this] () {
-            Q_EMIT stateChanged( Paused );
-        } );
-
-    connect( this, &QmlVlcPlayerProxy::mediaPlayerEncounteredError,
-        [this] () {
-            Q_EMIT stateChanged( Error );
-        } );
-
-    connect( this, &QmlVlcPlayerProxy::mediaPlayerEndReached,
-        [this] () {
-            Q_EMIT stateChanged( Ended );
-        } );
-
-    connect( this, &QmlVlcPlayerProxy::mediaPlayerStopped,
-        [this] () {
-            Q_EMIT stateChanged( Stopped );
-        } );
-
 
     connect( this, SIGNAL( mediaPlayerEncounteredError() ),
              &m_errorTimer, SLOT( start() ) );
@@ -102,16 +64,11 @@ QmlVlcPlayerProxy::QmlVlcPlayerProxy( const std::shared_ptr<vlc::player>& player
 
     connect( this, SIGNAL( mediaPlayerMediaChanged() ),
              &m_errorTimer, SLOT( stop() ) );
-    connect( this, SIGNAL( mediaPlayerMediaChanged() ),
-             &m_playlist, SIGNAL( currentItemChanged() ), Qt::QueuedConnection );
     connect( this, &QmlVlcPlayerProxy::mediaPlayerMediaChanged,
              get_subtitle(), &QmlVlcSubtitle::eraseLoaded );
 
-    connect( this, SIGNAL( mediaPlayerTitleChanged() ),
-             &m_currentMediaDesc, SIGNAL( titleChanged() ), Qt::QueuedConnection );
-
     connect( get_audio(), SIGNAL( volumeChanged() ),
-             this, SIGNAL( volumeChanged() ), Qt::QueuedConnection );
+             this, SIGNAL( volumeChanged() ) );
 }
 
 void QmlVlcPlayerProxy::classBegin()
@@ -192,32 +149,63 @@ void LogEvent( const libvlc_event_t* e )
     };
 }
 
-//libvlc events arrives from separate thread
+//libvlc events could arrive from separate thread
 void QmlVlcPlayerProxy::media_player_event( const libvlc_event_t* e )
 {
+    //to avoid deadlocks have to always queue libvlc events,
+    //since libvlc is not reentrant
+    QCoreApplication::postEvent( this, new LibvlcEvent( *e ) );
+}
+
+bool QmlVlcPlayerProxy::event( QEvent* event )
+{
+    if( event->type() == LibvlcEvent::LibvlcEventId ) {
+        LibvlcEvent* libvlcEvent = static_cast<LibvlcEvent*>( event );
+        handleLibvlcEvent( *libvlcEvent );
+        return true;
+    }
+
+    return QObject::event( event );
+}
+
+void QmlVlcPlayerProxy::handleLibvlcEvent( const LibvlcEvent& event )
+{
+    //it's highly possible libvlc_event_t will have wrong pointers inside at this point
+    const libvlc_event_t* e = &event._libvlcEvent;
+
     //LogEvent( e );
 
     switch ( e->type ) {
     case libvlc_MediaPlayerMediaChanged:
         Q_EMIT mediaPlayerMediaChanged();
+        Q_EMIT m_playlist.currentItemChanged();
         break;
     case libvlc_MediaPlayerNothingSpecial:
         Q_EMIT mediaPlayerNothingSpecial();
+        Q_EMIT stateChanged( NothingSpecial );
         break;
     case libvlc_MediaPlayerOpening:
         Q_EMIT mediaPlayerOpening();
+        Q_EMIT stateChanged( Opening );
         break;
     case libvlc_MediaPlayerBuffering:
         Q_EMIT mediaPlayerBuffering( e->u.media_player_buffering.new_cache );
+        Q_EMIT stateChanged( Buffering );
         break;
     case libvlc_MediaPlayerPlaying:
         Q_EMIT mediaPlayerPlaying();
+        Q_EMIT stateChanged( Playing );
+        Q_EMIT playingChanged();
         break;
     case libvlc_MediaPlayerPaused:
         Q_EMIT mediaPlayerPaused();
+        Q_EMIT stateChanged( Paused );
+        Q_EMIT playingChanged();
         break;
     case libvlc_MediaPlayerStopped:
         Q_EMIT mediaPlayerStopped();
+        Q_EMIT stateChanged( Stopped );
+        Q_EMIT playingChanged();
         break;
     case libvlc_MediaPlayerForward:
         Q_EMIT mediaPlayerForward();
@@ -227,9 +215,13 @@ void QmlVlcPlayerProxy::media_player_event( const libvlc_event_t* e )
         break;
     case libvlc_MediaPlayerEndReached:
         Q_EMIT mediaPlayerEndReached();
+        Q_EMIT stateChanged( Ended );
+        Q_EMIT playingChanged();
         break;
     case libvlc_MediaPlayerEncounteredError:
         Q_EMIT mediaPlayerEncounteredError();
+        Q_EMIT stateChanged( Error );
+        Q_EMIT playingChanged();
         break;
     case libvlc_MediaPlayerTimeChanged: {
         double new_time = static_cast<double>( e->u.media_player_time_changed.new_time );
@@ -247,6 +239,7 @@ void QmlVlcPlayerProxy::media_player_event( const libvlc_event_t* e )
         break;
     case libvlc_MediaPlayerTitleChanged:
         Q_EMIT mediaPlayerTitleChanged();
+        Q_EMIT m_currentMediaDesc.titleChanged();
         break;
     case libvlc_MediaPlayerLengthChanged: {
             double new_length =
