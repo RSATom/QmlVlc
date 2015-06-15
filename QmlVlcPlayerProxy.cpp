@@ -159,7 +159,7 @@ void QmlVlcPlayerProxy::media_player_event( const libvlc_event_t* e )
 
 bool QmlVlcPlayerProxy::event( QEvent* event )
 {
-    if( event->type() == LibvlcEvent::LibvlcEventId ) {
+    if( static_cast<unsigned>( event->type() ) == LibvlcEvent::LibvlcEventId ) {
         LibvlcEvent* libvlcEvent = static_cast<LibvlcEvent*>( event );
         handleLibvlcEvent( *libvlcEvent );
         return true;
