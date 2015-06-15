@@ -3,7 +3,7 @@
 #include <QtQml>
 #include <QQmlExtensionPlugin>
 
-#include <QmlVlc.h>
+#include "QmlVlc.h"
 
 #define QMLVLC_PLUGIN_ID "RSATom.QmlVlc"
 
