@@ -47,7 +47,7 @@ QmlVlcPlayerProxy::QmlVlcPlayerProxy( const std::shared_ptr<vlc::player>& player
       m_playlist( this ), m_subtitle( *player ), m_video( *player ),
       m_currentMediaDesc( this )
 {
-    qRegisterMetaType<QmlVlcPlayerProxy::State>("QmlVlcPlayerProxy::State");
+    qRegisterMetaType<QmlVlcPlayerProxy::State>( "QmlVlcPlayerProxy::State" );
 
     m_errorTimer.setInterval( 1000 );
     m_errorTimer.setSingleShot( true );
