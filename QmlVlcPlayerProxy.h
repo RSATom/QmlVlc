@@ -27,6 +27,7 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QQmlParserStatus>
 
 #include "QmlVlcVideoOutput.h"
 #include "QmlVlcAudio.h"
