@@ -4,6 +4,10 @@ if( NOT MSVC )
     add_definitions( -std=c++11 )
 endif()
 
+if( QT_STATIC )
+    add_definitions( -DQT_OPENGL_ES_2_ANGLE_STATIC )
+endif()
+
 add_subdirectory( libvlc_wrapper )
 
 set( CMAKE_AUTOMOC ON )
