@@ -91,5 +91,7 @@ private:
     unsigned m_pitchSize;
     unsigned m_UPlaneOffset;
     unsigned m_VPlaneOffset;
-    QVideoFrame m_videoFrame;
+
+    std::list<QVideoFrame> m_videoFrames;
+    std::deque<QVideoFrame> m_spareFrames;
 };
