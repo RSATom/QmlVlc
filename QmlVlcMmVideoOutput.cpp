@@ -99,7 +99,7 @@ void* QmlVlcMmVideoOutput::video_lock_cb( void** planes )
     QVideoFrame* frame = nullptr;
 
     //don't use latest frame to give it chance to be displayed
-    if( !m_spareFrames.size() > 1 ) {
+    if( m_spareFrames.size() > 1 ) {
         frame = &*m_videoFrames.insert( m_videoFrames.end(), m_spareFrames.front() );
         m_spareFrames.pop_front();
     } else {
