@@ -88,7 +88,6 @@ void QmlVlcMmVideoOutput::video_cleanup_cb()
     m_frameSize = 0;
     m_pitchSize = 0;
     m_UPlaneOffset = m_VPlaneOffset = 0;
-    m_spareFrames.clear();
     m_videoFrames.clear();
 
     QMetaObject::invokeMethod( this, "cleanupVideoSurface" );
@@ -96,29 +95,21 @@ void QmlVlcMmVideoOutput::video_cleanup_cb()
 
 void* QmlVlcMmVideoOutput::video_lock_cb( void** planes )
 {
-    QVideoFrame* frame = nullptr;
+    QVideoFrame& frame =
+        *m_videoFrames.emplace( m_videoFrames.end(),
+                                 m_frameSize,
+                                 QSize( m_frameWidth, m_frameHeight ), m_pitchSize,
+                                 m_pixelFormat );
 
-    //don't use latest frame to give it chance to be displayed
-    if( m_spareFrames.size() > 1 ) {
-        frame = &*m_videoFrames.insert( m_videoFrames.end(), m_spareFrames.front() );
-        m_spareFrames.pop_front();
-    } else {
-        frame =
-            &*m_videoFrames.emplace( m_videoFrames.end(),
-                                     m_frameSize,
-                                     QSize( m_frameWidth, m_frameHeight ), m_pitchSize,
-                                     m_pixelFormat );
-    }
-
-    if( frame->map( QAbstractVideoBuffer::WriteOnly ) ) {
-        uint8_t* b = frame->bits();
+    if( frame.map( QAbstractVideoBuffer::WriteOnly ) ) {
+        uint8_t* b = frame.bits();
         planes[0] = b;
         planes[1] = b + m_UPlaneOffset;
         planes[2] = b + m_VPlaneOffset;
     } else
         assert( false );
 
-    return frame;
+    return &frame;
 }
 
 void QmlVlcMmVideoOutput::video_unlock_cb( void* picture, void *const * /*planes*/ )
@@ -141,7 +132,6 @@ void QmlVlcMmVideoOutput::video_display_cb( void* picture )
     QMetaObject::invokeMethod( this, "presentFrame",
                                Q_ARG( QVideoFrame, frame ) );
 
-    m_spareFrames.push_back( frame );
     m_videoFrames.remove( frame );
 }
 
@@ -156,8 +146,9 @@ void QmlVlcMmVideoOutput::updateSurfaceFormat( const QVideoSurfaceFormat& newFor
 
 void QmlVlcMmVideoOutput::presentFrame( const QVideoFrame& newFrame )
 {
-    if( m_videoSurface )
+    if( m_videoSurface ) {
         m_videoSurface->present( newFrame );
+    }
 }
 
 void QmlVlcMmVideoOutput::setVideoSurface( QAbstractVideoSurface* s )

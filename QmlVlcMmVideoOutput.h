@@ -93,5 +93,4 @@ private:
     unsigned m_VPlaneOffset;
 
     std::list<QVideoFrame> m_videoFrames;
-    std::deque<QVideoFrame> m_spareFrames;
 };
