@@ -132,7 +132,11 @@ void QmlVlcMmVideoOutput::video_display_cb( void* picture )
     QMetaObject::invokeMethod( this, "presentFrame",
                                Q_ARG( QVideoFrame, frame ) );
 
-    m_videoFrames.remove( frame );
+    m_videoFrames.remove_if(
+        [&frame] ( const QVideoFrame& cachedFrame ) {
+            return &frame == &cachedFrame;
+        }
+    );
 }
 
 void QmlVlcMmVideoOutput::updateSurfaceFormat( const QVideoSurfaceFormat& newFormat )
