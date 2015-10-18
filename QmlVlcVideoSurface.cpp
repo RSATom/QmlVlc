@@ -25,11 +25,13 @@
 
 #include "QmlVlcVideoSurface.h"
 
-#include "QmlVlcSurfacePlayerProxy.h"
+#include "QmlVlcVideoFrame.h"
+#include "SGVlcVideoNode.h"
 
 QmlVlcVideoSurface::QmlVlcVideoSurface()
-    : m_source( 0 )
+    : m_fillMode( PreserveAspectFit ), m_source( nullptr ), m_frameUpdated( false )
 {
+    setFlag( QQuickItem::ItemHasContents, true );
 }
 
 QmlVlcVideoSurface::~QmlVlcVideoSurface()
@@ -37,14 +39,26 @@ QmlVlcVideoSurface::~QmlVlcVideoSurface()
     setSource( 0 );
 }
 
-QmlVlcSurfacePlayerProxy* QmlVlcVideoSurface::source() const
+void QmlVlcVideoSurface::setFillMode( FillMode m )
+{
+    if( m_fillMode == m )
+        return;
+
+    m_fillMode = m;
+
+    update();
+
+    emit fillModeChanged( m );
+}
+
+QmlVlcVideoSource* QmlVlcVideoSurface::source() const
 {
     return m_source;
 }
 
-void QmlVlcVideoSurface::setSource( QmlVlcSurfacePlayerProxy* source )
+void QmlVlcVideoSurface::setSource( QmlVlcVideoSource* source )
 {
-    if( source == m_source.data() )
+    if( source == m_source )
         return;
 
     if( m_source )
@@ -56,4 +70,63 @@ void QmlVlcVideoSurface::setSource( QmlVlcSurfacePlayerProxy* source )
         m_source->registerVideoSurface( this );
 
     Q_EMIT sourceChanged();
+}
+
+QSGNode* QmlVlcVideoSurface::updatePaintNode( QSGNode* oldNode,
+                                              UpdatePaintNodeData* /*data*/ )
+{
+    SGVlcVideoNode* node = static_cast<SGVlcVideoNode*>( oldNode );
+    if( !m_frame ) {
+        delete node;
+        return 0;
+    }
+
+    if( !node )
+        node = new SGVlcVideoNode;
+
+    QRectF outRect( 0, 0, width(), height() );
+    QRectF srcRect( 0, 0, 1., 1. );
+
+    if( Stretch != fillMode() ) {
+        const uint16_t fw = m_frame->width;
+        const uint16_t fh = m_frame->height;
+
+        const qreal frameAspect = qreal( fw ) / fh;
+        const qreal itemAspect = width() / height();
+
+        if( PreserveAspectFit == fillMode() ) {
+            qreal outWidth = width();
+            qreal outHeight = height();
+            if( frameAspect > itemAspect )
+                outHeight = outWidth / frameAspect;
+            else if( frameAspect < itemAspect )
+                outWidth = outHeight * frameAspect;
+
+            outRect = QRectF( ( width() - outWidth ) / 2, ( height() - outHeight ) / 2,
+                               outWidth, outHeight );
+        } else if( PreserveAspectCrop == fillMode() ) {
+            if( frameAspect > itemAspect ) {
+                srcRect.setX( ( 1. - itemAspect / frameAspect ) / 2 );
+                srcRect.setWidth( 1. - srcRect.x() - srcRect.x() );
+            } else if( frameAspect < itemAspect ) {
+                srcRect.setY( ( 1. - frameAspect / itemAspect ) / 2 );
+                srcRect.setHeight( 1. - srcRect.y() - srcRect.y() );
+            }
+        }
+    }
+
+    if( m_frameUpdated ) {
+        node->setFrame( m_frame );
+        m_frameUpdated = false;
+    }
+    node->setRect( outRect, srcRect );
+
+    return node;
+}
+
+void QmlVlcVideoSurface::presentFrame( const QSharedPointer<const QmlVlcI420Frame>& frame )
+{
+    m_frame = frame;
+    m_frameUpdated = true;
+    update();
 }

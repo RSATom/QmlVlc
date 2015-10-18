@@ -29,7 +29,7 @@
 #include <QTimer>
 #include <QQmlParserStatus>
 
-#include "QmlVlcVideoOutput.h"
+#include "QmlVlcVideoSource.h"
 #include "QmlVlcAudio.h"
 #include "QmlVlcInput.h"
 #include "QmlVlcPlaylist.h"
@@ -40,12 +40,10 @@
 struct LibvlcEvent;
 
 class QmlVlcPlayerProxy
-    : public QObject,
-      public QQmlParserStatus,
+    : public QmlVlcVideoSource,
       private vlc::media_player_events_callback
 {
     Q_OBJECT
-    Q_INTERFACES(QQmlParserStatus)
 
 protected:
     virtual void classBegin() override;

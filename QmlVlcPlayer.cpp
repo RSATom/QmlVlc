@@ -28,7 +28,7 @@
 #include "QmlVlcConfig.h"
 
 QmlVlcPlayer::QmlVlcPlayer( QObject* parent )
-    : QmlVlcSurfacePlayerProxy( std::make_shared<vlc::player>(), parent ),
+    : QmlVlcPlayerProxy( std::make_shared<vlc::player>(), parent ),
       m_libvlc( 0 )
 {
     m_libvlc = QmlVlcConfig::instance().createLibvlcInstance();

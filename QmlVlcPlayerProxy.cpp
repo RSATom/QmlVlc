@@ -43,7 +43,7 @@ struct LibvlcEvent : public QEvent
 
 QmlVlcPlayerProxy::QmlVlcPlayerProxy( const std::shared_ptr<vlc::player>& player,
                                       QObject* parent /*= 0*/ )
-    : QObject( parent ), m_player( player ), m_audio( *player ), m_input( *player ),
+    : QmlVlcVideoSource( player, parent ), m_player( player ), m_audio( *player ), m_input( *player ),
       m_playlist( this ), m_subtitle( *player ), m_video( *player ),
       m_currentMediaDesc( this )
 {
@@ -74,6 +74,7 @@ QmlVlcPlayerProxy::QmlVlcPlayerProxy( const std::shared_ptr<vlc::player>& player
 void QmlVlcPlayerProxy::classBegin()
 {
     player().register_callback( this );
+    QmlVlcVideoSource::classBegin();
 }
 
 void QmlVlcPlayerProxy::componentComplete()

@@ -25,12 +25,13 @@
 
 #pragma once
 
-#include "QmlVlcSurfacePlayerProxy.h"
+#include "QmlVlcPlayerProxy.h"
 
 class QmlVlcPlayer
-    : public QmlVlcSurfacePlayerProxy
+    : public QmlVlcPlayerProxy
 {
     Q_OBJECT
+
 public:
     explicit QmlVlcPlayer( QObject* parent = 0 );
     ~QmlVlcPlayer();

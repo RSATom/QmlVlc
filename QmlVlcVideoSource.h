@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright © 2014-2015, Sergey Radionov <rsatom_gmail.com>
+* Copyright © 2015, Sergey Radionov <rsatom_gmail.com>
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -25,45 +25,33 @@
 
 #pragma once
 
-#include <QQuickItem>
-#include <QSharedPointer>
+#include <memory>
 
-struct QmlVlcI420Frame;//#include "QmlVlcVideoFrame.h"
+#include <QtQml/qqml.h>
+#include <QQmlParserStatus>
 
-class QmlVlcGenericVideoSurface
-    : public QQuickItem
+#include <libvlc_wrapper/vlc_player.h>
+
+#include "QmlVlcVideoOutput.h"
+
+class QmlVlcVideoSurface;
+
+class QmlVlcVideoSource
+    : public QObject,
+      public QQmlParserStatus
 {
     Q_OBJECT
-
-    Q_PROPERTY( FillMode fillMode READ fillMode WRITE setFillMode NOTIFY fillModeChanged )
+    Q_INTERFACES( QQmlParserStatus )
 
 public:
-    QmlVlcGenericVideoSurface();
-    ~QmlVlcGenericVideoSurface();
+    QmlVlcVideoSource( const std::shared_ptr<vlc::player>& player, QObject* parent );
 
-    enum FillMode {
-        Stretch            = Qt::IgnoreAspectRatio,
-        PreserveAspectFit  = Qt::KeepAspectRatio,
-        PreserveAspectCrop = Qt::KeepAspectRatioByExpanding
-    };
-    Q_ENUMS( FillMode )
+    void classBegin() override;
+    void componentComplete() override;
 
-    FillMode fillMode() const
-        { return m_fillMode; }
-    void setFillMode( FillMode mode );
-
-    virtual QSGNode* updatePaintNode( QSGNode*, UpdatePaintNodeData* );
-
-public Q_SLOTS:
-    void presentFrame( const QSharedPointer<const QmlVlcI420Frame>& frame );
-
-Q_SIGNALS:
-    void sourceChanged();
-    void fillModeChanged( FillMode mode );
+    virtual void registerVideoSurface( QmlVlcVideoSurface* );
+    virtual void unregisterVideoSurface( QmlVlcVideoSurface* );
 
 private:
-    FillMode m_fillMode;
-
-    bool m_frameUpdated;
-    QSharedPointer<const QmlVlcI420Frame> m_frame;
+    QScopedPointer<QmlVlcVideoOutput> m_videoOutput;
 };

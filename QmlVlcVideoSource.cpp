@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright © 2014-2015, Sergey Radionov <rsatom_gmail.com>
+* Copyright © 2015, Sergey Radionov <rsatom_gmail.com>
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -23,61 +23,28 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "QmlVlcSurfacePlayerProxy.h"
+#include "QmlVlcVideoSource.h"
 
-#include "QmlVlcVideoSurface.h"
-
-QmlVlcSurfacePlayerProxy::QmlVlcSurfacePlayerProxy( const std::shared_ptr<vlc::player>& player,
-                                                    QObject* parent )
-    : QmlVlcPlayerProxy( player, parent ),
-      m_videoOutput( new QmlVlcVideoOutput( player ) )
+QmlVlcVideoSource::QmlVlcVideoSource( const std::shared_ptr<vlc::player>& player, QObject* parent )
+    : QObject( parent ), m_videoOutput( new QmlVlcVideoOutput( player ) )
 {
 }
 
-void QmlVlcSurfacePlayerProxy::classBegin()
+void QmlVlcVideoSource::classBegin()
 {
-    QmlVlcPlayerProxy::classBegin();
-
     m_videoOutput->init();
 }
 
-QmlVlcSurfacePlayerProxy::~QmlVlcSurfacePlayerProxy()
+void QmlVlcVideoSource::componentComplete()
 {
 }
 
-void QmlVlcSurfacePlayerProxy::registerVideoSurface( QmlVlcVideoSurface* s )
+void QmlVlcVideoSource::registerVideoSurface( QmlVlcVideoSurface* s )
 {
    m_videoOutput->registerVideoSurface( s );
 }
 
-void QmlVlcSurfacePlayerProxy::unregisterVideoSurface( QmlVlcVideoSurface* s )
+void QmlVlcVideoSource::unregisterVideoSurface( QmlVlcVideoSurface* s )
 {
     m_videoOutput->unregisterVideoSurface( s );
-}
-
-void QmlVlcSurfacePlayerProxy::swap( QmlVlcSurfacePlayerProxy* pp )
-{
-    if( !pp || pp == this )
-        return;
-
-    QList<QmlVlcGenericVideoSurface*> surfaces = m_videoOutput->attachedSurfaces();
-    QList<QmlVlcGenericVideoSurface*> ppSurfaces = pp->m_videoOutput->attachedSurfaces();
-
-    for( auto* s: surfaces ) {
-        static_cast<QmlVlcVideoSurface*>( s )->setSource( nullptr );
-    }
-    for( auto* s: ppSurfaces ) {
-        static_cast<QmlVlcVideoSurface*>( s )->setSource( nullptr );
-    }
-
-    player().swap( &pp->player() );
-
-    m_videoOutput.swap( pp->m_videoOutput );
-
-    for( auto* s: surfaces ) {
-        static_cast<QmlVlcVideoSurface*>( s )->setSource( pp );
-    }
-    for( auto* s: ppSurfaces ) {
-        static_cast<QmlVlcVideoSurface*>( s )->setSource( this );
-    }
 }

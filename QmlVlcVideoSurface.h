@@ -25,28 +25,54 @@
 
 #pragma once
 
+#include <QQuickItem>
 #include <QPointer>
+#include <QSharedPointer>
 
-#include "QmlVlcGenericVideoSurface.h"
-class QmlVlcSurfacePlayerProxy; //#include "QmlVlcSurfacePlayerProxy.h"
+#include "QmlVlcVideoSource.h"
+
+struct QmlVlcI420Frame;//#include "QmlVlcVideoFrame.h"
 
 class QmlVlcVideoSurface
-    : public QmlVlcGenericVideoSurface
+    : public QQuickItem
 {
     Q_OBJECT
 
-    Q_PROPERTY( QmlVlcSurfacePlayerProxy* source READ source WRITE setSource NOTIFY sourceChanged )
+    Q_PROPERTY( FillMode fillMode READ fillMode WRITE setFillMode NOTIFY fillModeChanged )
+    Q_PROPERTY( QmlVlcVideoSource* source READ source WRITE setSource NOTIFY sourceChanged )
 
 public:
     QmlVlcVideoSurface();
     ~QmlVlcVideoSurface();
 
-    QmlVlcSurfacePlayerProxy* source() const;
-    void setSource( QmlVlcSurfacePlayerProxy* source );
+    enum FillMode {
+        Stretch            = Qt::IgnoreAspectRatio,
+        PreserveAspectFit  = Qt::KeepAspectRatio,
+        PreserveAspectCrop = Qt::KeepAspectRatioByExpanding
+    };
+    Q_ENUMS( FillMode )
+
+    FillMode fillMode() const
+        { return m_fillMode; }
+    void setFillMode( FillMode mode );
+
+    QmlVlcVideoSource* source() const;
+    void setSource( QmlVlcVideoSource* source );
+
+    virtual QSGNode* updatePaintNode( QSGNode*, UpdatePaintNodeData* );
+
+public Q_SLOTS:
+    void presentFrame( const QSharedPointer<const QmlVlcI420Frame>& frame );
 
 Q_SIGNALS:
     void sourceChanged();
+    void fillModeChanged( FillMode mode );
 
 private:
-    QPointer<QmlVlcSurfacePlayerProxy> m_source;
+    FillMode m_fillMode;
+
+    QPointer<QmlVlcVideoSource> m_source;
+
+    bool m_frameUpdated;
+    QSharedPointer<const QmlVlcI420Frame> m_frame;
 };

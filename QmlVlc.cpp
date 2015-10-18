@@ -41,6 +41,11 @@ const int QmlVlcVersionMinor = 1;
 void RegisterQmlVlcPlayer()
 {
     // @uri QmlVlc
+    qmlRegisterUncreatableType<QmlVlcVideoSource>(
+        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
+        "QmlVlcVideoSource",
+        QStringLiteral("QmlVlcVideoSource cannot be instantiated directly") );
+
     qmlRegisterUncreatableType<QmlVlcInput>(
         qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcInput",
@@ -77,11 +82,6 @@ void RegisterQmlVlcPlayer()
         qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcMediaDesc",
         QStringLiteral("VlcMediaDesc cannot be instantiated directly") );
-
-    qmlRegisterUncreatableType<QmlVlcSurfacePlayerProxy>(
-        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
-        "VlcSurfacePlayerProxy",
-        QStringLiteral("VlcSurfacePlayerProxy cannot be instantiated directly") );
 
     qmlRegisterType<QmlVlcVideoSurface>(
         qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
