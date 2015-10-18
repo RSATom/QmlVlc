@@ -32,7 +32,6 @@
 #include <QMutex>
 #include <QVideoSurfaceFormat>
 class QAbstractVideoSurface; //#include <QAbstractVideoSurface>
-#include <QQmlParserStatus>
 
 #ifndef Q_MOC_RUN
 #include "libvlc_wrapper/vlc_player.h"
