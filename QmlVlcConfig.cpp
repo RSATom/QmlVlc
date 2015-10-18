@@ -40,8 +40,8 @@ QmlVlcConfig::QmlVlcConfig()
       _hardwareAcceleration( false ), _trustedEnvironment( false ),
       _libvlcCounter( 0 ), _libvlc( nullptr )
 {
-
 }
+
 QmlVlcConfig::~QmlVlcConfig()
 {
     Q_ASSERT( 0 == _libvlcCounter );
