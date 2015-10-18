@@ -40,7 +40,7 @@
 
 class QmlVlcPlayerProxy
     : public QmlVlcVideoSource,
-      private vlc::media_player_events_callback
+      protected vlc::media_player_events_callback
 {
     Q_OBJECT
 
@@ -48,9 +48,6 @@ protected:
     virtual void classBegin() override;
     virtual void componentComplete() override;
     void classEnd();
-
-private:
-    void media_player_event( const libvlc_event_t* e ) override;
 
 public:
     explicit QmlVlcPlayerProxy( const std::shared_ptr<vlc::playlist_player_core>& player,
@@ -152,6 +149,8 @@ Q_SIGNALS:
     void volumeChanged();
 
 protected:
+    void media_player_event( const libvlc_event_t* e ) override;
+
     bool event( QEvent* ) override;
 
     struct LibvlcEvent;
