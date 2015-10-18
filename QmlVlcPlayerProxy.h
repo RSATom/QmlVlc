@@ -27,6 +27,7 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QEvent>
 #include <QQmlParserStatus>
 
 #include "QmlVlcVideoSource.h"
@@ -36,8 +37,6 @@
 #include "QmlVlcSubtitle.h"
 #include "QmlVlcVideo.h"
 #include "QmlVlcMedia.h"
-
-struct LibvlcEvent;
 
 class QmlVlcPlayerProxy
     : public QmlVlcVideoSource,
@@ -155,9 +154,11 @@ Q_SIGNALS:
 protected:
     bool event( QEvent* ) override;
 
+    struct LibvlcEvent;
+    virtual void handleLibvlcEvent( const LibvlcEvent& );
+
 private Q_SLOTS:
     void currentItemEndReached();
-    void handleLibvlcEvent( const LibvlcEvent& );
 
 public:
     QmlVlcAudio*     get_audio()     { return &m_audio; }
@@ -178,4 +179,15 @@ private:
     QmlVlcCurrentMedia m_currentMediaDesc;
 
     QTimer m_errorTimer;
+};
+
+struct QmlVlcPlayerProxy::LibvlcEvent : public QEvent
+{
+    enum {
+        LibvlcEventId = QEvent::User,
+    };
+
+    LibvlcEvent( const libvlc_event_t& );
+
+    libvlc_event_t _libvlcEvent;
 };

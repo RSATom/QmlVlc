@@ -26,20 +26,13 @@
 #include "QmlVlcPlayerProxy.h"
 
 #include <QDebug>
-#include <QEvent>
 #include <QCoreApplication>
 
-struct LibvlcEvent : public QEvent
+QmlVlcPlayerProxy::LibvlcEvent::LibvlcEvent( const libvlc_event_t& libvlcEvent )
+    : QEvent( static_cast<QEvent::Type>( LibvlcEventId ) ),
+      _libvlcEvent( libvlcEvent )
 {
-    enum {
-        LibvlcEventId = QEvent::User,
-    };
-
-    LibvlcEvent( const libvlc_event_t& libvlcEvent )
-        : QEvent( static_cast<QEvent::Type>( LibvlcEventId ) ), _libvlcEvent( libvlcEvent ) {}
-
-    libvlc_event_t _libvlcEvent;
-};
+}
 
 QmlVlcPlayerProxy::QmlVlcPlayerProxy( const std::shared_ptr<vlc::playlist_player_core>& player,
                                       QObject* parent /*= 0*/ )
@@ -93,7 +86,7 @@ QmlVlcPlayerProxy::~QmlVlcPlayerProxy()
     classEnd();
 }
 
-void LogEvent( const libvlc_event_t* e )
+static void LogEvent( const libvlc_event_t* e )
 {
     switch ( e->type ) {
     case libvlc_MediaPlayerMediaChanged:

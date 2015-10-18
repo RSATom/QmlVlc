@@ -29,6 +29,7 @@
 
 #include "QmlVlcVideoSurface.h"
 #include "QmlVlcPlayer.h"
+#include "QmlVlcMediaListPlayer.h"
 
 #ifdef QMLVLC_QTMULTIMEDIA_ENABLE
 #include "QmlVlcMmPlayer.h"
@@ -89,6 +90,9 @@ void RegisterQmlVlcPlayer()
     qmlRegisterType<QmlVlcPlayer>(
         qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcPlayer" );
+    qmlRegisterType<QmlVlcMediaListPlayer>(
+        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
+        "VlcMediaListPlayer" );
 }
 
 #ifdef QMLVLC_QTMULTIMEDIA_ENABLE
