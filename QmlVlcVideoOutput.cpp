@@ -29,7 +29,7 @@
 
 #include "QmlVlcVideoSurface.h"
 
-QmlVlcVideoOutput::QmlVlcVideoOutput( const std::shared_ptr<vlc::player>& player,
+QmlVlcVideoOutput::QmlVlcVideoOutput( const std::shared_ptr<vlc::player_core>& player,
                                       QObject* parent /*= 0*/ )
     : QObject( parent ), m_player( player )
 {

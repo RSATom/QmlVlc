@@ -91,7 +91,7 @@ private:
     static QmlVlcMedia* getItem( ItemsProperty_t*, int index );
     static void itemsClear( ItemsProperty_t* );
 
-    inline vlc::player& player();
+    inline vlc::playlist_player_core& player();
 
 private:
     QmlVlcPlayerProxy *const m_owner;

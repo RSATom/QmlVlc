@@ -25,7 +25,7 @@
 
 #include "QmlVlcVideoSource.h"
 
-QmlVlcVideoSource::QmlVlcVideoSource( const std::shared_ptr<vlc::player>& player, QObject* parent )
+QmlVlcVideoSource::QmlVlcVideoSource( const std::shared_ptr<vlc::player_core>& player, QObject* parent )
     : QObject( parent ), m_videoOutput( new QmlVlcVideoOutput( player ) )
 {
 }

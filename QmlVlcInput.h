@@ -33,7 +33,7 @@ class QmlVlcInput : public QObject
 {
     Q_OBJECT
 public:
-    QmlVlcInput( vlc::player& player )
+    QmlVlcInput( vlc::player_core& player )
         : m_player( player ) { }
 
     Q_PROPERTY( double length READ get_length )
@@ -60,5 +60,5 @@ public:
     void set_rate( double );
 
 private:
-    vlc::player& m_player;
+    vlc::player_core& m_player;
 };

@@ -28,7 +28,7 @@
 #include <QAbstractVideoSurface>
 #include <QDebug>
 
-QmlVlcMmVideoOutput::QmlVlcMmVideoOutput( const std::shared_ptr<vlc::player>& player,
+QmlVlcMmVideoOutput::QmlVlcMmVideoOutput( const std::shared_ptr<vlc::playlist_player_core>& player,
                                           QObject* parent /*= 0*/ )
     : QObject( parent ), m_player( player ), m_videoSurface( 0 ),
       m_pixelFormat( QVideoFrame::Format_Invalid ),

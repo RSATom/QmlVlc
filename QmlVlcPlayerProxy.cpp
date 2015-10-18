@@ -41,7 +41,7 @@ struct LibvlcEvent : public QEvent
     libvlc_event_t _libvlcEvent;
 };
 
-QmlVlcPlayerProxy::QmlVlcPlayerProxy( const std::shared_ptr<vlc::player>& player,
+QmlVlcPlayerProxy::QmlVlcPlayerProxy( const std::shared_ptr<vlc::playlist_player_core>& player,
                                       QObject* parent /*= 0*/ )
     : QmlVlcVideoSource( player, parent ), m_player( player ), m_audio( *player ), m_input( *player ),
       m_playlist( this ), m_subtitle( *player ), m_video( *player ),
@@ -264,7 +264,7 @@ QString QmlVlcPlayerProxy::get_vlcVersion()
 
 void QmlVlcPlayerProxy::play( const QString& mrl )
 {
-    vlc_player& p = player();
+    vlc::playlist_player_core& p = player();
 
     p.clear_items();
 
@@ -327,27 +327,27 @@ bool QmlVlcPlayerProxy::get_playing()
 
 double QmlVlcPlayerProxy::get_length()
 {
-    return static_cast<double>( player().get_length() );
+    return static_cast<double>( player().playback().get_length() );
 }
 
 double QmlVlcPlayerProxy::get_position()
 {
-    return player().get_position();
+    return player().playback().get_position();
 }
 
 void QmlVlcPlayerProxy::set_position( double pos )
 {
-    player().set_position( static_cast<float>( pos ) );
+    player().playback().set_position( static_cast<float>( pos ) );
 }
 
 double QmlVlcPlayerProxy::get_time()
 {
-    return static_cast<double>( player().get_time() );
+    return static_cast<double>( player().playback().get_time() );
 }
 
 void QmlVlcPlayerProxy::set_time( double t )
 {
-    player().set_time( static_cast<libvlc_time_t>( t ) );
+    player().playback().set_time( static_cast<libvlc_time_t>( t ) );
 }
 
 unsigned int QmlVlcPlayerProxy::get_volume()

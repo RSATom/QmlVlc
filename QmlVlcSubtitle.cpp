@@ -36,7 +36,7 @@ enum {
     MAX_LOADED_SUBTITLES = 30,
 };
 
-QmlVlcSubtitle::QmlVlcSubtitle( vlc::player& player )
+QmlVlcSubtitle::QmlVlcSubtitle( vlc::player_core& player )
     : m_player( player ), m_networkReply( nullptr ), m_loadedCount( 0 )
 {
  QT_BEGIN_NAMESPACE}

@@ -39,7 +39,7 @@ class QmlVlcSubtitle : public QObject
 {
     Q_OBJECT
 public:
-    QmlVlcSubtitle( vlc::player& player );
+    QmlVlcSubtitle( vlc::player_core& player );
 
     enum Type {
         Microdvd    = 0,
@@ -99,7 +99,7 @@ private:
     bool loadFromFile( QTemporaryFile* );
 
 private:
-    vlc::player& m_player;
+    vlc::player_core& m_player;
     QNetworkAccessManager m_networkManager;
     QNetworkReply* m_networkReply;
     QScopedPointer<QTemporaryDir> m_subtitlesDir;

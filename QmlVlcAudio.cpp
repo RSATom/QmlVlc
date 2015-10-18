@@ -25,7 +25,7 @@
 
 #include "QmlVlcAudio.h"
 
-QmlVlcAudio::QmlVlcAudio( vlc::player& player )
+QmlVlcAudio::QmlVlcAudio( vlc::player_core& player )
     : m_player( player )
 {
     m_player.audio().register_callback( this );

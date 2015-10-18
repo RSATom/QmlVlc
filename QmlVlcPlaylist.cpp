@@ -36,7 +36,7 @@ QmlVlcPlaylist::QmlVlcPlaylist( QmlVlcPlayerProxy* owner )
 {
 }
 
-vlc::player& QmlVlcPlaylist::player()
+vlc::playlist_player_core& QmlVlcPlaylist::player()
 {
     return m_owner->player();
 }

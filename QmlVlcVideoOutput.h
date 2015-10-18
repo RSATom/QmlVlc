@@ -46,7 +46,7 @@ class QmlVlcVideoOutput
 {
     Q_OBJECT
 public:
-    explicit QmlVlcVideoOutput( const std::shared_ptr<vlc::player>& player,
+    explicit QmlVlcVideoOutput( const std::shared_ptr<vlc::player_core>& player,
                                 QObject* parent = 0 );
     void init();
     ~QmlVlcVideoOutput();
@@ -75,7 +75,7 @@ private:
     //end (for libvlc_video_set_callbacks)
 
 private:
-    std::shared_ptr<vlc::player> m_player;
+    std::shared_ptr<vlc::player_core> m_player;
 
     QList<QmlVlcVideoSurface*> m_attachedSurfaces;
 

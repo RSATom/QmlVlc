@@ -35,7 +35,7 @@ class QmlVlcVideo : public QObject
 {
     Q_OBJECT
 public:
-    QmlVlcVideo( vlc::player& player )
+    QmlVlcVideo( vlc::player_core& player )
         : m_player( player ), m_marquee( player ), m_logo( player ), m_deinterlace( player ) { }
 
     Q_PROPERTY( unsigned width READ get_width )
@@ -101,7 +101,7 @@ private:
     void getVideoSize( unsigned* width, unsigned* height );
 
 private:
-    vlc::player& m_player;
+    vlc::player_core& m_player;
 
     QmlVlcMarquee     m_marquee;
     QmlVlcLogo        m_logo;

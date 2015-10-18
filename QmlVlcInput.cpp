@@ -27,12 +27,12 @@
 
 double QmlVlcInput::get_length()
 {
-    return static_cast<double>( m_player.get_length() );
+    return static_cast<double>( m_player.playback().get_length() );
 }
 
 double QmlVlcInput::get_fps()
 {
-    return m_player.get_fps();
+    return m_player.playback().get_fps();
 }
 
 bool QmlVlcInput::get_hasVout()
@@ -47,30 +47,30 @@ unsigned int QmlVlcInput::get_state()
 
 double QmlVlcInput::get_position()
 {
-    return m_player.get_position();
+    return m_player.playback().get_position();
 }
 
 void QmlVlcInput::set_position( double pos )
 {
-    m_player.set_position( static_cast<float>( pos ) );
+    m_player.playback().set_position( static_cast<float>( pos ) );
 }
 
 double QmlVlcInput::get_time()
 {
-    return static_cast<double>( m_player.get_time() );
+    return static_cast<double>( m_player.playback().get_time() );
 }
 
 void QmlVlcInput::set_time( double t )
 {
-    return m_player.set_time( static_cast<libvlc_time_t>( t ) );
+    return m_player.playback().set_time( static_cast<libvlc_time_t>( t ) );
 }
 
 double QmlVlcInput::get_rate()
 {
-    return m_player.get_rate();
+    return m_player.playback().get_rate();
 }
 
 void QmlVlcInput::set_rate( double r )
 {
-    m_player.set_rate( static_cast<float>( r ) );
+    m_player.playback().set_rate( static_cast<float>( r ) );
 }

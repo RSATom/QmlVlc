@@ -145,7 +145,7 @@ bool QmlVlcMedia::get_disabled()
     if( !m_mediaOwner )
         return false;
 
-    vlc::player& player = m_mediaOwner->player();
+    vlc::playlist_player_core& player = m_mediaOwner->player();
 
     int idx = player.find_media_index( get_media() );
     return idx < 0 ? false : player.is_item_disabled( idx );
@@ -156,7 +156,7 @@ void QmlVlcMedia::set_disabled( bool disabled )
     if( !m_mediaOwner )
         return;
 
-    vlc::player& player = m_mediaOwner->player();
+    vlc::playlist_player_core& player = m_mediaOwner->player();
 
     int idx = player.find_media_index( get_media() );
     if( idx >= 0 ) {
@@ -169,7 +169,7 @@ QString QmlVlcMedia::get_setting()
     if( !m_mediaOwner )
         return QString();
 
-    vlc::player& player = m_mediaOwner->player();
+    vlc::playlist_player_core& player = m_mediaOwner->player();
 
     int idx = player.find_media_index( get_media() );
     if( idx >= 0 ) {
@@ -184,7 +184,7 @@ void QmlVlcMedia::set_setting( const QString& setting )
     if( !m_mediaOwner )
         return;
 
-    vlc::player& player = m_mediaOwner->player();
+    vlc::playlist_player_core& player = m_mediaOwner->player();
 
     int idx = player.find_media_index( get_media() );
     if( idx >= 0 ) {

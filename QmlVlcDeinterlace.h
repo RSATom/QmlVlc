@@ -33,12 +33,12 @@ class QmlVlcDeinterlace : public QObject
 {
     Q_OBJECT
 public:
-    QmlVlcDeinterlace( vlc::player& player )
+    QmlVlcDeinterlace( vlc::player_core& player )
         : m_player( player ) { }
 
     Q_INVOKABLE void enable( const QString& mode );
     Q_INVOKABLE void disable();
 
 private:
-    vlc::player& m_player;
+    vlc::player_core& m_player;
 };

@@ -35,7 +35,7 @@ class QmlVlcAudio
 {
     Q_OBJECT
 public:
-    QmlVlcAudio( vlc::player& player );
+    QmlVlcAudio( vlc::player_core& player );
     ~QmlVlcAudio();
 
     enum Output {
@@ -85,5 +85,5 @@ protected:
     void audio_event( vlc::audio_event_e e ) override;
 
 private:
-    vlc::player& m_player;
+    vlc::player_core& m_player;
 };

@@ -54,7 +54,7 @@ private:
     void media_player_event( const libvlc_event_t* e ) override;
 
 public:
-    explicit QmlVlcPlayerProxy( const std::shared_ptr<vlc::player>& player,
+    explicit QmlVlcPlayerProxy( const std::shared_ptr<vlc::playlist_player_core>& player,
                                 QObject* parent = 0 );
     ~QmlVlcPlayerProxy();
 
@@ -123,10 +123,10 @@ public:
 
     State get_state();
 
-    vlc::player& player()
+    vlc::playlist_player_core& player()
         { assert( m_player ); return *m_player; }
 
-    const std::shared_ptr<vlc::player>& player_ptr()
+    const std::shared_ptr<vlc::playlist_player_core>& player_ptr()
         { return m_player; }
 
 Q_SIGNALS:
@@ -168,7 +168,7 @@ public:
     QmlVlcMedia*     get_mediaDesc() { return &m_currentMediaDesc; }
 
 private:
-    std::shared_ptr<vlc::player> m_player;
+    std::shared_ptr<vlc::playlist_player_core> m_player;
 
     QmlVlcAudio        m_audio;
     QmlVlcInput        m_input;

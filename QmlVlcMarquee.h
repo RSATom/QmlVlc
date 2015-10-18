@@ -33,7 +33,7 @@ class QmlVlcMarquee : public QObject
 {
     Q_OBJECT
 public:
-    QmlVlcMarquee( vlc::player& player )
+    QmlVlcMarquee( vlc::player_core& player )
         : m_player( player ) { }
 
     Q_PROPERTY( QString text READ get_text WRITE set_text )
@@ -97,5 +97,5 @@ private:
     void set_marquee_int( libvlc_video_marquee_option_t, int i );
 
 private:
-    vlc::player& m_player;
+    vlc::player_core & m_player;
 };

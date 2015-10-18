@@ -44,7 +44,7 @@ class QmlVlcVideoSource
     Q_INTERFACES( QQmlParserStatus )
 
 public:
-    QmlVlcVideoSource( const std::shared_ptr<vlc::player>& player, QObject* parent );
+    QmlVlcVideoSource( const std::shared_ptr<vlc::player_core>& player, QObject* parent );
 
     void classBegin() override;
     void componentComplete() override;

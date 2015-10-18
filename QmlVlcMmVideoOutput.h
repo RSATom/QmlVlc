@@ -45,7 +45,7 @@ class QmlVlcMmVideoOutput
 {
     Q_OBJECT
 public:
-    explicit QmlVlcMmVideoOutput( const std::shared_ptr<vlc::player>& player,
+    explicit QmlVlcMmVideoOutput( const std::shared_ptr<vlc::playlist_player_core>& player,
                                   QObject *parent = 0 );
     void init();
     ~QmlVlcMmVideoOutput();
@@ -75,10 +75,10 @@ private:
     //end (for libvlc_video_set_callbacks)
 
 protected:
-    vlc::player& player() { assert( m_player ); return *m_player; }
+    vlc::playlist_player_core& player() { assert( m_player ); return *m_player; }
 
 private:
-    std::shared_ptr<vlc::player> m_player;
+    std::shared_ptr<vlc::playlist_player_core> m_player;
     QAbstractVideoSurface* m_videoSurface;
 
     QVideoSurfaceFormat m_surfaceFormat;
