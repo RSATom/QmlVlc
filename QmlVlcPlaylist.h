@@ -42,9 +42,9 @@ public:
     typedef QQmlListProperty<QmlVlcMedia> ItemsProperty_t;
 
     enum Mode {
+        Single = vlc::mode_single,
         Normal = vlc::mode_normal,
         Loop   = vlc::mode_loop,
-        Single = vlc::mode_single,
     };
     Q_ENUMS( Mode )
 
