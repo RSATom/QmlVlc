@@ -34,6 +34,7 @@
 QmlVlcPlaylist::QmlVlcPlaylist( QmlVlcPlayerProxy* owner )
     : m_owner( owner )
 {
+    set_mode( Normal );
 }
 
 vlc::playlist_player_core& QmlVlcPlaylist::player()
