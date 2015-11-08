@@ -57,6 +57,9 @@ public:
     QList<QmlVlcVideoSurface*> attachedSurfaces() const
         { return m_attachedSurfaces; }
 
+    QSharedPointer<const QmlVlcI420Frame> renderFrame() const
+        { return m_renderFrame; }
+
 private:
     Q_INVOKABLE void frameUpdated();
 
