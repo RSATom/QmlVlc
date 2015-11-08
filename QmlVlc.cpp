@@ -31,10 +31,6 @@
 #include "QmlVlcPlayer.h"
 #include "QmlVlcMediaListPlayer.h"
 
-#ifdef QMLVLC_QTMULTIMEDIA_ENABLE
-#include "QmlVlcMmPlayer.h"
-#endif
-
 const char* qmlVlcUri = "QmlVlc";
 const int QmlVlcVersionMajor = 0;
 const int QmlVlcVersionMinor = 1;
@@ -95,21 +91,7 @@ void RegisterQmlVlcPlayer()
         "VlcMediaListPlayer" );
 }
 
-#ifdef QMLVLC_QTMULTIMEDIA_ENABLE
-void RegisterQmlVlcMmPlayer()
-{
-    // @uri QmlVlc
-    qmlRegisterType<QmlVlcMmPlayer>(
-        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
-        "VlcMmPlayer" );
-}
-#endif
-
 void RegisterQmlVlc()
 {
     RegisterQmlVlcPlayer();
-
-#ifdef QMLVLC_QTMULTIMEDIA_ENABLE
-    RegisterQmlVlcMmPlayer();
-#endif
 }

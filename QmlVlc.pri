@@ -48,14 +48,6 @@ SOURCES += \
 
 contains( QT, multimedia ) {
     DEFINES += QMLVLC_QTMULTIMEDIA_ENABLE
-
-    HEADERS += \
-        $$PWD/QmlVlcMmVideoOutput.h \
-        $$PWD/QmlVlcMmPlayer.h
-
-    SOURCES += \
-        $$PWD/QmlVlcMmVideoOutput.cpp \
-        $$PWD/QmlVlcMmPlayer.cpp
 }
 
 INCLUDEPATH += $$PWD
