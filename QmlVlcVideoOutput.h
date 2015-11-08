@@ -31,6 +31,11 @@
 #include <QSharedPointer>
 #include <QQmlParserStatus>
 
+#ifdef QMLVLC_QTMULTIMEDIA_ENABLE
+#include <QVideoSurfaceFormat>
+#include <QAbstractVideoSurface>
+#endif
+
 #ifndef Q_MOC_RUN
 #include "libvlc_wrapper/vlc_player.h"
 #include "libvlc_wrapper/vlc_vmem.h"
@@ -60,8 +65,21 @@ public:
     QSharedPointer<const QmlVlcI420Frame> renderFrame() const
         { return m_renderFrame; }
 
+#ifdef QMLVLC_QTMULTIMEDIA_ENABLE
+    QAbstractVideoSurface* videoSurface() const
+        { return m_videoSurface; }
+    void setVideoSurface( QAbstractVideoSurface* s );
+#endif
+
 private:
     Q_INVOKABLE void frameUpdated();
+
+#ifdef QMLVLC_QTMULTIMEDIA_ENABLE
+    Q_INVOKABLE void updateSurfaceFormat( const QVideoSurfaceFormat& newFormat );
+    Q_INVOKABLE void cleanupVideoSurface();
+
+    void initVideoSurface( const QVideoSurfaceFormat& format );
+#endif
 
 private:
     //for libvlc_video_set_format_callbacks
@@ -84,4 +102,9 @@ private:
 
     QSharedPointer<QmlVlcI420Frame> m_decodeFrame;
     QSharedPointer<QmlVlcI420Frame> m_renderFrame;
+
+#ifdef QMLVLC_QTMULTIMEDIA_ENABLE
+    QVideoSurfaceFormat m_surfaceFormat;
+    QAbstractVideoSurface* m_videoSurface;
+#endif
 };

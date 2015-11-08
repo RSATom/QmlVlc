@@ -48,3 +48,15 @@ void QmlVlcVideoSource::unregisterVideoSurface( QmlVlcVideoSurface* s )
 {
     m_videoOutput->unregisterVideoSurface( s );
 }
+
+#ifdef QMLVLC_QTMULTIMEDIA_ENABLE
+QAbstractVideoSurface* QmlVlcVideoSource::videoSurface() const
+{
+    return m_videoOutput->videoSurface();
+}
+
+void QmlVlcVideoSource::setVideoSurface( QAbstractVideoSurface* s )
+{
+    m_videoOutput->setVideoSurface( s );
+}
+#endif

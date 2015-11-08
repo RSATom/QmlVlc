@@ -29,9 +29,66 @@
 
 #include "QmlVlcVideoSurface.h"
 
+#ifdef QMLVLC_QTMULTIMEDIA_ENABLE
+class MmVideoBuffer : public QAbstractVideoBuffer
+{
+public:
+    MmVideoBuffer( const QmlVlcVideoOutput* );
+
+    uchar* map( MapMode mode, int* numBytes, int* bytesPerLine) override;
+    MapMode mapMode() const override;
+    void unmap() override;
+
+private:
+    QPointer<const QmlVlcVideoOutput> m_source;
+    MapMode m_mode;
+    QSharedPointer<const QmlVlcI420Frame> m_renderFrame;
+};
+
+MmVideoBuffer::MmVideoBuffer( const QmlVlcVideoOutput* source )
+    : QAbstractVideoBuffer( HandleType( NoHandle ) ),
+      m_source( source ), m_mode( NotMapped )
+{
+}
+
+uchar* MmVideoBuffer::map( MapMode mode, int* numBytes, int* bytesPerLine )
+{
+    Q_ASSERT( ReadOnly == mode );
+
+    if( !m_source )
+        return nullptr;
+
+    m_mode = ReadOnly;
+    m_renderFrame = m_source->renderFrame();
+    if( m_renderFrame ) {
+        *numBytes = m_renderFrame->frameBuf.size();
+        *bytesPerLine = m_renderFrame->yPlaneSize / m_renderFrame->height;
+        return (uchar*) m_renderFrame->frameBuf.data();
+    } else {
+        *numBytes = 0;
+        *bytesPerLine = 0;
+        return nullptr;
+    }
+}
+
+QAbstractVideoBuffer::MapMode MmVideoBuffer::mapMode() const
+{
+    return m_mode;
+}
+
+void MmVideoBuffer::unmap()
+{
+    m_mode = NotMapped;
+    m_renderFrame.reset();
+}
+#endif
+
 QmlVlcVideoOutput::QmlVlcVideoOutput( const std::shared_ptr<vlc::player_core>& player,
                                       QObject* parent /*= 0*/ )
     : QObject( parent ), m_player( player )
+#ifdef QMLVLC_QTMULTIMEDIA_ENABLE
+    , m_videoSurface( nullptr )
+#endif
 {
 }
 
@@ -108,6 +165,13 @@ unsigned QmlVlcVideoOutput::video_format_cb( char *chroma,
 
     m_renderFrame = cloneFrame( m_decodeFrame );
 
+#ifdef QMLVLC_QTMULTIMEDIA_ENABLE
+    QVideoSurfaceFormat format( QSize( evenWidth, evenHeight ), QVideoFrame::Format_YUV420P );
+
+    QMetaObject::invokeMethod( this, "updateSurfaceFormat",
+                               Q_ARG( QVideoSurfaceFormat, format ) );
+#endif
+
     return 3;
 }
 
@@ -117,6 +181,10 @@ void QmlVlcVideoOutput::video_cleanup_cb()
     m_renderFrame.clear();
 
     QMetaObject::invokeMethod( this, "frameUpdated" );
+
+#ifdef QMLVLC_QTMULTIMEDIA_ENABLE
+    QMetaObject::invokeMethod( this, "cleanupVideoSurface" );
+#endif
 }
 
 void* QmlVlcVideoOutput::video_lock_cb( void **planes )
@@ -147,6 +215,15 @@ void QmlVlcVideoOutput::frameUpdated()
 
     std::for_each( m_attachedSurfaces.begin(), m_attachedSurfaces.end(),
                    std::bind2nd( std::mem_fun( &QmlVlcVideoSurface::presentFrame ), frame ) );
+
+#ifdef QMLVLC_QTMULTIMEDIA_ENABLE
+    if( m_videoSurface ) {
+        QVideoFrame frame( new MmVideoBuffer( this ),
+                           m_surfaceFormat.frameSize(),
+                           m_surfaceFormat.pixelFormat() );
+        m_videoSurface->present( frame );
+    }
+#endif
 }
 
 void QmlVlcVideoOutput::registerVideoSurface( QmlVlcVideoSurface* s )
@@ -165,3 +242,40 @@ void QmlVlcVideoOutput::unregisterVideoSurface( QmlVlcVideoSurface* s )
 
     m_attachedSurfaces.removeOne( s );
 }
+
+#ifdef QMLVLC_QTMULTIMEDIA_ENABLE
+void QmlVlcVideoOutput::initVideoSurface( const QVideoSurfaceFormat& format )
+{
+    assert( !m_videoSurface || !m_videoSurface->isActive() );
+
+    if( m_videoSurface && format.isValid() )
+        m_videoSurface->start( format );
+}
+
+void QmlVlcVideoOutput::cleanupVideoSurface()
+{
+    if( m_videoSurface && m_videoSurface->isActive() )
+        m_videoSurface->stop();
+}
+
+void QmlVlcVideoOutput::updateSurfaceFormat( const QVideoSurfaceFormat& newFormat )
+{
+    cleanupVideoSurface();
+
+    m_surfaceFormat = newFormat;
+
+    initVideoSurface( newFormat );
+}
+
+void QmlVlcVideoOutput::setVideoSurface( QAbstractVideoSurface* s )
+{
+    if( m_videoSurface == s )
+        return;
+
+    cleanupVideoSurface();
+
+    m_videoSurface = s;
+
+    initVideoSurface( m_surfaceFormat );
+}
+#endif

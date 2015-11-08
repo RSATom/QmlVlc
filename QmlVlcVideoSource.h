@@ -52,6 +52,13 @@ public:
     virtual void registerVideoSurface( QmlVlcVideoSurface* );
     virtual void unregisterVideoSurface( QmlVlcVideoSurface* );
 
+#ifdef QMLVLC_QTMULTIMEDIA_ENABLE
+    Q_PROPERTY( QAbstractVideoSurface* videoSurface READ videoSurface WRITE setVideoSurface )
+
+    QAbstractVideoSurface* videoSurface() const;
+    void setVideoSurface( QAbstractVideoSurface* s );
+#endif
+
 private:
     QScopedPointer<QmlVlcVideoOutput> m_videoOutput;
 };
