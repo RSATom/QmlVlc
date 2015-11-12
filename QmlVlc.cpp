@@ -29,7 +29,10 @@
 
 #include "QmlVlcVideoSurface.h"
 #include "QmlVlcPlayer.h"
-#include "QmlVlcMediaListPlayer.h"
+
+#ifndef Q_OS_ANDROID
+    #include "QmlVlcMediaListPlayer.h"
+#endif
 
 const char* qmlVlcUri = "QmlVlc";
 const int QmlVlcVersionMajor = 0;
@@ -86,9 +89,12 @@ void RegisterQmlVlcPlayer()
     qmlRegisterType<QmlVlcPlayer>(
         qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcPlayer" );
+
+#ifndef Q_OS_ANDROID
     qmlRegisterType<QmlVlcMediaListPlayer>(
         qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcMediaListPlayer" );
+#endif
 }
 
 void RegisterQmlVlc()
