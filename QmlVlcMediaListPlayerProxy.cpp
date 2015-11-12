@@ -23,7 +23,7 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "QmlVlcMedialistPlayerProxy.h"
+#include "QmlVlcMediaListPlayerProxy.h"
 
 QmlVlcMediaListPlayerProxy::QmlVlcMediaListPlayerProxy( const std::shared_ptr<vlc::media_list_player>& player, QObject* parent )
     : QmlVlcPlayerProxy( player, parent )
