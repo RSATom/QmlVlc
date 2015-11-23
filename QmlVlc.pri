@@ -47,7 +47,7 @@ SOURCES += \
         $$PWD/QmlVlcMediaListPlayerProxy.h \
         $$PWD/QmlVlcMediaListPlayer.h
 
-    OURCES += \
+    SOURCES += \
        $$PWD/QmlVlcMediaListPlayerProxy.cpp \
        $$PWD/QmlVlcMediaListPlayer.cpp
 }
