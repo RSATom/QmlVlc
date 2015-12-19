@@ -49,7 +49,7 @@ public:
     Q_PROPERTY( QString crop READ get_crop WRITE set_crop )
     Q_PROPERTY( float contrast READ get_contrast WRITE set_contrast )
     Q_PROPERTY( float brightness READ get_brightness WRITE set_brightness )
-    Q_PROPERTY( float hue READ get_hue WRITE set_hue )
+    Q_PROPERTY( int hue READ get_hue WRITE set_hue )
     Q_PROPERTY( float saturation READ get_saturation WRITE set_saturation )
     Q_PROPERTY( float gamma READ get_gamma WRITE set_gamma )
 
@@ -82,8 +82,8 @@ public:
     float get_brightness();
     void set_brightness( float v );
 
-    float get_hue();
-    void set_hue( float v );
+    int get_hue();
+    void set_hue( int v );
 
     float get_saturation();
     void set_saturation( float v );

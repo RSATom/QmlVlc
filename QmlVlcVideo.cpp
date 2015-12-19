@@ -152,12 +152,12 @@ void QmlVlcVideo::set_brightness( float v )
     return m_player.video().set_brightness( v );
 }
 
-float QmlVlcVideo::get_hue()
+int QmlVlcVideo::get_hue()
 {
     return m_player.video().get_hue();
 }
 
-void QmlVlcVideo::set_hue( float v )
+void QmlVlcVideo::set_hue( int v )
 {
     return m_player.video().set_hue( v );
 }
