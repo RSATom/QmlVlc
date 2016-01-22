@@ -28,7 +28,6 @@
 #include <cassert>
 #include <memory>
 
-#include <QSharedPointer>
 #include <QQmlParserStatus>
 
 #ifdef QMLVLC_QTMULTIMEDIA_ENABLE
@@ -62,7 +61,7 @@ public:
     QList<QmlVlcVideoSurface*> attachedSurfaces() const
         { return m_attachedSurfaces; }
 
-    QSharedPointer<const QmlVlcI420Frame> renderFrame() const
+    std::shared_ptr<const QmlVlcI420Frame> renderFrame() const
         { return m_renderFrame; }
 
 #ifdef QMLVLC_QTMULTIMEDIA_ENABLE
@@ -100,8 +99,9 @@ private:
 
     QList<QmlVlcVideoSurface*> m_attachedSurfaces;
 
-    QSharedPointer<QmlVlcI420Frame> m_decodeFrame;
-    QSharedPointer<QmlVlcI420Frame> m_renderFrame;
+    std::deque<std::shared_ptr<QmlVlcI420Frame> > m_frames;
+    std::list<std::shared_ptr<QmlVlcI420Frame> > m_lockedFrames;
+    std::shared_ptr<QmlVlcI420Frame> m_renderFrame;
 
 #ifdef QMLVLC_QTMULTIMEDIA_ENABLE
     QVideoSurfaceFormat m_surfaceFormat;

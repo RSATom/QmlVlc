@@ -124,7 +124,7 @@ QSGNode* QmlVlcVideoSurface::updatePaintNode( QSGNode* oldNode,
     return node;
 }
 
-void QmlVlcVideoSurface::presentFrame( const QSharedPointer<const QmlVlcI420Frame>& frame )
+void QmlVlcVideoSurface::presentFrame( const std::shared_ptr<const QmlVlcI420Frame>& frame )
 {
     m_frame = frame;
     m_frameUpdated = true;

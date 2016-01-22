@@ -27,7 +27,6 @@
 
 #include <QQuickItem>
 #include <QPointer>
-#include <QSharedPointer>
 
 #include "QmlVlcVideoSource.h"
 
@@ -62,7 +61,7 @@ public:
     virtual QSGNode* updatePaintNode( QSGNode*, UpdatePaintNodeData* );
 
 public Q_SLOTS:
-    void presentFrame( const QSharedPointer<const QmlVlcI420Frame>& frame );
+    void presentFrame( const std::shared_ptr<const QmlVlcI420Frame>& frame );
 
 Q_SIGNALS:
     void sourceChanged();
@@ -74,5 +73,5 @@ private:
     QPointer<QmlVlcVideoSource> m_source;
 
     bool m_frameUpdated;
-    QSharedPointer<const QmlVlcI420Frame> m_frame;
+    std::shared_ptr<const QmlVlcI420Frame> m_frame;
 };

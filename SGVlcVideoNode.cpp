@@ -156,7 +156,7 @@ int QSGVlcVideoFrameMaterial::compare( const QSGMaterial* other ) const
     return 0;
 }
 
-void QSGVlcVideoFrameMaterial::setFrame( const QSharedPointer<const QmlVlcI420Frame>& frame )
+void QSGVlcVideoFrameMaterial::setFrame( const std::shared_ptr<const QmlVlcI420Frame>& frame )
 {
     m_frame = frame;
 }
@@ -167,7 +167,7 @@ void QSGVlcVideoFrameMaterial::bindPlanes()
     if( 0 == m_planeTexIds[0] && 0 == m_planeTexIds[1] && 0 == m_planeTexIds[2] )
         F( glGenTextures( sizeof( m_planeTexIds ) / sizeof( m_planeTexIds[0] ), m_planeTexIds ) );
 
-    QSharedPointer<const QmlVlcI420Frame> tmpFrame;
+    std::shared_ptr<const QmlVlcI420Frame> tmpFrame;
     m_frame.swap( tmpFrame );
 
     if( tmpFrame ) {
@@ -211,7 +211,7 @@ SGVlcVideoNode::SGVlcVideoNode()
     setMaterial( &m_material );
 }
 
-void SGVlcVideoNode::setFrame( const QSharedPointer<const QmlVlcI420Frame>& frame )
+void SGVlcVideoNode::setFrame( const std::shared_ptr<const QmlVlcI420Frame>& frame )
 {
     m_material.setFrame( frame );
     markDirty( QSGNode::DirtyMaterial );

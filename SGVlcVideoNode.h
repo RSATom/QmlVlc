@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include <QSharedPointer>
+#include <memory>
 
 #include <QSGGeometryNode>
 #include <QSGGeometry>
@@ -68,7 +68,7 @@ public:
     virtual QSGMaterialShader* createShader() const;
     virtual int compare( const QSGMaterial *other ) const;
 
-    void setFrame( const QSharedPointer<const QmlVlcI420Frame>& frame );
+    void setFrame( const std::shared_ptr<const QmlVlcI420Frame>& frame );
 
     void bindPlanes();
 
@@ -77,7 +77,7 @@ private:
                     quint16 width, quint16 height );
 
 private:
-    QSharedPointer<const QmlVlcI420Frame> m_frame;
+    std::shared_ptr<const QmlVlcI420Frame> m_frame;
     GLuint m_planeTexIds[3];
 };
 
@@ -89,7 +89,7 @@ public:
     SGVlcVideoNode();
 
     void setRect( const QRectF& rect, const QRectF& sourceRect );
-    void setFrame( const QSharedPointer<const QmlVlcI420Frame>& frame );
+    void setFrame( const std::shared_ptr<const QmlVlcI420Frame>& frame );
 
 private:
     QSGGeometry m_geometry;
