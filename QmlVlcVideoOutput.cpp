@@ -208,16 +208,26 @@ void* QmlVlcVideoOutput::video_lock_cb( void** planes )
 
 void QmlVlcVideoOutput::video_unlock_cb( void* picture, void *const * /*planes*/ )
 {
-    std::shared_ptr<QmlVlcI420Frame>& frame =
-        m_frames[reinterpret_cast<decltype( m_frames )::size_type>( picture )];
+    auto frameNo = reinterpret_cast<decltype( m_frames )::size_type>( picture );
+    if( frameNo >= m_frames.size() ) {
+        assert( false );
+        return;
+    }
+
+    std::shared_ptr<QmlVlcI420Frame>& frame = m_frames[frameNo];
 
     m_lockedFrames.erase( std::find( m_lockedFrames.begin(), m_lockedFrames.end(), frame ) );
 }
 
 void QmlVlcVideoOutput::video_display_cb( void* picture )
 {
-    std::shared_ptr<QmlVlcI420Frame>& frame =
-        m_frames[reinterpret_cast<decltype( m_frames )::size_type>( picture )];
+    auto frameNo = reinterpret_cast<decltype( m_frames )::size_type>( picture );
+    if( frameNo >= m_frames.size() ) {
+        assert( false );
+        return;
+    }
+
+    std::shared_ptr<QmlVlcI420Frame>& frame = m_frames[frameNo];
 
     m_renderFrame = frame;
 
