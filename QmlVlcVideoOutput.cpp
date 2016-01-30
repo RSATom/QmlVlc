@@ -210,7 +210,6 @@ void QmlVlcVideoOutput::video_unlock_cb( void* picture, void *const * /*planes*/
 {
     auto frameNo = reinterpret_cast<decltype( m_frames )::size_type>( picture );
     if( frameNo >= m_frames.size() ) {
-        assert( false );
         return;
     }
 
