@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright © 2014, Sergey Radionov <rsatom_gmail.com>
+* Copyright © 2014, 2016 Sergey Radionov <rsatom_gmail.com>
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -73,4 +73,78 @@ double QmlVlcInput::get_rate()
 void QmlVlcInput::set_rate( double r )
 {
     m_player.playback().set_rate( static_cast<float>( r ) );
+}
+
+unsigned QmlVlcInput::get_titleCount()
+{
+    if( !m_player.is_open() )
+        return 0;
+
+    const int count =
+        libvlc_media_player_get_title_count( m_player.get_mp() );
+    if( count < 0 )
+        return 0;
+
+    return static_cast<unsigned>( count );
+}
+
+int QmlVlcInput::get_title()
+{
+    if( !m_player.is_open() )
+        return -1;
+
+    return libvlc_media_player_get_title( m_player.get_mp() );
+}
+
+void QmlVlcInput::set_title( unsigned idx )
+{
+    if( !m_player.is_open() )
+        return;
+
+    libvlc_media_player_set_title( m_player.get_mp(), idx );
+}
+
+unsigned QmlVlcInput::get_chapterCount()
+{
+    if( !m_player.is_open() )
+        return 0;
+
+    const int count =
+        libvlc_media_player_get_chapter_count( m_player.get_mp() );
+    if( count < 0 )
+        return 0;
+
+    return static_cast<unsigned>( count );
+}
+
+int QmlVlcInput::get_chapter()
+{
+    if( !m_player.is_open() )
+        return -1;
+
+    return libvlc_media_player_get_chapter( m_player.get_mp() );
+}
+
+void QmlVlcInput::set_chapter( unsigned idx )
+{
+    if( !m_player.is_open() )
+        return;
+
+    libvlc_media_player_set_chapter( m_player.get_mp(), idx );
+}
+
+void QmlVlcInput::prevChapter()
+{
+    if( !m_player.is_open() )
+        return;
+
+    libvlc_media_player_previous_chapter( m_player.get_mp() );
+}
+
+void QmlVlcInput::nextChapter()
+{
+    if( !m_player.is_open() )
+        return;
+
+    libvlc_media_player_next_chapter( m_player.get_mp() );
 }
