@@ -57,3 +57,9 @@ contains( QT, multimedia ) {
 }
 
 INCLUDEPATH += $$PWD
+INCLUDEPATH += $$PWD/vmem2/include
+win32 {
+    LIBS += $$PWD/vmem2/lib/vmem2.lib
+} else {
+    LIBS += -lvmem2
+}

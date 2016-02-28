@@ -42,6 +42,9 @@ struct QmlVlcI420Frame : public QmlVlcVideoFrame
     quint16 width;
     quint16 height;
 
+    quint16 visibleWidth;
+    quint16 visibleHeight;
+
     void* yPlane;
     quint32 yPlaneSize;
 

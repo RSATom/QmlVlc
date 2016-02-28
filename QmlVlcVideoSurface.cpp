@@ -88,8 +88,8 @@ QSGNode* QmlVlcVideoSurface::updatePaintNode( QSGNode* oldNode,
     QRectF srcRect( 0, 0, 1., 1. );
 
     if( Stretch != fillMode() ) {
-        const uint16_t fw = m_frame->width;
-        const uint16_t fh = m_frame->height;
+        const uint16_t fw = m_frame->visibleWidth;
+        const uint16_t fh = m_frame->visibleHeight;
 
         const qreal frameAspect = qreal( fw ) / fh;
         const qreal itemAspect = width() / height();

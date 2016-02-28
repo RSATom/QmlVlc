@@ -92,17 +92,43 @@ QmlVlcVideoOutput::QmlVlcVideoOutput( const std::shared_ptr<vlc::player_core>& p
 {
 }
 
+bool QmlVlcVideoOutput::vmem2_setup( void* opaque, vmem2_video_format_t* format )
+{
+    return reinterpret_cast<QmlVlcVideoOutput*>( opaque )->setup( format );
+}
+
+bool QmlVlcVideoOutput::vmem2_lock( void* opaque, vmem2_planes_t* planes )
+{
+    return reinterpret_cast<QmlVlcVideoOutput*>( opaque )->lock( planes );
+}
+
+void QmlVlcVideoOutput::vmem2_unlock( void* opaque, const vmem2_planes_t* planes )
+{
+    reinterpret_cast<QmlVlcVideoOutput*>( opaque )->unlock( planes );
+}
+
+void QmlVlcVideoOutput::vmem2_display( void* opaque, const vmem2_planes_t* planes )
+{
+    reinterpret_cast<QmlVlcVideoOutput*>( opaque )->display( planes );
+}
+
+void QmlVlcVideoOutput::vmem2_cleanup( void* opaque )
+{
+    reinterpret_cast<QmlVlcVideoOutput*>( opaque )->cleanup();
+}
+
 void QmlVlcVideoOutput::init()
 {
     assert( m_player && m_player->is_open() );
-    vlc::basic_vmem_wrapper::open( &( m_player->basic_player() ) );
+
+    vmem2_set_callbacks( m_player->basic_player().get_mp(),
+                         vmem2_setup ,
+                         vmem2_lock, vmem2_unlock, vmem2_display,
+                         vmem2_cleanup, this );
 }
 
 QmlVlcVideoOutput::~QmlVlcVideoOutput()
 {
-    //we should force closing vmem here,
-    //to avoid pure virtual member call in vlc::basic_vmem_wrapper
-    vlc::basic_vmem_wrapper::close();
 }
 
 std::shared_ptr<QmlVlcI420Frame> cloneFrame( const std::shared_ptr<QmlVlcI420Frame>& from )
@@ -113,6 +139,9 @@ std::shared_ptr<QmlVlcI420Frame> cloneFrame( const std::shared_ptr<QmlVlcI420Fra
 
     newFrame->width = from->width;
     newFrame->height = from->height;
+
+    newFrame->visibleWidth = from->visibleWidth;
+    newFrame->visibleHeight = from->visibleHeight;
 
     char* fb = newFrame->frameBuf.data();
 
@@ -128,54 +157,55 @@ std::shared_ptr<QmlVlcI420Frame> cloneFrame( const std::shared_ptr<QmlVlcI420Fra
     return newFrame;
 }
 
-unsigned QmlVlcVideoOutput::video_format_cb( char *chroma,
-                                             unsigned *width, unsigned *height,
-                                             unsigned *pitches, unsigned *lines )
+bool QmlVlcVideoOutput::setup( vmem2_video_format_t* format )
 {
-    memcpy( chroma, "I420", 4 );
+    format->chroma = I420_FOURCC;
+    format->plane_count = 3;
 
-    uint16_t evenWidth = *width + ( *width & 1 ? 1 : 0 );
-    uint16_t evenHeight = *height + ( *height & 1 ? 1 : 0 );
+    format->pitches[0] = format->width;
+    format->pitches[1] = format->width >> 1;
+    format->pitches[2] = format->width >> 1;
 
-    pitches[0] = evenWidth; if( pitches[0] % 4 ) pitches[0] += 4 - pitches[0] % 4;
-    pitches[1] = evenWidth / 2; if( pitches[1] % 4 ) pitches[1] += 4 - pitches[1] % 4;
-    pitches[2] = pitches[1];
-
-    lines[0] = evenHeight;
-    lines[1] = evenHeight / 2;
-    lines[2] = lines[1];
-
+    format->lines[0] = format->height;
+    format->lines[1] = format->height >> 1;
+    format->lines[2] = format->height >> 1;
 
     std::shared_ptr<QmlVlcI420Frame>& frame =
-            *m_frames.emplace( m_frames.end(), new QmlVlcI420Frame );
+        *m_frames.emplace( m_frames.end(), new QmlVlcI420Frame );
 
-    frame->frameBuf.resize( pitches[0] * lines[0] + pitches[1] * lines[1] + pitches[2] * lines[2] );
+    frame->frameBuf.resize( format->pitches[0] * format->lines[0] +
+                            format->pitches[1] * format->lines[1] +
+                            format->pitches[2] * format->lines[2] );
 
-    frame->width = evenWidth;
-    frame->height = evenHeight;
+    frame->width = format->width;
+    frame->height = format->height;
+
+    frame->visibleWidth = format->visible_width;
+    frame->visibleHeight = format->visible_height;
 
     char* fb = frame->frameBuf.data();
 
     frame->yPlane = fb;
-    frame->yPlaneSize = pitches[0] * lines[0];
+    frame->yPlaneSize = format->pitches[0] * format->lines[0];
 
     frame->uPlane = fb + frame->yPlaneSize;
-    frame->uPlaneSize = pitches[1] * lines[1];
+    frame->uPlaneSize = format->pitches[1] * format->lines[1];
 
     frame->vPlane = fb + frame->yPlaneSize + frame->uPlaneSize;
-    frame->vPlaneSize = pitches[2] * lines[2];
+    frame->vPlaneSize = format->pitches[2] * format->lines[2];
 
 #ifdef QMLVLC_QTMULTIMEDIA_ENABLE
-    QVideoSurfaceFormat format( QSize( evenWidth, evenHeight ), QVideoFrame::Format_YUV420P );
+    QVideoSurfaceFormat surfaceFormat( QSize( frame->visibleWidth, frame->visibleHeight ),
+                                       QVideoFrame::Format_YUV420P );
 
     QMetaObject::invokeMethod( this, "updateSurfaceFormat",
-                               Q_ARG( QVideoSurfaceFormat, format ) );
+                               Q_ARG( QVideoSurfaceFormat, surfaceFormat ) );
 #endif
 
-    return 3;
+    return true;
 }
 
-void QmlVlcVideoOutput::video_cleanup_cb()
+void QmlVlcVideoOutput::cleanup()
 {
     m_renderFrame.reset();
     m_lockedFrames.clear();
@@ -188,7 +218,7 @@ void QmlVlcVideoOutput::video_cleanup_cb()
 #endif
 }
 
-void* QmlVlcVideoOutput::video_lock_cb( void** planes )
+bool QmlVlcVideoOutput::lock( vmem2_planes_t* planes )
 {
     auto frameIt = m_frames.begin();
     for( ; frameIt != m_frames.end() && frameIt->use_count() > 1; ++frameIt );
@@ -197,18 +227,21 @@ void* QmlVlcVideoOutput::video_lock_cb( void** planes )
         frameIt = m_frames.emplace( m_frames.end(), cloneFrame( m_frames.front() ) );
 
     std::shared_ptr<QmlVlcI420Frame>& frame = *frameIt;
-    planes[0] = frame->yPlane;
-    planes[1] = frame->uPlane;
-    planes[2] = frame->vPlane;
+    planes->planes[0] = frame->yPlane;
+    planes->planes[1] = frame->uPlane;
+    planes->planes[2] = frame->vPlane;
 
     m_lockedFrames.emplace_back( frame );
 
-    return reinterpret_cast<void*>( frameIt - m_frames.begin() );
+    planes->opaque = reinterpret_cast<void*>( frameIt - m_frames.begin() );
+
+    return true;
 }
 
-void QmlVlcVideoOutput::video_unlock_cb( void* picture, void *const * /*planes*/ )
+void QmlVlcVideoOutput::unlock( const vmem2_planes_t* planes )
 {
-    auto frameNo = reinterpret_cast<decltype( m_frames )::size_type>( picture );
+    auto frameNo =
+        reinterpret_cast<decltype( m_frames )::size_type>( planes->opaque );
     if( frameNo >= m_frames.size() ) {
         return;
     }
@@ -218,9 +251,10 @@ void QmlVlcVideoOutput::video_unlock_cb( void* picture, void *const * /*planes*/
     m_lockedFrames.erase( std::find( m_lockedFrames.begin(), m_lockedFrames.end(), frame ) );
 }
 
-void QmlVlcVideoOutput::video_display_cb( void* picture )
+void QmlVlcVideoOutput::display( const vmem2_planes_t* planes )
 {
-    auto frameNo = reinterpret_cast<decltype( m_frames )::size_type>( picture );
+    auto frameNo =
+        reinterpret_cast<decltype( m_frames )::size_type>( planes->opaque );
     if( frameNo >= m_frames.size() ) {
         assert( false );
         return;

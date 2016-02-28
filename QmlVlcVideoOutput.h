@@ -37,16 +37,15 @@
 
 #ifndef Q_MOC_RUN
 #include "libvlc_wrapper/vlc_player.h"
-#include "libvlc_wrapper/vlc_vmem.h"
+
+#include <vmem2.h>
 #endif // Q_MOC_RUN
 
 #include "QmlVlcVideoFrame.h"
 
 class QmlVlcVideoSurface; //#include "QmlVlcVideoSurface.h"
 
-class QmlVlcVideoOutput
-    : public QObject,
-      private vlc::basic_vmem_wrapper
+class QmlVlcVideoOutput : public QObject
 {
     Q_OBJECT
 public:
@@ -81,18 +80,17 @@ private:
 #endif
 
 private:
-    //for libvlc_video_set_format_callbacks
-    virtual unsigned video_format_cb( char *chroma,
-                                      unsigned *width, unsigned *height,
-                                      unsigned *pitches, unsigned *lines );
-    virtual void video_cleanup_cb();
-    //end (for libvlc_video_set_format_callbacks)
+    static bool vmem2_setup( void* opaque, vmem2_video_format_t* format );
+    static bool vmem2_lock( void* opaque, vmem2_planes_t* planes );
+    static void vmem2_unlock( void* opaque, const vmem2_planes_t* planes );
+    static void vmem2_display( void* opaque, const vmem2_planes_t* planes );
+    static void vmem2_cleanup( void* opaque );
 
-    //for libvlc_video_set_callbacks
-    virtual void* video_lock_cb( void **planes );
-    virtual void  video_unlock_cb( void *picture, void *const *planes );
-    virtual void  video_display_cb( void *picture );
-    //end (for libvlc_video_set_callbacks)
+    bool setup( vmem2_video_format_t* format );
+    bool lock( vmem2_planes_t* planes );
+    void unlock( const vmem2_planes_t* planes );
+    void display( const vmem2_planes_t* planes );
+    void cleanup();
 
 private:
     std::shared_ptr<vlc::player_core> m_player;

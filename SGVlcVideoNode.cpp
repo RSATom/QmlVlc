@@ -171,12 +171,11 @@ void QSGVlcVideoFrameMaterial::bindPlanes()
     m_frame.swap( tmpFrame );
 
     if( tmpFrame ) {
-        Q_ASSERT( 0 == ( tmpFrame->width & 1 ) && 0 == ( tmpFrame->height & 1 ) );//width and height should be even
-        const quint16 tw = tmpFrame->width;
-        const quint16 th = tmpFrame->height;
+        const quint16 tw = tmpFrame->visibleWidth;
+        const quint16 th = tmpFrame->visibleHeight;
 
-        bindPlane( GL_TEXTURE1, m_planeTexIds[1], tmpFrame->uPlane, tw / 2, th / 2 );
-        bindPlane( GL_TEXTURE2, m_planeTexIds[2], tmpFrame->vPlane, tw / 2, th / 2 );
+        bindPlane( GL_TEXTURE1, m_planeTexIds[1], tmpFrame->uPlane, tw >> 1, th >> 1 );
+        bindPlane( GL_TEXTURE2, m_planeTexIds[2], tmpFrame->vPlane, tw >> 1, th >> 1 );
         bindPlane( GL_TEXTURE0, m_planeTexIds[0], tmpFrame->yPlane, tw, th );
     } else {
         bindPlane( GL_TEXTURE1, m_planeTexIds[1], 0, 0, 0 );
