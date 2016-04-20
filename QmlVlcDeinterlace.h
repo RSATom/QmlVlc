@@ -26,10 +26,10 @@
 #pragma once
 
 #include <QObject>
-
+#include "qmlvlclib_global.h"
 #include "libvlc_wrapper/vlc_player.h"
 
-class QmlVlcDeinterlace : public QObject
+class QMLVLCLIB_EXPORT QmlVlcDeinterlace : public QObject
 {
     Q_OBJECT
 public:

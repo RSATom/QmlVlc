@@ -26,5 +26,6 @@
 #pragma once
 
 #include "QmlVlcConfig.h"
+#include "qmlvlclib_global.h"
 
-void RegisterQmlVlc();
+void QMLVLCLIB_EXPORT RegisterQmlVlc();

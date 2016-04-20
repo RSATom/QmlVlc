@@ -26,8 +26,8 @@
 #pragma once
 
 #include "QmlVlcPlayerProxy.h"
-
-class QmlVlcPlayer
+#include "qmlvlclib_global.h"
+class QMLVLCLIB_EXPORT QmlVlcPlayer
     : public QmlVlcPlayerProxy
 {
     Q_OBJECT

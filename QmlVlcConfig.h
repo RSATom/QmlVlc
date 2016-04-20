@@ -26,11 +26,11 @@
 #pragma once
 
 #include <QObject>
-
+#include "qmlvlclib_global.h"
 #include <vlc/vlc.h>
 
 //this class is not thread safe
-class QmlVlcConfig
+class QMLVLCLIB_EXPORT QmlVlcConfig
     : public QObject
 {
     Q_OBJECT

@@ -32,10 +32,10 @@
 #include <QNetworkReply>
 #include <QByteArray>
 #include <QLinkedList>
-
+#include "qmlvlclib_global.h"
 #include "libvlc_wrapper/vlc_player.h"
 
-class QmlVlcSubtitle : public QObject
+class QMLVLCLIB_EXPORT QmlVlcSubtitle : public QObject
 {
     Q_OBJECT
 public:

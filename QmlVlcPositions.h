@@ -24,8 +24,8 @@
 *******************************************************************************/
 
 #pragma once
-
+#include "qmlvlclib_global.h"
 #include <QString>
 
-QString QmlGetPositionById( unsigned int id );
-int QmlGetIdByPosition( const QString& pos );
+QMLVLCLIB_EXPORT QString QmlGetPositionById( unsigned int id );
+QMLVLCLIB_EXPORT int QmlGetIdByPosition( const QString& pos );

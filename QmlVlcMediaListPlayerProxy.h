@@ -26,10 +26,10 @@
 #pragma once
 
 #include <libvlc_wrapper/vlc_media_list_player.h>
-
+#include "qmlvlclib_global.h"
 #include "QmlVlcPlayerProxy.h"
 
-class QmlVlcMediaListPlayerProxy
+class QMLVLCLIB_EXPORT QmlVlcMediaListPlayerProxy
     : public QmlVlcPlayerProxy
 {
     Q_OBJECT

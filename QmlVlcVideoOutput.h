@@ -29,7 +29,7 @@
 #include <memory>
 
 #include <QQmlParserStatus>
-
+#include "qmlvlclib_global.h"
 #ifdef QMLVLC_QTMULTIMEDIA_ENABLE
 #include <QVideoSurfaceFormat>
 #include <QAbstractVideoSurface>
@@ -42,7 +42,7 @@
 
 #include "QmlVlcVideoFrame.h"
 
-class QmlVlcVideoSurface; //#include "QmlVlcVideoSurface.h"
+class QMLVLCLIB_EXPORT QmlVlcVideoSurface; //#include "QmlVlcVideoSurface.h"
 
 class QmlVlcVideoOutput
     : public QObject,

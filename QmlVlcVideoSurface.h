@@ -29,10 +29,10 @@
 #include <QPointer>
 
 #include "QmlVlcVideoSource.h"
-
+#include "qmlvlclib_global.h"
 struct QmlVlcI420Frame;//#include "QmlVlcVideoFrame.h"
 
-class QmlVlcVideoSurface
+class QMLVLCLIB_EXPORT QmlVlcVideoSurface
     : public QQuickItem
 {
     Q_OBJECT
