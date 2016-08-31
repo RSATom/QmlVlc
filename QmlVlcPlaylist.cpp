@@ -69,7 +69,7 @@ QmlVlcPlaylist::Mode QmlVlcPlaylist::get_mode()
 
 void QmlVlcPlaylist::set_mode( QmlVlcPlaylist::Mode mode )
 {
-    if( mode > Mode::Loop )
+    if( reinterpret_cast<playback_mode_e>(mode) > playback_mode_e::last )
         return;
 
     return player().set_playback_mode( (vlc::playback_mode_e) mode );
