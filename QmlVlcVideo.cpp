@@ -39,20 +39,20 @@ void QmlVlcVideo::getVideoSize( unsigned* width, unsigned* height )
         since now will be returned dimensions of first track with not zero demensions,
         and there are no any guarantee it will be be current playing track.
         But we nothing can do with it, since there are no way to match current
-        playing track and track info received from libvlc_media_get_tracks_info for now.*/
-        libvlc_media_track_info_t* info;
-        int infoCount = libvlc_media_get_tracks_info( media, &info );
-        for( int i = 0; i < infoCount; ++i ) {
-            if( libvlc_track_video == info[i].i_type &&
-                info[i].u.video.i_width &&
-                info[i].u.video.i_height )
+        playing track and track info received from libvlc_media_tracks_get for now.*/
+        libvlc_media_track_t** info;
+        unsigned int infoCount = libvlc_media_tracks_get( media, &info );
+        for( unsigned int i = 0; i < infoCount; ++i ) {
+            if( libvlc_track_video == info[i]->i_type &&
+                info[i]->video->i_width &&
+                info[i]->video->i_height )
             {
-                *width = info[i].u.video.i_width;
-                *height = info[i].u.video.i_height;
+                *width = info[i]->video->i_width;
+                *height = info[i]->video->i_height;
                 break;
             }
         }
-        libvlc_free( info );
+        libvlc_media_tracks_release( info , infoCount);
     }
 }
 
