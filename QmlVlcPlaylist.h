@@ -27,10 +27,10 @@
 
 #include <QObject>
 #include <QQmlListProperty>
-
+#include "qmlvlclib_global.h"
 #include "libvlc_wrapper/vlc_player.h"
 
-class QmlVlcPlayerProxy; //#include "QmlVlcPlayerProxy.h"
+class QMLVLCLIB_EXPORT QmlVlcPlayerProxy; //#include "QmlVlcPlayerProxy.h"
 #include "QmlVlcMedia.h"
 
 class QmlVlcPlaylist : public QObject

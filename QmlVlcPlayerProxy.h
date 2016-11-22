@@ -29,7 +29,7 @@
 #include <QTimer>
 #include <QEvent>
 #include <QQmlParserStatus>
-
+#include "qmlvlclib_global.h"
 #include "QmlVlcVideoSource.h"
 #include "QmlVlcAudio.h"
 #include "QmlVlcInput.h"
@@ -38,7 +38,7 @@
 #include "QmlVlcVideo.h"
 #include "QmlVlcMedia.h"
 
-class QmlVlcPlayerProxy
+class QMLVLCLIB_EXPORT QmlVlcPlayerProxy
     : public QmlVlcVideoSource,
       protected vlc::media_player_events_callback
 {

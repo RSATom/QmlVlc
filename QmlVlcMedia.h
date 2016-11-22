@@ -26,7 +26,7 @@
 #pragma once
 
 #include <QObject>
-
+#include "qmlvlclib_global.h"
 #include "libvlc_wrapper/vlc_player.h"
 
 #include <QObject>
@@ -37,7 +37,7 @@ class QmlVlcPlayerProxy; //#include "QmlVlcPlayerProxy.h"
 ////////////////////////////////////////////////////////////////////////////
 /// QmlVlcMedia
 ////////////////////////////////////////////////////////////////////////////
-class QmlVlcMedia : public QObject
+class QMLVLCLIB_EXPORT QmlVlcMedia : public QObject
 {
     Q_OBJECT
 public:

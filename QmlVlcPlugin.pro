@@ -5,6 +5,8 @@ TARGET = QmlVlcPlugin
 
 PLUGIN_IMPORT_PATH = RSATom/QmlVlc
 
+DEFINES += QMLVLCLIB_LIBRARY
+
 TEMPLATE = lib
 CONFIG += qt plugin
 QT += qml quick

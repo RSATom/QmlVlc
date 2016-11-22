@@ -30,12 +30,12 @@
 #include <QSGGeometryNode>
 #include <QSGGeometry>
 #include <QSGMaterial>
-
+#include "qmlvlclib_global.h"
 struct QmlVlcI420Frame;//#include "QmlVlcVideoFrame.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // QSGVlcVideoFrameMaterialShader
-class QSGVlcVideoFrameMaterialShader : public QSGMaterialShader
+class QMLVLCLIB_EXPORT QSGVlcVideoFrameMaterialShader : public QSGMaterialShader
 {
 public:
     virtual char const* const* attributeNames() const;

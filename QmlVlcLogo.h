@@ -26,10 +26,10 @@
 #pragma once
 
 #include <QObject>
-
+#include "qmlvlclib_global.h"
 #include "libvlc_wrapper/vlc_player.h"
 
-class QmlVlcLogo : public QObject
+class QMLVLCLIB_EXPORT QmlVlcLogo : public QObject
 {
     Q_OBJECT
 public:

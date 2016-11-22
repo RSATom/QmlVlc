@@ -19,7 +19,8 @@ HEADERS += \
     $$PWD/QmlVlcVideoOutput.h \
     $$PWD/QmlVlcVideoSource.h \
     $$PWD/QmlVlcVideoSurface.h \
-    $$PWD/SGVlcVideoNode.h
+    $$PWD/SGVlcVideoNode.h \
+    $$PWD/qmlvlclib_global.h
 
 SOURCES += \
     $$PWD/QmlVlc.cpp \

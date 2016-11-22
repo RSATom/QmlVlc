@@ -27,13 +27,13 @@
 
 #include <QByteArray>
 #include <QMutex>
-
-struct QmlVlcVideoFrame
+#include "qmlvlclib_global.h"
+struct QMLVLCLIB_EXPORT QmlVlcVideoFrame
 {
     QByteArray frameBuf;
 };
 
-struct QmlVlcI420Frame : public QmlVlcVideoFrame
+struct QMLVLCLIB_EXPORT QmlVlcI420Frame : public QmlVlcVideoFrame
 {
     QmlVlcI420Frame();
     void clear();

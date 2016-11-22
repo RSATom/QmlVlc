@@ -26,10 +26,11 @@
 #pragma once
 
 #include <QObject>
+#include "qmlvlclib_global.h"
 
 #include "libvlc_wrapper/vlc_player.h"
 
-class QmlVlcAudio
+class QMLVLCLIB_EXPORT QmlVlcAudio
     : public QObject,
       protected vlc::audio_events_callback
 {

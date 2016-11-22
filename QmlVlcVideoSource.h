@@ -29,14 +29,14 @@
 
 #include <QtQml/qqml.h>
 #include <QQmlParserStatus>
-
+#include "qmlvlclib_global.h"
 #include <libvlc_wrapper/vlc_player.h>
 
 #include "QmlVlcVideoOutput.h"
 
 class QmlVlcVideoSurface;
 
-class QmlVlcVideoSource
+class QMLVLCLIB_EXPORT QmlVlcVideoSource
     : public QObject,
       public QQmlParserStatus
 {
