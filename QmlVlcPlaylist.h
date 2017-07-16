@@ -68,6 +68,7 @@ public:
     ItemsProperty_t get_items();
 
     Q_INVOKABLE int add( const QString& mrl );
+    Q_INVOKABLE int add( const QUrl& mrl );
     Q_INVOKABLE int add( QmlVlcMedia* media );
     Q_INVOKABLE int addWithOptions( const QString& mrl, const QStringList& options );
 
