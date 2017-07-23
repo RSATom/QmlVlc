@@ -110,6 +110,11 @@ int QmlVlcPlaylist::add( const QString& mrl )
     return player().add_media( mrl.toUtf8().data() );
 }
 
+int QmlVlcPlaylist::add(const QUrl &mrl)
+{
+    return player().add_media( mrl.toString().toUtf8().data() );
+}
+
 int QmlVlcPlaylist::add( QmlVlcMedia* media )
 {
     if( !media )
