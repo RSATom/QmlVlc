@@ -28,3 +28,4 @@
 #include "QmlVlcConfig.h"
 
 void RegisterQmlVlc();
+void RegisterQmlVlcPlayer(const char* uri = nullptr);

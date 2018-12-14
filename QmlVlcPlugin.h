@@ -10,11 +10,10 @@
 class Q_DECL_EXPORT QmlVlcPlugin
     : public QQmlExtensionPlugin
 {
-    Q_PLUGIN_METADATA( IID QMLVLC_PLUGIN_ID )
-
     Q_OBJECT
+    Q_PLUGIN_METADATA( IID QMLVLC_PLUGIN_ID )
 
 public:
     virtual void initializeEngine( QQmlEngine* engine, const char* uri );
-    virtual void registerTypes( const char* uri );
+    virtual void registerTypes( const char* uri ) override;
 };
