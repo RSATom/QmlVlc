@@ -255,13 +255,13 @@ QString QmlVlcPlayerProxy::get_vlcVersion()
     return QString::fromLatin1( libvlc_get_version() );
 }
 
-void QmlVlcPlayerProxy::play( const QString& mrl )
+void QmlVlcPlayerProxy::play( const QString& mrl, bool is_path /*= false*/ )
 {
     vlc::playlist_player_core& p = player();
 
     p.clear_items();
 
-    int item = p.add_media( mrl.toUtf8().data(), 0, 0, 0, 0 );
+    int item = p.add_media( mrl.toUtf8().data(), 0, 0, 0, 0, is_path );
     if( item >= 0) {
         p.play( item );
     }
@@ -311,6 +311,17 @@ QString QmlVlcPlayerProxy::get_mrl()
 void QmlVlcPlayerProxy::set_mrl( const QString& mrl )
 {
     play( mrl );
+}
+
+QString QmlVlcPlayerProxy::get_path()
+{
+    std::string path = player().current_media().mrl();
+    return QString::fromUtf8( path.data(), path.size() );
+}
+
+void QmlVlcPlayerProxy::set_path( const QString& path )
+{
+    play( path, true );
 }
 
 bool QmlVlcPlayerProxy::get_playing()
