@@ -73,6 +73,7 @@ public:
     Q_PROPERTY( State state READ get_state NOTIFY stateChanged )
 
     Q_PROPERTY( QString mrl READ get_mrl WRITE set_mrl )
+    Q_PROPERTY( QString path READ get_path WRITE set_path )
     Q_PROPERTY( double position READ get_position WRITE set_position NOTIFY mediaPlayerPositionChanged )
     Q_PROPERTY( double time READ get_time WRITE set_time NOTIFY mediaPlayerTimeChanged )
     Q_PROPERTY( unsigned volume READ get_volume WRITE set_volume NOTIFY volumeChanged )
@@ -92,7 +93,7 @@ public:
     //QML Api
     QString get_vlcVersion();
 
-    Q_INVOKABLE void play( const QString& mrl );
+    Q_INVOKABLE void play( const QString& mrl, bool is_path = false );
     Q_INVOKABLE void play();
     Q_INVOKABLE void pause();
     Q_INVOKABLE void togglePause();
@@ -103,6 +104,9 @@ public:
 
     QString get_mrl();
     void set_mrl( const QString& mrl );
+
+    QString get_path();
+    void set_path( const QString& path );
 
     bool get_playing();
 
