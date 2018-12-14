@@ -34,65 +34,70 @@
     #include "QmlVlcMediaListPlayer.h"
 #endif
 
-const char* qmlVlcUri = "QmlVlc";
+const char* qmlVlcUri = "RSATom.QmlVlc";
 const int QmlVlcVersionMajor = 0;
 const int QmlVlcVersionMinor = 1;
 
-void RegisterQmlVlcPlayer()
+void RegisterQmlVlcPlayer(const char* uri /*= nullptr*/)
 {
     // @uri QmlVlc
+    if (uri == nullptr)
+    {
+        uri = qmlVlcUri;
+    }
+
     qmlRegisterUncreatableType<QmlVlcVideoSource>(
-        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
+        uri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "QmlVlcVideoSource",
         QStringLiteral("QmlVlcVideoSource cannot be instantiated directly") );
 
     qmlRegisterUncreatableType<QmlVlcInput>(
-        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
+        uri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcInput",
         QStringLiteral("VlcInput cannot be instantiated directly") );
     qmlRegisterUncreatableType<QmlVlcVideo>(
-        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
+        uri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcVideo",
         QStringLiteral("VlcVideo cannot be instantiated directly") );
     qmlRegisterUncreatableType<QmlVlcAudio>(
-        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
+        uri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcAudio",
         QStringLiteral("VlcAudio cannot be instantiated directly") );
     qmlRegisterUncreatableType<QmlVlcSubtitle>(
-        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
+        uri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcSubtitle",
         QStringLiteral("VlcSubtitle cannot be instantiated directly") );
     qmlRegisterUncreatableType<QmlVlcPlaylist>(
-        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
+        uri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcPlaylist",
         QStringLiteral("VlcPlaylist cannot be instantiated directly") );
     qmlRegisterUncreatableType<QmlVlcMarquee>(
-        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
+        uri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcMarquee",
         QStringLiteral("VlcMarquee cannot be instantiated directly") );
     qmlRegisterUncreatableType<QmlVlcLogo>(
-        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
+        uri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcLogo",
         QStringLiteral("VlcLogo cannot be instantiated directly") );
     qmlRegisterUncreatableType<QmlVlcDeinterlace>(
-        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
+        uri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcDeinterlace",
         QStringLiteral("VlcDeinterlace cannot be instantiated directly") );
     qmlRegisterUncreatableType<QmlVlcMedia>(
-        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
+        uri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcMediaDesc",
         QStringLiteral("VlcMediaDesc cannot be instantiated directly") );
 
     qmlRegisterType<QmlVlcVideoSurface>(
-        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
+        uri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcVideoSurface" );
     qmlRegisterType<QmlVlcPlayer>(
-        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
+        uri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcPlayer" );
 
 #ifndef Q_OS_ANDROID
     qmlRegisterType<QmlVlcMediaListPlayer>(
-        qmlVlcUri, QmlVlcVersionMajor, QmlVlcVersionMinor,
+        uri, QmlVlcVersionMajor, QmlVlcVersionMinor,
         "VlcMediaListPlayer" );
 #endif
 }
