@@ -1,5 +1,0 @@
-.DS_Store
-*.o
-*.so
-moc_*.cpp
-Makefile
